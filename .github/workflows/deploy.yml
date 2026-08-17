@@ -1,0 +1,71 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [dev, prod]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '10.13.0'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build (dev)
+        if: github.ref_name == 'dev'
+        run: npx ng build --configuration dev-optimized
+
+      - name: Build (prod)
+        if: github.ref_name == 'prod'
+        run: npx ng build --configuration production
+
+      - name: Safety check — verify correct backend endpoint is baked in
+        run: |
+          MAIN=$(ls dist/my-app/main.*.js)
+          if [ "${{ github.ref_name }}" = "prod" ]; then
+            if ! grep -q "APIEndpoint: 'http://api.divyaltech.com" "$MAIN"; then
+              echo "ABORT: prod build does not contain the expected api.divyaltech.com endpoint"
+              exit 1
+            fi
+            if grep -q "APIEndpoint: 'http://dev-api.divyaltech.com" "$MAIN"; then
+              echo "ABORT: prod build contains the DEV backend endpoint — refusing to deploy"
+              exit 1
+            fi
+          else
+            if ! grep -q "APIEndpoint: 'http://dev-api.divyaltech.com" "$MAIN"; then
+              echo "ABORT: dev build does not contain the expected dev-api.divyaltech.com endpoint"
+              exit 1
+            fi
+          fi
+          echo "Backend endpoint check passed."
+
+      - name: Include gzip .htaccess in build output
+        run: cp deploy/.htaccess dist/my-app/.htaccess
+
+      - name: Deploy via rsync
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
+          if [ "${{ github.ref_name }}" = "prod" ]; then
+            TARGET=/var/www/html/erp.divyaltech.com
+          else
+            TARGET=/var/www/html/dev-frontend
+          fi
+
+          rsync -avz --delete \
+            dist/my-app/ "$SSH_USER@$SSH_HOST:$TARGET/"
+
+          echo "Deployed to $TARGET"
