@@ -1,0 +1,106 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Sale Order List
+                    <button type="button" (click)="route('add-sale-order')" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Order</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row" [formGroup]="searchOrder">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control" formControlName="searchOrderDate">
+                                <label for="date-picker-example" class="active">Sale Order Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="searchCustName">
+                                    <label for="searchCustName" class="">Customer Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" formControlName="searchMobNumber" class="form-control ">
+                                    <label for="searchMobNumber" class=" ">Mobile Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" formControlName="searchOrderstatus">
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="1">Completed</option>
+                                <option value="2">Pending</option>
+                            </select>
+                            <label class="top-lb active">Status</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="searchOrderFilter()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%" >
+                            <thead>
+                                <tr>
+                                    <th width="5%">S.No.</th>
+                                    <th width="10%">Order Number</th>
+                                    <th width="15%">Order Date</th>
+                                    <th width="10%">Customer Name</th>
+                                    <th width="15%">Mobile Number</th>
+                                    <th width="15%">Payment Status</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a class="black-text" id="" ngbTooltip="View Order" placement="top"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="text-success" id="" ngbTooltip="Edit Order" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="text-danger" id="" ngbTooltip="Remove Customer" placement="top" ><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="data?.length == 0">
+                                <tr>
+                                  <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

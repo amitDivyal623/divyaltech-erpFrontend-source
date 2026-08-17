@@ -1,0 +1,1 @@
+﻿src/app/project/project-vendor/project-vendor.component.spec.ts(3,35): error TS2307: Cannot find module './hr-labour.component' or its corresponding type declarations.

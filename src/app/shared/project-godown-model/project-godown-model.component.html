@@ -1,0 +1,125 @@
+ <!-- Add New Godown modal -->
+ 
+    <!-- <div class="modal-dialog modal-lg modal-notify modal-info " role="document "> -->
+        <!-- Content -->
+        <div class="modal-content modal-lg " > 
+            <!-- Header -->
+            <div class="modal-header mdb-color ">
+                <p class="heading lead font-weight-bold text-light" id="modaltextheader">{{heading}}</p>
+                <button type="button" class="close" (click)="close_mdl()" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div [formGroup]="addCrmGodown" class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <div class="md-form md-outline">
+
+                            <input type="text" formControlName="inpt_godown_name" id="inpt_godown_name"  [readonly]="isButtonDisabled" class="form-control " required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['inpt_godown_name'].invalid ) || (addCrmGodown.controls['inpt_godown_name'].invalid && addCrmGodown.controls['inpt_godown_name'].touched)}">
+                            <label for="inpt_godown_name " class="{{editView}}">Godown Name*</label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['inpt_godown_name'].invalid && addCrmGodown.controls['inpt_godown_name'].errors.required) || (addCrmGodown.controls['inpt_godown_name'].invalid && addCrmGodown.controls['inpt_godown_name'].touched && addCrmGodown.controls['inpt_godown_name'].errors.required)" class="invalid-feedback">Godown is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="md-form md-outline">
+
+                            <input type="text" formControlName="inpt_date"  [disabled]="isButtonDisabled" id="inpt_date"  class="form-control "   required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['inpt_date'].invalid ) || (addCrmGodown.controls['inpt_date'].invalid && addCrmGodown.controls['inpt_date'].touched)}"
+                                placeholder="Select date" [minDate]="minDate" value="{{date_inp_value | date: 'yyyy-MM-dd'}}" [maxDate]="maxDate" readonly ngbDatepicker #inpt_date="ngbDatepicker" (click)="inpt_date.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                            <label for="inpt_date " class="{{editView}}"></label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['inpt_date'].invalid && addCrmGodown.controls['inpt_date'].errors.required) || (addCrmGodown.controls['inpt_date'].invalid && addCrmGodown.controls['inpt_date'].touched && addCrmGodown.controls['inpt_date'].errors.required)" class="invalid-feedback">Date is required.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- <div class="form-row">
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" [readonly]="isButtonDisabled" formControlName="inpt_godown_code" id="inpt_godown_code"  class="form-control" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['inpt_godown_code'].invalid ) || (addCrmGodown.controls['inpt_godown_code'].invalid && addCrmGodown.controls['inpt_godown_code'].touched)}">
+                            <label for="inpt_godown_code" class="{{editView}}">Godown Code</label>
+                        </div>
+                    </div>
+                </div> -->
+                    <!-- <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" formControlName="inpt_project_id" id="inpt_project_id"  class="form-control" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['project_id'].invalid ) || (addCrmGodown.controls['inpt_project_id'].invalid && addCrmGodown.controls['inpt_project_id'].touched)}" >
+                            <label for="inpt_project_id" class="{{editView}}">Project </label> 
+                            <select class="form-control field-ht colorful-select"   formControlName="inpt_project_id" >
+                                <ngtemplate *ngFor="let projectlist of respProject">
+                                    <ng-template *ngif="projectlist.projectId == inp_project_id" >
+                                        <option  value={{projectlist.projectId}} selected="true">
+                                            {{projectlist.projectName}}  /  {{projectlist.projectType}}
+                                        </option>
+                                    </ng-template>
+                                    <option value="" selected="true">Select Project Name</option>
+                                        <option  value={{projectlist.projectId}} selected="true">
+                                            {{projectlist.projectName}}  /  {{projectlist.projectType}}
+                                        </option>
+                                    </ngtemplate>
+                            </select>
+                            <label class="top-lb active">Project Name</label>
+                        </div>
+                    </div> -->
+
+                    
+                <div class="form-row">
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" formControlName="address" id="address" [readonly]="isButtonDisabled" class="form-control" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['address'].invalid ) || (addCrmGodown.controls['address'].invalid && addCrmGodown.controls['address'].touched)}">
+                            <label for="address" class="{{editView}}">Address *</label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['address'].invalid && addCrmGodown.controls['address'].errors.required) || (addCrmGodown.controls['address'].invalid && addCrmGodown.controls['address'].touched && addCrmGodown.controls['address'].errors.required)" class="invalid-feedback">Address is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" formControlName="dist" id="dist" [readonly]="isButtonDisabled" class="form-control " required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['dist'].invalid ) || (addCrmGodown.controls['dist'].invalid && addCrmGodown.controls['dist'].touched)}">
+                            <label for="dist " class="{{editView}}">District *</label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['dist'].invalid && addCrmGodown.controls['dist'].errors.required) || (addCrmGodown.controls['dist'].invalid && addCrmGodown.controls['dist'].touched && addCrmGodown.controls['dist'].errors.required)" class="invalid-feedback">District is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" formControlName="state" id="state"  class="form-control " [readonly]="isButtonDisabled" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['state'].invalid ) || (addCrmGodown.controls['state'].invalid && addCrmGodown.controls['state'].touched)}">
+                            <label for="state " class="{{editView}}">State Name*</label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['state'].invalid && addCrmGodown.controls['state'].errors.required) || (addCrmGodown.controls['state'].invalid && addCrmGodown.controls['state'].touched && addCrmGodown.controls['state'].errors.required)" class="invalid-feedback">State is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" formControlName="pincode" id="pincode"  class="form-control " [readonly]="isButtonDisabled" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['pincode'].invalid ) || (addCrmGodown.controls['pincode'].invalid && addCrmGodown.controls['pincode'].touched)}">
+                            <label for="pincode " class="{{editView}}">Pincode *</label>
+                            <div *ngIf=" (submitted && addCrmGodown.controls['pincode'].invalid && addCrmGodown.controls['pincode'].errors.required) || (addCrmGodown.controls['pincode'].invalid && addCrmGodown.controls['pincode'].touched && addCrmGodown.controls['pincode'].errors.required)" class="invalid-feedback">Pincode is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="md-form md-outline">
+                            <input type="text" [readonly]="isButtonDisabled"  formControlName="inpt_godown_code" id="inpt_godown_code"  class="form-control" required=" " [ngClass]="{ 'is-invalid': (submitted && addCrmGodown.controls['inpt_godown_code'].invalid ) || (addCrmGodown.controls['inpt_godown_code'].invalid && addCrmGodown.controls['inpt_godown_code'].touched)}">
+                            <label for="inpt_godown_code" class="{{editView}}">Godown Code</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" #closebutton class="btn btn-sm btn-danger"  (click)="close_mdl()">Cancel</button>
+                <button type="button" (click)="insertgodownDetail()" class="btn btn-sm btn-outline-success waves-effect" [disabled]="isButtonDisabled" >Save</button>
+            </div>
+            <!-- Content -->
+        </div>
+    <!-- </div> -->
+
+<!-- End of Godown modal -->

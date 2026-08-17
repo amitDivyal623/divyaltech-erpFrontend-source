@@ -1,0 +1,237 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;"> Contractors List
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openContractorModal()" data-target="#add_company_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add Contractor</button>
+                </h5>
+                <div [formGroup]="searchContractor" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="name" class="form-control field-ht colorful-select"
+                                id="form-customername">
+                                <option value="" selected="true">Select Assignee</option>
+                                <option *ngFor="let Employeelist of contractorrs" value={{Employeelist.contractor_id}}>
+                                    {{Employeelist.name}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Contractors</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="mobile" type="text" class="form-control">
+                                <label for="date-picker-example" class="active">Mobile No.</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"
+                            (click)="searchContractorForm()"><i class="fa fa-search mr-2"
+                                aria-hidden="true"></i>Search</button>
+                        <button type="button"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"
+                            (click)="resetContractorForm()"><i class="fa fa-search mr-2"
+                                aria-hidden="true"></i>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Contractor Name
+                                    </th>
+                                    <th>Mobile No.
+                                    </th>
+                                    <th>Address
+                                    </th>
+                                    <th>Bank Name
+                                    </th>
+                                    <th>Account No.
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of companyDatalists;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.mobile}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.bank_name}}</td>
+                                    <td>{{item.account_no}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                            (click)="editContractorDetail('view_contractor',item.contractor_id)"
+                                            data-target="#add_company_name_modal"><i class="fa fa-eye"
+                                                aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                            (click)="editContractorDetail('edit_contractor', item.contractor_id)"
+                                            data-target="#add_company_name_modal"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"
+                                            (click)="deleteContractorDetail(item.contractor_id)"><i
+                                                class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tbody *ngIf="companyDatalists?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">
+                                        No
+                                        data!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Add Contractor Modal -->
+            <div class="modal fade" id="add_company_name_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddContractor">
+
+                    <div class="modal-content">
+
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Contractor</p>
+                            <button type="button" class="close" data-dismiss="modal" #closeContractorModal>
+                                <span class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <!-- Body -->
+                        <div class="modal-body">
+
+                            <input type="hidden" formControlName="contractor_id">
+
+                            <!-- Contractor Name & Mobile -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="name"
+                                                [ngClass]="{'is-invalid': AddContractor.get('name')?.touched && AddContractor.get('name')?.invalid}">
+                                            <label class="active">Contractor Name *</label>
+                                            <div class="invalid-feedback d-block"
+                                                *ngIf="AddContractor.get('name')?.touched && AddContractor.get('name')?.invalid">
+                                                Contractor name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="mobile"
+                                                [ngClass]="{'is-invalid': AddContractor.get('mobile')?.touched && AddContractor.get('mobile')?.invalid}">
+                                            <label class="active">Mobile *</label>
+                                            <div class="invalid-feedback d-block"
+                                                *ngIf="AddContractor.get('mobile')?.touched && AddContractor.get('mobile')?.invalid">
+                                                Enter valid 10 digit mobile number
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bank Name (Full Width) -->
+                            <div class="form-group mb-3">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="bank_name">
+                                    <label class="active">Bank Name</label>
+                                </div>
+                            </div>
+
+                            <!-- Account No & IFSC -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="account_no">
+                                            <label class="active">Account No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="ifsc_code">
+                                            <label class="active">IFSC Code</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="form-group mb-4">
+                                <div class="md-form md-outline">
+                                    <textarea rows="3" class="form-control" formControlName="address"
+                                        [ngClass]="{'is-invalid': AddContractor.get('address')?.touched && AddContractor.get('address')?.invalid}"></textarea>
+                                    <label class="active">Address *</label>
+                                    <div class="invalid-feedback d-block"
+                                        *ngIf="AddContractor.get('address')?.touched && AddContractor.get('address')?.invalid">
+                                        Address is required
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-danger" data-dismiss="modal" #closeContractorModal
+                                (click)="AddContractor.reset()">Cancel</button>
+                            <button class="btn btn-sm btn-success" *ngIf="!isViewMode" [disabled]="isButtonDisabled"
+                                (click)="saveContractor()">
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </main>
+    <!-- Main layout -->
+
+</body>

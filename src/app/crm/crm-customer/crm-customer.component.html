@@ -1,0 +1,489 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Customer List
+                    <button type="button" #customermodal (click)="openModalButton()" id="openModalButton"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" data-target="#add_cust_modal"><i class="fa fa-plus" aria-hidden="true"></i>
+                        Add New Customer</button>
+                </h5>
+                <div [formGroup]="searchCrmCustomer" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="filtercustomernm" id="filtercustomernm"
+                                    class="form-control" required="">
+                                <label for="filtercustomernm" class="active">Customer Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" formControlName="filtercustomertype"
+                                id="filtercustomertype">
+                                <option value="" selected>Select Customer Type</option>
+                                <option value="1">New Customer</option>
+                                <option value="2">Existing Customer</option>
+                            </select>
+                            <label class="top-lb active">Customer Type</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline input-group margin-mdform">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">+91</span>
+                                </div>
+                                <input type="text" class="form-control" formControlName="filtercustomerno"
+                                    id="filtercustomerno" placeholder="Contact Number" aria-label="Contact Number"
+                                    aria-describedby="basic-addon1" required="">
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline input-group margin-mdform" style="z-index: 0;">
+                                <!-- <input type="hidden" formControlName="customertag_id" value="{{CustTagID}}"> -->
+                                <ng-select formControlName="filtercustomertag" [items]="respcusTags"
+                                    bindLabel="lookupvalue" bindValue="lookupdataid" placeholder="Select Tags"
+                                    appendTo="body" [multiple]="true" (change)="SelectedTagsValue($event)"
+                                    style="z-index: 0;">
+                                </ng-select>
+                                <label class="active">Tags</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="enquiry_mode" id="enquiry_mode"
+                                (change)="onEnquiryModeChange($event)" class="form-control field-ht colorful-select">
+                                <option value="" disabled selected>Select Enquiry Mode</option>
+                                <option *ngFor="let mode of enquiryModeData" [value]="mode.lookupdataid">
+                                    {{ mode.lookupvalue }}
+                                </option>
+                            </select>
+                            <label class="ml-4 active">Enquiry Mode</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="showIntroducedBy">
+                            <select formControlName="introduced_by" class="form-control field-ht colorful-select">
+                                <option value="" disabled>Select Marketing Team</option>
+                                <option *ngFor="let emp of marketingTeamMembersData" [value]="emp.lookupdataid">
+                                    {{ emp.lookupvalue }}
+                                </option>
+                            </select>
+                            <label class="ml-4 active">Introduce By</label>
+                        </div>
+                        <div class="col-3 px-4">
+                            <div class="md-form md-outline">
+                                <select formControlName="stage" id="stage"
+                                    class="form-control field-ht colorful-select">
+                                    <option selected svalue="">Select Stage</option>
+                                    <!--Dynamic options from respStages -->
+                                    <option *ngFor="let stage of respStages" [value]="stage.erpStageID">{{
+                                        stage.stage_name }}</option>
+                                    <option value="c4a8e1d2-9f73-4b6a-8d5c-21e7f0a9b3de"> Cancel</option>
+                                </select>
+                                <label for="stage" class="active">Stages</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="CustomerSearch()"
+                            class="btn dusty-grass-gradient btn-sm waves-light waves-effect float-left"><i
+                                class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        <button type="button"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"
+                            (click)="resetSearch()"><i class="fas fa-redo-alt mr-2"
+                                aria-hidden="true"></i>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="CrmCustomerMngmtTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th width="5%">S.No.</th>
+                                    <th width="5%">Title</th>
+                                    <th width="15%">Customer Name</th>
+                                    <th width="10%">Customer Type</th>
+                                    <th width="15%">Meet By</th>
+                                    <th width="10%">Contact</th>
+                                    <th width="20%">Address</th>
+                                    <th width="10%">Status</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.customer_title}}</td>
+                                    <td>{{item.CustomerFullName}}</td>
+                                    <td>{{item.CustomerType==1?"New Customer":"Existing Customer"}}</td>
+                                    <td>{{item.ContactBy}}</td>
+                                    <td>{{item.PhoneNumber}}</td>
+                                    <td>{{item.Address}}</td>
+                                    <td>{{item.Status==1 ? "Enabled" : "Disabled"}}</td>
+                                    <!-- <td *ngIf="item.Status==1" >Enabled</td>
+                                    <td *ngIf="item.Status==0">Disabled</td> -->
+                                    <td>
+                                        <a class="black-text" id="{{i+1}}" ngbTooltip="View Customer" placement="top"
+                                            (click)="view(item.CustomerId)"><i class="fa fa-eye "
+                                                aria-hidden="true"></i></a>
+                                        <a class="text-success" id="{{i+1}}" ngbTooltip="Edit Customer" placement="top"
+                                            (click)="edit(item.CustomerId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="text-primary pr-1" id="{{i+1}}" ngbTooltip="Customer Profile"
+                                            placement="top" (click)="custEnquiryEdit(item.CustomerId)"><i
+                                                class="fas fa-user"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="text-danger" id="{{i+1}}"
+                                            ngbTooltip="Remove Customer" placement="top" #Customerdata
+                                            (click)="delete(item.CustomerId)"><i class="fa-times px-1 fas"></i></a>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="data?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New Customer modal -->
+            <div class="modal fade" id="add_cust_modal" (click)="custmodalbackdropbtn()" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                    <!-- Content -->
+                    <div class="modal-content ">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color ">
+                            <p class="heading lead font-weight-bold" id="modaltextheader">{{PopupTitle}}</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div [formGroup]="addCrmCustomer" class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <!-- <select formControlName="cust_title" id="cust_title"  class="form-control field-ht colorful-select">
+                                            <option value="Mr">Mr</option>
+                                            <option value="Mrs">Mrs</option>
+                                            <option value="Miss">Miss</option>
+                                            <option value="Master">Master</option>
+                                            </select> -->
+                                        <select formControlName="cust_title" required=" "
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_title'].invalid ) || (addCrmCustomer.controls['cust_title'].invalid && addCrmCustomer.controls['cust_title'].touched)}"
+                                            class="form-control field-ht colorful-select" id="form-cust_title">
+                                            <option value="" selected="true">Select Title</option>
+                                            <option *ngFor="let titlelist of respcustomerTitle"
+                                                value={{titlelist.LookupValue}}>
+                                                {{titlelist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="active">Title</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_title'].invalid && addCrmCustomer.controls['cust_title'].errors.required) || (addCrmCustomer.controls['cust_title'].invalid && addCrmCustomer.controls['cust_title'].touched && addCrmCustomer.controls['cust_title'].errors.required)"
+                                            class="invalid-feedback">Title is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <input type="hidden" formControlName="CustomerId" id="CustomerId">
+                                        <input type="text" formControlName="cust_firstname" id="cust_firstname"
+                                            class="form-control " required=" "
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_firstname'].invalid ) || (addCrmCustomer.controls['cust_firstname'].invalid && addCrmCustomer.controls['cust_firstname'].touched)}">
+                                        <label for="cust_firstname " class="{{editView}}">First Name*</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_firstname'].invalid && addCrmCustomer.controls['cust_firstname'].errors.required) || (addCrmCustomer.controls['cust_firstname'].invalid && addCrmCustomer.controls['cust_firstname'].touched && addCrmCustomer.controls['cust_firstname'].errors.required)"
+                                            class="invalid-feedback">FirstName is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col ">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="cust_lastname" id="cust_lastname"
+                                            class="form-control">
+                                        <label for="cust_lastname" class="{{editView}}">Last Name</label>
+                                        <!-- <div *ngIf=" (submitted && addCrmCustomer.controls['cust_lastname'].invalid && addCrmCustomer.controls['cust_lastname'].errors.required) || (addCrmCustomer.controls['cust_lastname'].invalid && addCrmCustomer.controls['cust_lastname'].touched && addCrmCustomer.controls['cust_lastname'].errors.required)" class="invalid-feedback">LastName is required.
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="cust_email" id="cust_email"
+                                            class="form-control ">
+                                        <label for="cust_email" class="{{editView}}">Email*</label>
+                                        <!-- <div *ngIf="(submitted && addCrmCustomer.controls['cust_email'].invalid && addCrmCustomer.controls['cust_email'].errors.required) || (addCrmCustomer.controls['cust_email'].invalid && addCrmCustomer.controls['cust_email'].touched && addCrmCustomer.controls['cust_email'].errors.required)" class="invalid-feedback">Email is required.
+                                        </div> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" formControlName="cust_status">
+                                            <option value="enabled" [selected]="true">Enabled</option>
+                                            <option value="disabled">Disabled</option>
+                                        </select>
+                                        <label class="active">Status*</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contprn'].invalid && addCrmCustomer.controls['cust_contprn'].errors.required) || (addCrmCustomer.controls['cust_contprn'].invalid && addCrmCustomer.controls['cust_contprn'].touched && addCrmCustomer.controls['cust_contprn'].errors.required)"
+                                            class="invalid-feedback">Filed is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+
+                                        <ng-autocomplete [data]="employeedataList" [searchKeyword]="keyword"
+                                            (click)="employeelistData($event)"
+                                            (inputChanged)='onEmployeeSearch($event);' [itemTemplate]="itemTemplate"
+                                            id="cust_contprn" name="cust_contprn" formControlName="cust_contprn"
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_contprn'].invalid ) || (addCrmCustomer.controls['cust_contprn'].invalid && addCrmCustomer.controls['cust_contprn'].touched)}">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                            <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                            <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                        </ng-template>
+                                        <label for="cust_contprn" class="active" style="z-index: 1000;">Contact
+                                            Person*</label>
+                                        <div *ngIf="(submitted && addCrmCustomer.controls['cust_contprn'].invalid ) || (addCrmCustomer.controls['cust_contprn'].touched && addCrmCustomer.controls['cust_contprn'].invalid)"
+                                            class="invalid-feedback">Contact person is required</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-row ">
+                                <div class="col md-form md-outline ">
+                                    <select formControlName="cust_customertype" id="cust_customertype"
+                                        class="form-control field-ht colorful-select"
+                                        [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_customertype'].invalid ) || (addCrmCustomer.controls['cust_customertype'].invalid && addCrmCustomer.controls['cust_customertype'].touched)}">
+
+                                        <option value="0" placeholder="Select Customer Type" disabled>Select Customer
+                                            Type</option>
+                                        <option value="1">New Customer</option>
+                                        <option value="2">Existing Customer</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer Type*</label>
+                                    <div *ngIf="(submitted && addCrmCustomer.controls['cust_customertype'].invalid && addCrmCustomer.controls['cust_customertype'].errors.required) || (addCrmCustomer.controls['cust_customertype'].invalid && addCrmCustomer.controls['cust_customertype'].touched && addCrmCustomer.controls['cust_customertype'].errors.required)"
+                                        class="invalid-feedback">Customer Type is required.
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">+91</span>
+                                        </div>
+                                        <input type="text" formControlName="cust_contactnumber" class="form-control"
+                                            placeholder="Phone Number*" aria-label="Username"
+                                            aria-describedby="basic-addon1"
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_contactnumber'].invalid ) || (addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].touched)}">
+
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].errors.required) || (addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].touched && addCrmCustomer.controls['cust_contactnumber'].errors.required)"
+                                            class="invalid-feedback">Contact Number is required.
+                                        </div>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].errors.maxlength) || (addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].touched && addCrmCustomer.controls['cust_contactnumber'].errors.maxlength && !addCrmCustomer.controls['cust_contactnumber'].errors.pattern)"
+                                            class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].errors.minlength) || (addCrmCustomer.controls['cust_contactnumber'].errors && addCrmCustomer.controls['cust_contactnumber'].touched && addCrmCustomer.controls['cust_contactnumber'].errors.minlength && !addCrmCustomer.controls['cust_contactnumber'].errors.pattern)"
+                                            class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                        <div *ngIf="(submitted && addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].errors.pattern) || (addCrmCustomer.controls['cust_contactnumber'].invalid && addCrmCustomer.controls['cust_contactnumber'].touched && addCrmCustomer.controls['cust_contactnumber'].errors.pattern)"
+                                            class="invalid-feedback">
+                                            Only Numeric value
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col md-form md-outline ">
+                                    <select formControlName="cust_category"
+                                        class="form-control field-ht colorful-select" id="form-cust_category">
+                                        <option value="" disabled="true">Select Category</option>
+                                        <option *ngFor="let categorieslist of respcustomerCategory"
+                                            value={{categorieslist.LookupValue}}>
+                                            {{categorieslist.LookupValue}}
+                                        </option>
+                                    </select>
+                                    <label class="ml-2 active">Category</label>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <!-- <input type="hidden" #tag_id formControlName="tag_id" value="{{lookupdataid}}"> -->
+                                    <ng-select formControlName="cust_tags" [items]="respcusTags" bindLabel="lookupvalue"
+                                        bindValue="lookupdataid" placeholder="Select Tags" appendTo="body"
+                                        [multiple]="true" (change)="SelectedTagsValue($event)">
+                                    </ng-select>
+                                    <label class="top-lb active">Tags</label>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">+91</span>
+                                        </div>
+                                        <input type="text" formControlName="cust_contactnumber1" class="form-control"
+                                            placeholder="Alternate Number1" aria-label="Username"
+                                            aria-describedby="basic-addon1"
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_contactnumber1'].invalid ) || (addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].touched)}">
+
+                                        <!-- <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].errors.required) || (addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].touched && addCrmCustomer.controls['cust_contactnumber1'].errors.required)" class="invalid-feedback">Contact Number is required.
+                                            </div>
+                                            <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].errors.maxlength) || (addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].touched && addCrmCustomer.controls['cust_contactnumber1'].errors.maxlength && !addCrmCustomer.controls['cust_contactnumber1'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                            <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].errors.minlength) || (addCrmCustomer.controls['cust_contactnumber1'].errors && addCrmCustomer.controls['cust_contactnumber1'].touched && addCrmCustomer.controls['cust_contactnumber1'].errors.minlength && !addCrmCustomer.controls['cust_contactnumber1'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                            <div *ngIf="(submitted && addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].errors.pattern) || (addCrmCustomer.controls['cust_contactnumber1'].invalid && addCrmCustomer.controls['cust_contactnumber1'].touched && addCrmCustomer.controls['cust_contactnumber1'].errors.pattern)" class="invalid-feedback">
+                                                Only Numeric value
+                                            </div> -->
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">+91</span>
+                                        </div>
+                                        <input type="text" formControlName="cust_contactnumber2" class="form-control"
+                                            placeholder="Alternate Number2" aria-label="Username"
+                                            aria-describedby="basic-addon1"
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_contactnumber2'].invalid ) || (addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].touched)}">
+
+                                        <!-- <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].errors.required) || (addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].touched && addCrmCustomer.controls['cust_contactnumber2'].errors.required)" class="invalid-feedback">Contact Number is required.
+                                            </div>
+                                            <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].errors.maxlength) || (addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].touched && addCrmCustomer.controls['cust_contactnumber2'].errors.maxlength && !addCrmCustomer.controls['cust_contactnumber2'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                            <div *ngIf=" (submitted && addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].errors.minlength) || (addCrmCustomer.controls['cust_contactnumber2'].errors && addCrmCustomer.controls['cust_contactnumber2'].touched && addCrmCustomer.controls['cust_contactnumber2'].errors.minlength && !addCrmCustomer.controls['cust_contactnumber2'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                            <div *ngIf="(submitted && addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].errors.pattern) || (addCrmCustomer.controls['cust_contactnumber2'].invalid && addCrmCustomer.controls['cust_contactnumber2'].touched && addCrmCustomer.controls['cust_contactnumber2'].errors.pattern)" class="invalid-feedback">
+                                                Only Numeric value
+                                            </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline ">
+                                        <textarea type="text" formControlName="cust_Address" id="form10"
+                                            class="md-textarea form-control" rows="2 "
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_Address'].invalid ) || (addCrmCustomer.controls['cust_Address'].invalid && addCrmCustomer.controls['cust_Address'].touched)}"></textarea>
+                                        <label for="form10" class="{{editView}}">Address*</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_Address'].invalid && addCrmCustomer.controls['cust_Address'].errors.required) || (addCrmCustomer.controls['cust_Address'].invalid && addCrmCustomer.controls['cust_Address'].touched && addCrmCustomer.controls['cust_Address'].errors.required)"
+                                            class="invalid-feedback">Address is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class=" md-form md-outline ">
+                                        <input type="text" formControlName="cust_Country" id="form-country"
+                                            class="form-control">
+                                        <label for="form-country" class="active">Country*</label>
+                                    </div>
+                                </div>
+                                <div class="col " [ngClass]="displayFieldCss('cust_State')">
+                                    <div class=" md-form md-outline ">
+                                        <input type="text" formControlName="cust_State" id="form-state "
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_State'].invalid ) || (addCrmCustomer.controls['cust_State'].invalid && addCrmCustomer.controls['cust_State'].touched)}">
+                                        <label for="form-state" class="active">State*</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_State'].invalid && addCrmCustomer.controls['cust_State'].errors.required) || (addCrmCustomer.controls['cust_State'].invalid && addCrmCustomer.controls['cust_State'].touched && addCrmCustomer.controls['cust_State'].errors.required)"
+                                            class="invalid-feedback">State is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col-md-6" [ngClass]="displayFieldCss('cust_City')">
+                                    <div class=" md-form md-outline ">
+                                        <input type="text" formControlName="cust_City" id="form-city "
+                                            class="form-control "
+                                            [ngClass]="{ 'is-invalid': (submitted && addCrmCustomer.controls['cust_City'].invalid ) || (addCrmCustomer.controls['cust_City'].invalid && addCrmCustomer.controls['cust_City'].touched)}">
+                                        <label for="form-city " class="active">City*</label>
+                                        <div *ngIf=" (submitted && addCrmCustomer.controls['cust_City'].invalid && addCrmCustomer.controls['cust_City'].errors.required) || (addCrmCustomer.controls['cust_City'].invalid && addCrmCustomer.controls['cust_City'].touched && addCrmCustomer.controls['cust_City'].errors.required)"
+                                            class="invalid-feedback">City is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <input type="hidden" formControlName="enquiryId">
+                                    <select formControlName="enquiry_mode" id="enquiry_mode"
+                                        class="form-control field-ht colorful-select" [ngClass]="{
+                                        'is-invalid':
+                                            (submitted && addCrmCustomer.controls['enquiry_mode'].invalid) ||
+                                            (addCrmCustomer.controls['enquiry_mode'].touched &&
+                                            addCrmCustomer.controls['enquiry_mode'].invalid)
+                                        }" (change)="OnSelectValue($event.target.value)">
+                                        <option value="" disabled selected>Select Enquiry Mode</option>
+
+                                        <option *ngFor="let mode of enquiryModeData" [value]="mode.lookupdataid">
+                                            {{ mode.lookupvalue }}
+                                        </option>
+
+                                    </select>
+
+                                    <label class="ml-2 active">Enquiry Mode</label>
+                                </div>
+
+                            </div>
+                            <div class="form-row">
+
+                                <!-- TEXT INPUT -->
+                                <div class="col md-form md-outline" *ngIf="introduceByType === 'text'">
+                                    <input type="text" formControlName="introduce_by" class="form-control">
+                                    <label class="active">Introduce By</label>
+                                </div>
+
+                                <!-- DROPDOWN -->
+                                <div class="col md-form md-outline" *ngIf="introduceByType === 'dropdown'">
+                                    <select formControlName="introduce_by"
+                                        class="form-control field-ht colorful-select">
+                                        <option value="" disabled>Select Marketing Team</option>
+                                        <option *ngFor="let emp of marketingTeamMembersData" [value]="emp.lookupdataid">
+                                            {{ emp.lookupvalue }}
+                                        </option>
+                                    </select>
+                                    <label class="ml-2 active">Introduce By</label>
+                                </div>
+
+                            </div>
+
+                            <!-- Footer -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger"
+                                data-dismiss="modal">Cancel</button>
+                            <span *ngIf="save_btn">
+                                <button type="button" (click)="insertcustomerDetail()"
+                                    class="btn btn-sm btn-outline-success waves-effect"
+                                    [disabled]="isButtonDisabled || isSaving">{{ isSaving ? 'Saving...' : 'Save' }}</button>
+                            </span>
+                        </div>
+                        <!-- Content -->
+                    </div>
+                </div>
+            </div>
+            <!-- End of Customer modal -->
+
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

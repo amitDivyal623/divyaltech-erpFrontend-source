@@ -1,0 +1,354 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Customer Profile List
+                    <!-- <button type="button" (click)="route('crm-enquiry-details')" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_eqy_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Customer Profile</button> -->
+                </h5>
+                <div class="card-body" [formGroup]="searchCrmEnquiry">
+                    <div class="form-row px-2 pt-2">
+                        <div class="col-md-2 px-2">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="filter_customername" id="filter_customername"
+                                    class="form-control">
+                                <label for="filter_customername" class="active">Customer Name</label>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-3 px-2">
+                            <div class="md-form md-outline">
+                                <select formControlName="filter_contactperson" id="filter_contactperson"
+                                    class="form-control field-ht colorful-select">
+                                    <option value="" selected>Select Contact Person</option>
+                                    <option *ngFor="let emp of plotShownByList" [value]="emp.name">{{ emp.name }}</option>
+                                </select>
+                                <label for="filter_contactperson" class="active">Contact Person</label>
+                            </div>
+                        </div> -->
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline input-group margin-mdform">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">+91</span>
+                                </div>
+                                <input type="text" formControlName="filter_contactno" id="filter_contactno"
+                                    class="form-control" placeholder="Contact Number" aria-label="Username"
+                                    aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-md-1 px-2">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="filter_city" id="filter_city" class="form-control">
+                                <label for="filter_city" class="active">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <input formControlName="filter_date" type="date" class="form-control">
+                                <label for="filter_date" class="ml-1 mt-3 active">Visited Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-2">
+                            <div class="md-form md-outline input-group margin-mdform" style="z-index: 0;">
+
+                                <ng-select formControlName="filtercustomertag" [items]="respcusTags"
+                                    bindLabel="lookupvalue" bindValue="lookupdataid" placeholder="Select Tags"
+                                    appendTo="body" [multiple]="true" (change)="SelectedTagsValue($event)"
+                                    style="z-index: 0; width:100%;">
+                                </ng-select>
+                                <label class="active">Tags</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 md-form md-outline px-2">
+                            <select formControlName="enquiry_mode" id="enquiry_mode"
+                                (change)="onEnquiryModeChange($event)" class="form-control field-ht colorful-select">
+                                <option value="" disabled selected>Select Enquiry Mode</option>
+                                <option *ngFor="let mode of enquiryModeData" [value]="mode.lookupdataid">
+                                    {{ mode.lookupvalue }}
+                                </option>
+                            </select>
+                            <label class="ml-2 active">Enquiry Mode</label>
+                        </div>
+                        <div class="col-md-2 md-form md-outline px-2" *ngIf="showIntroducedBy">
+                            <select formControlName="introduced_by" class="form-control field-ht colorful-select">
+                                <option value="" disabled>Select Marketing Team</option>
+                                <option *ngFor="let emp of marketingTeamMembersData" [value]="emp.lookupdataid">
+                                    {{ emp.lookupvalue }}
+                                </option>
+                            </select>
+                            <label class="ml-2 active">Introduce By</label>
+                        </div>
+
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <select formControlName="stage" id="stage"
+                                    class="form-control field-ht colorful-select">
+                                    <option selected svalue="">Select Stage</option>
+                                    <!--Dynamic options from respStages -->
+                                    <option *ngFor="let stage of respStages" [value]="stage.erpStageID">{{
+                                        stage.stage_name }}</option>
+                                    <option value="c4a8e1d2-9f73-4b6a-8d5c-21e7f0a9b3de"> Cancel</option>
+                                </select>
+                                <label for="stage" class="active">Stages</label>
+                            </div>
+                        </div>
+
+                        <div class="col-2 px-2">
+                            <div class="md-form md-outline">
+                                <select formControlName="plot_shown_by" id="plot_shown_by"
+                                    class="form-control field-ht colorful-select">
+                                    <option value="" selected>Select Plot Shown By</option>
+                                    <option *ngFor="let emp of plotShownByList" [value]="emp.name">{{ emp.name }}
+                                    </option>
+                                </select>
+                                <label for="plot_shown_by" class="active">Plot Shown By</label>
+                            </div>
+                        </div>
+                        <div class="col-2 px-2">
+                            <div class="md-form md-outline">
+                                <select formControlName="added_by" id="added_by"
+                                    class="form-control field-ht colorful-select">
+                                    <option value="" selected>Select Added By</option>
+                                    <option *ngFor="let emp of userLists" [value]="emp.UserId">{{ emp.UserName }}
+                                    </option>
+                                </select>
+                                <label for="added_by" class="active">Added By</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline input-group margin-mdform">
+                                <ng-select formControlName="visited_plot" [items]="plotList" bindLabel="name"
+                                    bindValue="id" placeholder="Select Visited Plot" appendTo="body"
+                                    style="width:100%;">
+                                </ng-select>
+                                <label class="active">Visited Plot</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="notes_search" id="notes_search" class="form-control">
+                                <label for="notes_search" class="active">Notes</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-4">
+                                <input placeholder="Select date" (dateSelect)="onFromDateChange($event)" placeholder="dd/mm/yyyy" formControlName="from_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="datepicker-example" class="form-control datepicker">
+                                <label for="datepicker-example" class="active">From Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-4">
+                                <input placeholder="Select date" (dateSelect)="onToDateChange($event)" placeholder="dd/mm/yyyy" formControlName="to_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date1="ngbDatepicker" (click)="date1.toggle()" type="text" id="datepicker-example" class="form-control datepicker">
+                                <label for="datepicker-example" class="active">To Date</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"
+                            (click)="resetSearch()"><i class="fas fa-redo-alt mr-2"
+                                aria-hidden="true"></i>Reset</button>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                            (click)="EnquirySearch()"><i class="fa fa-search mr-2"
+                                aria-hidden="true"></i>Search</button>
+                        <button type="button" class="btn blue-gradient btn-sm waves-light waves-effect ml-2"
+                            [disabled]="!canExport()" (click)="exportToExcel()">
+                            <i class="fa fa-file-excel mr-2" aria-hidden="true"></i>Export to Excel
+                        </button>
+                        <span class="ml-2">
+                            <app-crm-revisit></app-crm-revisit>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <!-- Main docs tabs -->
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="CrmEnquiryTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+
+                                    <th>S.No.</th>
+                                    <th>Title</th>
+                                    <th>Customer Name</th>
+                                    <th>Last Visiting Date</th>
+                                    <th>Shown By</th>
+                                    <th>Mobile Number</th>
+                                    <th>Address</th>
+                                    <th>Added by</th>
+                                    <!-- <th >Last visited date</th> -->
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let item of data;let i=index">
+
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.customer_title}}</td>
+                                    <td>{{item.VisitorName}}</td>
+                                    <td>{{item.latestVisitingDate}}</td>
+                                    <td class="shown-by">
+                                        <span *ngFor="let name of item.plotshownby?.split(',')">
+                                            {{ name.trim() }}<br>
+                                        </span>
+                                    </td>
+                                    <td>{{item.MobileNumber}}</td>
+                                    <td>{{item.Address}}</td>
+                                    <td>{{item.LoginUser}}</td>
+                                    <!-- <td>{{item.latestVisitingDate}}</td> -->
+
+                                    <td>
+                                        <a class="black-text" id="{{i+1}}" mdbtooltip="View" placement="top"
+                                            (click)="viewenquiry(item.EnquiryId,item.CustomerId)"><i class="fa fa-eye"
+                                                aria-hidden="true"></i></a>
+                                        <a class="teal-text" id="{{i+1}}" mdbtooltip="Edit" placement="top"
+                                            (click)="editenquiry(item.EnquiryId,item.CustomerId)"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text" id="{{i+1}}" mdbtooltip="Remove"
+                                            placement="top" #Visitordata (click)="delete(item.EnquiryId)"><i
+                                                class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Main docs tabs -->
+            </section>
+            <!-- Add New enquiry modal -->
+            <!-- <div class="modal fade" id="add_eqy_modal" (click)="enquirymodalbackdropbtn()" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+
+                    <div class="modal-content">
+
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold" id="modaltextheader" >Add New Customer Profile</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+
+                        <div class="modal-body" [formGroup]="addCrmEnquiry">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline pr-4">
+                                            <input class="form-control" formControlName="Enquiry_date" placeholder="Select date" name="td" ngbDatepicker [(ngModel)]="model2" [minDate]="minDate" [maxDate]="maxDate" #td="ngbDatepicker" (click)="td.toggle()" readonly>
+                                            <label for="date-picker-example" class="active">Date</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['Enquiry_date'].touched && addCrmEnquiry.controls['Enquiry_date'].invalid">Date is required</code>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="EnquiryId" id="EnquiryId">
+                                            <input type="text" formControlName="enquiry_cust" id="enquiry_cust" class="form-control" required="">
+                                            <label for="enquiry_cust" class="active">Customer Name</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_cust'].touched && addCrmEnquiry.controls['enquiry_cust'].invalid">Customer Name is required</code>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                        <select formControlName="enquiry_mode" id="enquiry_mode" class="form-control field-ht colorful-select">
+                                            <option value="" disabled selected>Select Mode</option>
+                                            <option value="1">Calling</option>
+                                            <option value="2">Meeting</option>
+                                        </select>
+                                        <label class="ml-3 active">Enquiry Mode</label>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_mode'].touched && addCrmEnquiry.controls['enquiry_mode'].invalid">Select Mode is required</code>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input type="text" formControlName="enquiry_no" id="enquiry_no" class="form-control" required="">
+                                            <label for="enquiry_no" class="active">Contact Number</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_no'].touched && addCrmEnquiry.controls['enquiry_no'].invalid">Contact Number is required</code>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input type="text" formControlName="enquiry_reference" id="enquiry_reference" class="form-control" required="">
+                                            <label for="enquiry_reference" class="active">Reference Name</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_reference'].touched && addCrmEnquiry.controls['enquiry_reference'].invalid">Reference Name is required</code>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="enquiry_state" id="enquiry_state" class="md-textarea form-control" rows="2">
+                                            <label for="enquiry_state" class="active">State</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_state'].touched && addCrmEnquiry.controls['enquiry_state'].invalid">State is required</code>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="city_enquiry" id="city_enquiry" class="form-control" required="">
+                                            <label for="city_enquiry" class="active">City</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['city_enquiry'].touched && addCrmEnquiry.controls['city_enquiry'].invalid">City is required</code>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <textarea type="text" formControlName="enquiry_address" id="enquiry_address" class="md-textarea form-control" rows="2"></textarea>
+                                            <label for="enquiry_address" class="active">Address</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_address'].touched && addCrmEnquiry.controls['enquiry_address'].invalid">Address is required</code>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <textarea type="text" formControlName="enquiry_details" id="enquiry_details" class="md-textarea form-control" rows="2" required=""></textarea>
+                                            <label for="enquiry_details" class="active">Enquiry Details</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_details'].touched && addCrmEnquiry.controls['enquiry_details'].invalid">Enquiry Details is required</code>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <textarea type="text" formControlName="enquiry_intrested" id="enquiry_intrested" class="md-textarea form-control" rows="2" required=""></textarea>
+                                            <label for="enquiry_intrested" class="active">Intrested For</label>
+                                        </div>
+                                        <code *ngIf="addCrmEnquiry.controls['enquiry_intrested'].touched && addCrmEnquiry.controls['enquiry_intrested'].invalid">Field is required</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer mx-3 mx-4">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" [disabled]="isButtonDisabled" (click)="insertenquiryDetail()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div> -->
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

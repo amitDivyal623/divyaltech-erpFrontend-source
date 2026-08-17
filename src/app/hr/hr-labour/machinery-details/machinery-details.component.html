@@ -1,0 +1,202 @@
+<div class="row p-2">
+    <div class="col-lg-12 col-md-12" [formGroup]="searchvehicle">
+        <div class="row py-2 px-2">
+            <div class="col-md-2 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" id="vehicleName" class="form-control" formControlName="vehicleName" required="">
+                    <label for="vehicleName" class="">Vehicle Number</label>
+                </div>
+            </div>
+            <div class="col-md-3 px-2">
+                <div class="md-form md-outline">
+                    <select id="vendorname" formControlName="vendorname" class="form-control field-ht colorful-select" required="" >
+                        <option value="" selected="true">Select Vendor</option>
+                        <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                            {{contractorlist.contractorName}}
+                        </option>
+                    </select>
+                    <label for="vendorname" class="active">Vendor Name</label>
+                </div>
+            </div> 
+            <div class="col-md-4 px-0">
+                <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="vehicleSearch()"><i class="fa fa-search mr-2" aria-hidden="true" ></i>Search</button>
+                <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="vehicleReset()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+            </div>
+            <div class="col-md-2 px-2">
+                <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="addMachine()"><i class="fa fa-plus " aria-hidden="true" ></i>Add Machinery</button>
+                <button type="button" #MachinPopup  data-toggle="modal" data-target="#add_Machinery_modal" style="display: none;"></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 mb-2 ml-2">
+        <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="vehicle" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="table table-striped" cellspacing="0" width="100%">
+                            <thead class="winter-neva-gradient ml-2">
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Vehicle Name</th>
+                                    <th>Vehicle No.</th>
+                                    <th>Vendor Name</th>
+                                    <th>Rate Type</th>
+                                    <th>Rate</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tr *ngFor="let vehicles of vehicle">
+                                <td>{{vehicles.counter}}</td>
+                                <td>{{vehicles.vehicleName}}</td>
+                                <td>{{vehicles.vehicleNo}}</td>
+                                <td>{{vehicles.vendorName}}</td>
+                                <td>{{vehicles.ratedType}}</td>
+                                <td>{{vehicles.rate}}</td>
+                                <td>{{vehicles.vendorContact}}</td>
+                                <td>{{vehicles.status}}</td>
+                                <td>
+                                    <a class="teal-text" id="" #vehicalModal mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_Machinery_modal" ></a>
+                                    <a class="black-text" mdbtooltip="View" placement="top"  (click)="getViewvehicles(vehicles.vehicleId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a class="teal-text" id="" mdbtooltip="Edit" placement="top" (click)="getEditvehicles(vehicles.vehicleId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                    <a class="red-text" id="" mdbtooltip="Remove" placement="top" (click)="deletevehicle(vehicles.vehicleId)"><i class="fa-times px-1 fas"></i></a>
+                                </td>
+                            </tr>
+                            <tbody *ngIf="vehicle?.length == 0">
+                            <tr>
+                                <td colspan="7" class="no-data-available">No data!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Add New Machinery modal -->
+<div class="modal fade" id="add_Machinery_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!-- Content -->
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header mdb-color">
+                <p class="heading lead font-weight-bold">{{MachinePopupTitle}}</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <!-- Body -->
+            <div [formGroup]="addvehicle" class="modal-body">
+                <div class="col-lg-12 col-md-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input type="hidden" formControlName="vehicleId" name="vehicleId" id="vehicleId">
+                                <input type="text" id="vehicleName" formControlName="vehicleName" class="form-control" required="" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['vehicleName'].invalid ) || (addvehicle.controls['vehicleName'].invalid && addvehicle.controls['vehicleName'].touched)}">
+                                <label for="vehicleName" class="{{MachinefiledClass}}">Vehicle Name *</label>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vehicleName'].invalid ) || (addvehicle.controls['vehicleName'].invalid && addvehicle.controls['vehicleName'].touched)" class="invalid-feedback">Please vehicle Name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="vendorname" formControlName="vendorname" class="form-control field-ht colorful-select" required="" (change)="vendorData($event)" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['vendorname'].invalid ) || (addvehicle.controls['vendorname'].invalid && addvehicle.controls['vendorname'].touched)}">
+                                    <option value="" selected="true">Select Vendor</option>
+                                    <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                                        {{contractorlist.contractorName}}
+                                    </option>
+                                </select>
+                                <label for="vendorname" class="active">Vendor Name *</label>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vendorname'].invalid ) || (addvehicle.controls['vendorname'].invalid && addvehicle.controls['vendorname'].touched)" class="invalid-feedback">Please vendor Name.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" id="drivername" formControlName="driverName" name="drivername" id="drivername" class="form-control" required="" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['driverName'].invalid ) || (addvehicle.controls['driverName'].invalid && addvehicle.controls['driverName'].touched)}">
+                                <label for="driver_name" class="{{MachinefiledClass}}">Driver Name *</label>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['driverName'].invalid ) || (addvehicle.controls['driverName'].invalid && addvehicle.controls['driverName'].touched)" class="invalid-feedback">Please Driver Name.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2 ">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="rateType" name="rateType" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['rateType'].invalid ) || (addvehicle.controls['rateType'].invalid && addvehicle.controls['rateType'].touched)}">
+                                    <option value="" selected="true" >Select Rate Type </option>
+                                    <option *ngFor="let RatedTypeList of respRateType" value={{RatedTypeList.LookupDataId}}>
+                                        {{RatedTypeList.LookupValue}}
+                                    </option> 
+                                </select>
+                                <label for="rateType" class="active">Rate Type *</label>  
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['rateType'].invalid ) || (addvehicle.controls['rateType'].invalid && addvehicle.controls['rateType'].touched)" class="invalid-feedback">Please select Rate Type.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" id="rate" formControlName="rate" name="rate" id="rate" maxlength="8" class="form-control" required="" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['rate'].invalid ) || (addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].touched)}">
+                                <label for="rate" class="{{MachinefiledClass}}">Rate *</label>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].errors.required) || (addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].touched && addvehicle.controls['rate'].errors.required)" class="invalid-feedback">Please Enter Vehicle Rate.
+                                </div>
+                                <div *ngIf="(vehiclesubmitted && addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].errors.maxlength && addvehicle.controls['rate'].errors.maxlength) || (addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].touched && addvehicle.controls['rate'].errors.maxlength)" class="invalid-feedback">
+                                    Only 7 Characters Allowed
+                                </div>
+                                <div *ngIf="(vehiclesubmitted && addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].errors.pattern) || (addvehicle.controls['rate'].invalid && addvehicle.controls['rate'].touched && addvehicle.controls['rate'].errors.pattern)" class="invalid-feedback">
+                                    Only Numeric value
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" id="vehicleNo" name="vehicleNo" formControlName="vehicleNo" class="form-control" required="" [ngClass]="{ 'is-invalid': (vehiclesubmitted && addvehicle.controls['vehicleNo'].invalid ) || (addvehicle.controls['vehicleNo'].invalid && addvehicle.controls['vehicleNo'].touched)}">
+                                <label class="{{MachinefiledClass}}">Vehicle Number *</label>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vehicleNo'].invalid ) || (addvehicle.controls['vehicleNo'].invalid && addvehicle.controls['vehicleNo'].touched)" class="invalid-feedback">Please Enter Vehicle Number.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class=" md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="vehicleType">
+                                    <option value="" >Select Vehicle Type</option>
+                                    <option *ngFor="let VehicleTypeList of respVehicleType" value={{VehicleTypeList.LookupDataId}}>
+                                        {{VehicleTypeList.LookupValue}}
+                                    </option> 
+                                </select>
+                                <label class="active">Vehicle Type</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">+91</span>
+                                </div>
+                                <input type="text" class="form-control" formControlName="vendorContact" name="vendorContact" placeholder="Contact Number" aria-label="Username" aria-describedby="basic-addon1" [ngClass]="{ 'is-invalid': (submitted && addvehicle.controls['vendorContact'].invalid ) || (addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].touched)}">
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].errors.pattern) || (addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].touched && addvehicle.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Only Numeric Number. </div>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].errors.maxlength) || (addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].touched && addvehicle.controls['vendorContact'].errors.maxlength && !addvehicle.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                <div *ngIf=" (vehiclesubmitted && addvehicle.controls['vendorContact'].invalid && addvehicle.controls['vendorContact'].errors.minlength) || (addvehicle.controls['vendorContact'].errors && addvehicle.controls['vendorContact'].touched && addvehicle.controls['vendorContact'].errors.minlength && !addvehicle.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class=" md-form md-outline">
+                                <select class="form-control field-ht colorful-select" id="form-status" class="form-control" formControlName="status" name="status">
+                                    <option value="">Select Status</option>
+                                    <option *ngFor="let Statuslist of respStatus" value={{Statuslist.LookupDataId}}>
+                                        {{Statuslist.LookupValue}}
+                                    </option>
+                                </select>
+                                <label class="active">Status</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" #closebutton data-dismiss="modal">Cancel</button>
+                <button *ngIf="vehicleSaveButton" [disabled]="isButtonDisabled" type="button" (click)="insertvehicle()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+            </div>
+        </div>
+        <!-- Content -->
+    </div>
+</div>

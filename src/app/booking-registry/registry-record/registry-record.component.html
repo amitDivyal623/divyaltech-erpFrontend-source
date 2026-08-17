@@ -1,0 +1,276 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Registry Record
+                    <button type="button" (click)='addBookingRegistry()' class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Booking / Registry </button>
+                </h5>
+                <div [formGroup]="srcRegistryForm" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="buyer_name" class="form-control">
+                                <label for="buyer_name" class="active">Buyer Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <ng-select formControlName="stage" [items]="filteredStages" bindLabel="name" bindValue="id" placeholder="Select Stage" appendTo="body" [multiple]="true"   (change)="onChangeStatus($event)">
+                                </ng-select>
+                                <label for="stage" class="active"> CRM Stage</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4" *ngIf="showBookingDateFilter">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" ngbDatepicker #fromBdate="ngbDatepicker" (click)="fromBdate.toggle()" type="text" class="form-control datepicker" formControlName="from_booking_date">
+                                <label class="ml-1 active">From Booking Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4" *ngIf="showBookingDateFilter">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" ngbDatepicker #toBdate="ngbDatepicker" (click)="toBdate.toggle()" type="text" class="form-control datepicker" formControlName="to_booking_date">
+                                <label class="ml-1 active">To Booking Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4" *ngIf="showRegistryDateFilter">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #fromRdate="ngbDatepicker" (click)="fromRdate.toggle()" type="text" class="form-control datepicker" formControlName="from_registry_date">
+                                <label class="ml-1 active">From Registry Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4" *ngIf="showRegistryDateFilter">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #toRdate="ngbDatepicker" (click)="toRdate.toggle()" type="text" class="form-control datepicker" formControlName="to_registry_date">
+                                <label class="ml-1 active">To Registry Date</label>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                              <ng-select formControlName="status" [items] = "respPStatus" bindLabel="status" bindValue="status" placeholder="Select  Status" appendTo="body" [multiple]="true">
+                              </ng-select>
+                              <label for="status" class="active"> Status</label>
+                            </div>
+                        </div>
+                        
+                        <!-- <div class="col-md-3 px-4">
+                          <div class=" md-form md-outline">
+                              <input formControlName="divertion_date" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Ddate="ngbDatepicker" (click)="Ddate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                <label for="date-picker-example" class="ml-1 active">Divertion Date</label>
+                          </div>
+                      </div> -->
+
+                        
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <!-- <input type="text"  formControlName="payment_plan"  class="form-control"> -->
+                                <select formControlName="payment_status" id="payment_status" class="form-control field-ht colorful-select">
+                              <option value="" >Select Payment Status </option>
+                              <option *ngFor="let paymentPlanlist of respPPlan"  value={{paymentPlanlist.erpPlanID}}>{{paymentPlanlist.plan_name}}</option>
+                            </select>
+                                <label for="payment_plan" class="active">Payment Plan</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                
+                                <ng-autocomplete  [data]="blockplotdataList" [searchKeyword]="keyword" (selected)='selectBp($event)' (click)="blockPlotlistData($event)" (inputChanged)='onBlockPlotSearch($event);'  [itemTemplate]="itemTemplate" id="BlockPlotSearch" name="BlockPlotSearch" formControlName="BlockPlotSearch" >
+                                </ng-autocomplete>
+                                <ng-template #itemTemplate let-item>
+                                    <a [innerHTML]="item.product_code" [readonly]="Access"></a>
+                                </ng-template>
+                                <ng-template #notFoundTemplate let-notFound>
+                                    <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                </ng-template>
+                                <label for="BlockPlotSearch" class="active">Block Plot</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="resetSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="registrySearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <button *ngIf="canViewExcelExports" (click)="ExportTOExcel()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" style="float: right;">Export to Excel</button>
+                        <button *ngIf="canViewBookingList" (click)="BookingToExcel()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" style="float: right;">Booking List</button>
+                        <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple">
+                            <p style="font-size: 20px; color: white">Please wait...</p>
+                        </ngx-spinner>
+                        <button *ngIf="canViewExcelExports" (click)="RegRecordToExcel()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" style="float: right;">Registry Record</button>
+                        <button *ngIf="canViewExcelExports" (click)="BalSheetToExcel()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" style="float: right;">Balance Sheet</button>
+                        <table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Buyer Name</th>
+                                    <th>Booking date</th>
+                                    <th>Registry date</th>
+                                    <th>Status</th>
+                                    <th>Stages</th>
+                                    <!-- <th>Paymeccnt Status</th> -->
+                                    <th>Payment Plan</th>
+                                    <th>Block-Plot</th>
+                                    <th>Plot size</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of regdata; let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.buyerName}}</td>
+                                    <td>{{item.booking_date}}</td>
+                                    <td>{{item.registry_date}}</td>
+                                    <td>{{item.stage_status || 'On Track'}}</td>
+                                    <td>{{item.stage_name}}</td>
+                                    <!-- <td>{{item.payment_status}}</td> -->
+                                    <td>{{item.payment_plan}}</td>
+                                    <td>{{item.ProductCode}}</td>
+                                    <td>{{item.plot_size}}</td>
+
+
+                                    <td>
+                                        <a class="black-text" id="" ngbTooltip="View Registry" placement="top" (click)="addRegistry('View',item.id,item.PersonsId)" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" id="" ngbTooltip="Edit" placement="top" (click)="addRegistry('Edit',item.id,item.PersonsId)" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="item.buyer_id" class="text-primary px-1" ngbTooltip="Customer Profile" placement="top" (click)="custEnquiryEdit( item.buyer_id,item.buyerName, item.mobile_number)"><i class="fas fa-user"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text" id="" ngbTooltip="Remove" placement="top" (click)="deletRegistryData(item.PersonsId,item.enquiry_id,item.booking_id,item.id)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="regdata?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Address</th>
+                                    <th>State</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               <tr *ngFor="let item of regdata; let i=index">
+                                    <td>{{i}}</td>
+                                    <td>{{item.company_id}}</td>
+                                    <td>{{item.plot_id}}</td>
+                                    <td>{{item.land_id}}</td>
+                                    <td>{{item.plot_length}}</td>
+                                    <td>
+                                        <a class="black-text" id="" mdbtooltip="View" placement="top" (click)="addRegistry('View',1)" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" id="" mdbtooltip="Edit" placement="top" (click)="addRegistry('Edit',1)" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" id="" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                             <tbody *ngIf="regdata?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table> -->
+                    </div>
+                </div>
+            </section>
+            <!-- Add New modal -->
+            <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Landlord Detail</p>
+                            <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <!-- <div class="modal-body">
+                          <div class="form-row" [formGroup]="registryForm">
+
+                          <div class="col-md-3 px-4">
+                              <div class=" md-form md-outline">
+                                  <input formControlName="TargetDate" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                    <label for="date-picker-example" class="ml-1 active">Date</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3 px-4">
+                              <div class=" md-form md-outline">
+                                  <input formControlName="BookingDate" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Bdate="ngbDatepicker" (click)="Bdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                    <label for="date-picker-example" class="ml-1 active">Date</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3 px-4">
+                              <div class=" md-form md-outline">
+                                  <input formControlName="DivertionDate" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Ddate="ngbDatepicker" (click)="Ddate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                    <label for="date-picker-example" class="ml-1 active">Date</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3 px-4">
+                              <div class=" md-form md-outline">
+                                  <input type="text"   formControlName="RegStatus"  class="form-control">
+                                  <label for="status" class="active">Status</label>
+                              </div>
+                          </div>
+                          <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text"   formControlName="RegStage"  class="form-control">
+                                <label for="stage" class="active">Stage</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text"  formControlName="PaymentStatus"  class="form-control">
+                                <label for="PaymentStatus" class="active">Payment Status</label>
+                            </div>
+                          </div>
+                      </div>
+                        </div> -->
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+
+</body>

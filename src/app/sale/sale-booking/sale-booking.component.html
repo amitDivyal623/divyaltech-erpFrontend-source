@@ -1,0 +1,233 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Property Sale List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_bking_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Property Booking</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline margin-mdform">
+                                <input type="text" id="customer_name" class="form-control" required="">
+                                <label for="customer_name" class="">Customer</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline pr-4">
+                                <input class="form-control" placeholder="Select date" name="td" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()" readonly>
+                                <label for="date-picker-example" class="active">Transaction date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-autocomplete" class="form-control">
+                                <label for="form-autocomplete" class="">Property</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-autocomplete2" class="form-control" value="">
+                                <label for="form-autocomplete2" class="">Contact Person</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Date
+                                    </th>
+                                    <th>Property Details
+                                    </th>
+                                    <th>Booked By
+                                    </th>
+                                    <th>Booking Amount
+                                    </th>
+                                    <th>Booking Done By
+                                    </th>
+                                    <th>Description
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#view_bking_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_bking_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#view_bking_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_bking_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>3</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#view_bking_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_bking_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#view_bking_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_bking_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New property modal -->
+            <div class="modal fade" id="add_bking_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Property Booking</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="saleBooking" class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" formControlName="date" placeholder="Select date" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()"  [ngClass]="{ 'is-invalid': (submitted && saleBooking.controls['date'].invalid ) || (saleBooking.controls['date'].invalid && saleBooking.controls['date'].touched)}" readonly>
+                                        <label for="date-picker-example" class="active">Transaction date *</label>
+                                        <div *ngIf=" (submitted && saleBooking.controls['date'].invalid) || (saleBooking.controls['date'].invalid && saleBooking.controls['date'].touched)" class="invalid-feedback">
+                                        <div *ngIf=" (submitted && saleBooking.controls['date'].invalid) || (saleBooking.controls['date'].invalid && saleBooking.controls['date'].touched)">Date is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="property">
+                                            <option value="" selected="true" disabled="disabled">Select Property</option>
+                                            <option value="5AFFFF1B-2AE6-40E7-95CCA7A305FDB2ED">1A</option>
+                                            <option value="5AFFFF1B-2AE6-40E7-95CCA7A305FDB2ED">2B</option>
+                                            <option value="5AFFFF1B-2AE6-40E7-95CCA7A305FDB2ED">3B</option>
+                                        </select>
+                                    <label class="ml-2 active">Property</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="Customer">
+                                            <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                            <option value="default">Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" formControlName="bookingAmt" placeholder="Booking Amount" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="bking_dn_by" class="form-control" formControlName="bookingDoneBy" required="">
+                                        <label for="f2" class="">Booking Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea formControlName="Description" type="text" id="form10" class="md-textarea form-control" rows="3" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect" (click)="insertBooking()">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>            
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

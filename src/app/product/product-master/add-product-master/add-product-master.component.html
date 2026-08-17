@@ -1,0 +1,365 @@
+<body class="fixed-sn white-skin">
+
+	<!-- Main Navigation -->
+	<header>
+
+		<!-- Sidebar navigation -->
+		<app-header></app-header>
+
+		<!-- Navbar -->
+		<app-navbar></app-navbar>
+
+		<!-- /.Navbar -->
+
+	</header>
+	<!-- Main Navigation -->
+
+	<!-- Main layout -->
+	<main>
+		<div class="container-fluid px-4 mb-2">
+			<form [formGroup]="productForm">
+				<div class="card">
+					<h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">{{heading}}</h5>
+					<div class="card-body my-3">
+						<div class="row px-3">
+							<div class="col-lg-12 col-md-12 px-2">
+								<div class="border-box mb-4">
+									<span class="border-label">Product Details</span>
+									<div class="row px-3">
+										<div class="col-lg-2 col-md-12 px-2 md-form md-outline">
+											<select #type class="form-control field-ht colorful-select"
+												(change)="productTypeData(type.value)" formControlName="ProductType"
+												name="ProductType">
+												<option value="" selected="true">Select Product Type</option>
+												<option *ngFor="let list of productTypeDataList"
+													value={{list.productTypeId}}>
+													{{list.productType_name}}
+												</option>
+											</select>
+											<label class="ml-2 active">Product Type</label>
+											<!-- <div *ngIf=" (submitted && productForm.controls['ProductType'].invalid) || (productForm.controls['ProductType'].invalid && productForm.controls['ProductType'].touched)" class="invalid-feedback">Please Select Product Type</div> -->
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 md-form md-outline">
+											<select class="form-control field-ht colorful-select"
+												formControlName="productCategory" name="productCategory">
+												<option value="" selected="true">Select Product Category</option>
+												<option *ngFor="let cateGoryList of productCategoryDataList"
+													value={{cateGoryList.productCategoryId}}>
+													{{cateGoryList.productCategoryName}}
+												</option>
+											</select>
+											<label class="ml-2 active">Product Category</label>
+											<!-- <div *ngIf=" (submitted && productForm.controls['productCategory'].invalid) || (productForm.controls['productCategory'].invalid && productForm.controls['productCategory'].touched)" class="invalid-feedback">Please Select Product Category</div> -->
+										</div>
+										<div class="col-lg-2 col-md-12 px-2" *ngIf="isPlotSelected">
+											<div class="md-form md-outline">
+												<ng-select [items]="lookupDataList2" bindLabel="LookupValue"
+													bindValue="LookupDataId" formControlName="custom2"
+													placeholder="Please Select" [searchable]="true" [clearable]="true">
+												</ng-select>
+
+												<label for="Block" class="active">Block</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 md-form md-outline" *ngIf="isPlotSelected">
+
+											<input type="text" class="form-control field-ht" formControlName="plotName"
+												placeholder="Enter Plot No." />
+
+											<label class="ml-2 active">Plot Number</label>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 md-form md-outline"
+											*ngIf="isRawLandSelected">
+
+											<ng-select [items]="landlordsData" bindLabel="landlord_name"
+												bindValue="landlord_id" formControlName="ownerName"
+												placeholder="Select Owner Name" [searchable]="true" [clearable]="true"
+												[virtualScroll]="true">
+
+											</ng-select>
+
+											<label class="ml-2 active">Owner's Name</label>
+
+										</div>
+										<div class="col-lg-2 col-md-12 px-2" *ngIf="isRawLandSelected">
+											<div class="md-form md-outline">
+												<input type="text" id="custom3" formControlName="custom3"
+													class="form-control" name="custom3">
+												<label for="Khasranumber" class="active">Khasra No (RawLand)</label>
+												<div *ngIf=" (submitted && productForm.controls['custom3'].invalid) || (productForm.controls['custom3'].invalid && productForm.controls['custom3'].touched)"
+													class="invalid-feedback">Please Enter Khasra No</div>
+											</div>
+										</div>
+
+										<div class="col-lg-2 col-md-12 px-2" *ngIf="isPlotSelected">
+											<div class="md-form md-outline">
+												<ng-select [items]="rawKhasraList" bindLabel="raw_khasra"
+													bindValue="raw_khasra" formControlName="custom7"
+													placeholder="Select Khasra No" [searchable]="true"
+													[clearable]="true"
+													[ngClass]="{ 'is-invalid': (submitted && productForm.controls['custom7'].invalid) || (productForm.controls['custom7'].invalid && productForm.controls['custom7'].touched)}">
+												</ng-select>
+												<label for="Khasranumber" class="active">Khasra No (Plot)</label>
+												<div *ngIf="(submitted && productForm.controls['custom7'].invalid) || (productForm.controls['custom7'].invalid && productForm.controls['custom7'].touched)"
+													class="invalid-feedback">Please Select Khasra No</div>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 md-form md-outline">
+											<select class="form-control field-ht colorful-select" formControlName="uom"
+												name="uom">
+												<option value="" selected="true">Select Unit of Measurement</option>
+												<option *ngFor="let uomList of productUOMDataList"
+													value={{uomList.Unit_of_MeasureId}}>
+													{{uomList.uom_name}}
+												</option>
+											</select>
+											<label class="ml-2 active">Unit of Measurement </label>
+											<!-- <div *ngIf=" (submitted && productForm.controls['uom'].invalid) || (productForm.controls['uom'].invalid && productForm.controls['uom'].touched)" class="invalid-feedback">Please Select Unit of Measurement</div> -->
+										</div>
+										<div class="col-lg-2 col-md-12 px-2">
+											<div class=" md-form md-outline">
+												<input type="hidden" id="product_id" formControlName="product_id"
+													name="product_id">
+												<input type="text" id="product-code" #data1
+													formControlName="productCode" name="productCode"
+													class="form-control" (change)="oncheckProductCode(data1.value)"
+													[ngClass]="{ 'is-invalid': (submitted && productForm.controls['productCode'].invalid ) || (productForm.controls['productCode'].invalid && productForm.controls['productCode'].touched)}">
+												<label for="product-code" class="active">Product Code</label>
+												<div *ngIf=" (submitted && productForm.controls['productCode'].invalid) || (productForm.controls['productCode'].invalid && productForm.controls['productCode'].touched)"
+													class="invalid-feedback">Please Enter Product Code</div>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2">
+											<div class=" md-form md-outline">
+												<input type="text" id="prod-name" #data class="form-control"
+													formControlName="productName" name="productName"
+													(change)="oncheckProductName(data.value)"
+													[ngClass]="{ 'is-invalid': (submitted && productForm.controls['productName'].invalid ) || (productForm.controls['productName'].invalid && productForm.controls['productName'].touched)}">
+												<label for="prod-name" class="active">Product Name</label>
+												<div *ngIf=" (submitted && productForm.controls['productName'].invalid) || (productForm.controls['productName'].invalid && productForm.controls['productName'].touched)"
+													class="invalid-feedback">Please Enter Product Name</div>
+											</div>
+										</div>
+										<!-- <div class="col-lg-3 col-md-12 px-2">
+											<div class=" md-form md-outline">
+												<input type="text" id="GST-code" class="form-control"
+													formControlName="GSTCODE" name="GSTCODE">
+												<label for="GST-code" class="active">GST Code</label>
+												
+											</div>
+										</div> -->
+
+										<!-- <div class="col-lg-3 col-md-12 px-2 md-form md-outline">
+											<select  class="form-control field-ht colorful-select" formControlName="productgroup" name="productgroup" [ngClass]="{ 'is-invalid': (submitted && productForm.controls['productgroup'].invalid ) || (productForm.controls['productgroup'].invalid && productForm.controls['productgroup'].touched)}">
+												<option value="" selected="true" >Select Product Group</option>
+												<option > Group1</option>
+											</select>
+											<label class="ml-2 active">Product Group</label>
+											<div *ngIf=" (submitted && productForm.controls['productgroup'].invalid) || (productForm.controls['productgroup'].invalid && productForm.controls['productgroup'].touched)" class="invalid-feedback">Please Select Product Group</div>
+										</div> -->
+
+										<!-- <div class="col-lg-3 col-md-12 px-2">
+											<div class="md-form md-outline input-group">
+												<div class="input-group-prepend">
+													<div class="input-group-prepend">
+														<span class="input-group-text" id="basic-addon1">Rs</span>
+													</div>
+													<input type="text" class="form-control" aria-label="Username"
+														aria-describedby="basic-addon1" formControlName="purchaseRate"
+														name="purchaseRate"
+														>
+													<label for="purchaseRate" class=""
+														style="margin: 7px 35px 0px">Purchase Rate</label>
+												</div>
+
+											</div>
+										</div> -->
+										<div class="col-lg-3 col-md-12 px-2">
+											<div class="md-form md-outline input-group">
+												<div class="input-group-prepend">
+													<span class="input-group-text" id="basic-addon1">Rs</span>
+												</div>
+												<input type="text" class="form-control" aria-label="Username"
+													aria-describedby="basic-addon1" formControlName="salesRate"
+													name="salesRate" inputmode="numeric"
+													(input)="onSalesRateInput($event)"
+													[ngClass]="{ 'is-invalid': (submitted && productForm.controls['salesRate'].errors ) || (productForm.controls['salesRate'].touched && productForm.controls['salesRate'].invalid)}">
+												<div *ngIf=" (submitted && productForm.controls['salesRate'].errors && productForm.controls['salesRate'].errors.pattern) || (productForm.controls['salesRate'].touched && productForm.controls['salesRate'].errors && productForm.controls['salesRate'].errors.pattern)"
+													class="invalid-feedback">Please Enter Only Numeric value</div>
+												<label for="salesRate" class="active"
+													style="margin-left: 35px;z-index: 1000">Sales Rate</label>
+											</div>
+										</div>
+										<div class="col-lg-6 col-md-12 px-2">
+											<div class="md-form md-outline">
+												<textarea type="text" id="prod-remark" class="md-textarea form-control"
+													rows="1" formControlName="productDescription"
+													name="productDescription"></textarea>
+												<label for="prod-remark">Description</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- <div class="col-lg-3 col-md-12 px-2 ">
+								<div class="border-box">
+									<span class="border-label">Property Image</span>
+									<div class="col-lg-12 col-md-12">
+										<div class="group-gap">
+											<div class="avatar-upload">
+												<div class="avatar-edit">
+													<input type='file' mage" id="imageUpload" accept=".png, .jpg, .jpeg" #fileInput (change)="uploadFile($event)" />
+												</div>
+												<div class="avatar-preview">
+													<div id="imagePreview" [style.backgroundImage]="'url('+ imageUrl +')'" (click)="fileInput.click()">
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> -->
+							<div class="col-lg-12 col-md-12 px-2 mt-2" *ngIf="AdditionalDetails">
+								<div class="border-box mb-4">
+									<span class="border-label">Additional Detail</span>
+									<div class="row px-3" #data id="htmlToAdd">
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition1">
+											<div class="md-form md-outline">
+												<input type="text" id="custom8" formControlName="custom8" #data
+													class="form-control" name="custom8">
+												<label for="sizeinacr" class="active">Size in Acre</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition1">
+											<div class="md-form md-outline">
+												<input type="text" id="custom9" value="{{this.Hect|number}}"
+													formControlName="custom9" class="form-control" name="custom9">
+												<label for="sizeinhect" class="active">Size in Hect</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition1">
+											<div class="md-form md-outline">
+												<input type="text" id="custom13" formControlName="custom13"
+													class="form-control" name="custom13">
+												<label for="sizeinsqft" class="active">Size in Square Feet</label>
+											</div>
+										</div>
+
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition1">
+											<div class="md-form md-outline">
+												<input type="text" id="custom11" formControlName="custom11"
+													class="form-control" name="custom11">
+												<label for="rinpustika" class="active">Rin Pustika</label>
+											</div>
+										</div>
+
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition1">
+											<div class="md-form md-outline">
+												<input type="text" id="custom6" formControlName="custom6"
+													class="form-control" name="custom6">
+												<label for="Landdetails" class="active"> Mouja</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition2">
+											<div class="md-form md-outline">
+												<select id="custom1" class="form-control" formControlName="custom1"
+													name="custom1">
+													<option value="">Please Select</option>
+													<option value="{{items.LookupDataId}}"
+														*ngFor="let items of lookupDataList1">
+														{{items.LookupValue}}
+													</option>
+												</select>
+												<label for="Facing" class="active">Facing</label>
+											</div>
+										</div>
+
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition2">
+											<div class="md-form md-outline">
+												<select id="custom12" class="form-control" formControlName="custom12"
+													name="custom12">
+													<option value="">Please Select</option>
+													<option value="{{items.LookupDataId}}"
+														*ngFor="let items of lookupDataList3">
+														{{items.LookupValue}}
+													</option>
+												</select>
+												<label for="Status" class="active">Status</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv"
+											*ngIf="Condition2 || Condition1">
+											<div class="md-form md-outline">
+												<select id="custom10" class="form-control" formControlName="custom10"
+													name="custom10">
+													<option value="">Please Select</option>
+													<option value="{{items.LookupDataId}}"
+														*ngFor="let items of lookupDataList">
+														{{items.LookupValue}}
+													</option>
+												</select>
+												<label for="landuse" class="active">Land Use</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition2">
+											<div class="md-form md-outline">
+												<input type="text" id="custom4" formControlName="custom4"
+													class="form-control" name="custom4"
+													[disabled]="productForm.get('isNonRectangular')?.value">
+												<label for="frontlength" class="active">Front Length</label>
+											</div>
+										</div>
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition2">
+											<div class="md-form md-outline">
+												<input type="text" id="custom5" formControlName="custom5"
+													class="form-control" name="custom5"
+													[disabled]="productForm.get('isNonRectangular')?.value">
+												<label for="depthlength" class="active">Depth Length</label>
+											</div>
+										</div>
+										<!-- Non Rectangular Plot Checkbox -->
+										<div class="col-lg-2 col-md-12 px-2 additatinolDiv" *ngIf="Condition2">
+											<div class="non-rectangular-checkbox">
+												<input type="checkbox" id="nonRectangular" class="non-rectangular-input"
+													formControlName="isNonRectangular" (change)="onNonRectangularChange($event)">
+												<label for="nonRectangular" class="non-rectangular-label">
+													Non Rectangular Plot
+												</label>
+											</div>
+
+
+										</div>
+										<!-- Enter All Sides Field -->
+										<div class="col-lg-3 col-md-12 px-2 additatinolDiv"
+											*ngIf="Condition2 && productForm.get('isNonRectangular')?.value">
+											<div class="md-form md-outline">
+												<input type="text" id="custom14" formControlName="custom14"
+													class="form-control">
+												<label class="active">Enter All Sides</label>
+											</div>
+										</div>
+										<div class="col-lg-3 col-md-12 px-2 additatinolDiv" *ngIf="Condition2 || Condition1">
+											<div class=" md-form md-outline">
+												<input type="text" id="Quantity-code" class="form-control"
+													formControlName="Quantity" name="Quantity">
+												<label for="Quantity-code" class="active">Total Avaliable Quantity
+													(Area)</label>
+												<!-- <div *ngIf=" (submitted && productForm.controls['Quantity'].invalid) || (productForm.controls['Quantity'].invalid && productForm.controls['Quantity'].touched)" class="invalid-feedback">Please Enter Total Avaliable Quantity</div> -->
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 float-right mr-3" *ngIf="productSubmitButton">
+							<button type="button" [disabled]="isButtonDisabled"
+								class="float-right btn btn-sm dusty-grass-gradient waves-light waves-effect"
+								(click)="productSubmit()"><i class="fas fa-save mr-2"></i>Submit</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</main>
+	<!-- Main layout -->
+</body>

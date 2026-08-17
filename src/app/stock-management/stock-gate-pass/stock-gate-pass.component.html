@@ -1,0 +1,1258 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;"> Gate Pass
+                        <ng-container>
+                            <button type="button"  (click)="openRentItemGatePass()"
+                                class="btn btn-white heavy-rain-gradient btn-sm waves-light waves-effect float-right my-0"
+                                >
+                                <i class="fa fa-plus" aria-hidden="true"></i> Rent Item Gate Pass
+                            </button>
+                            <button type="button"
+                                class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                                (click)="openConsumptionModal()" data-toggle="modal"
+                                data-target="#add_material_consumed_modal"><i class="fa fa-plus" aria-hidden="true"></i> Daily Consumption Gate Pass
+                            </button>
+                            <button type="button"
+                                class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                                (click)="addnewMachine()"><i class="fa fa-plus" aria-hidden="true"></i> Vehicle Gate Pass 
+                            </button>
+                            <button type="button"
+                                class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                                (click)="openGatePassModal()"><i class="fa fa-plus" aria-hidden="true"></i> Material Gate  Pass
+                            </button>
+                        </ng-container>
+                </h5>
+
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <div class="tab-pane pb-0" id="docsTabsBank" role="tabpanel">
+
+                            <div class="form-row px-1">
+
+                            </div>
+                            <nav class="nav nav-pills nav-justified">
+
+                                <!-- Gate Pass -->
+                                <a class="nav-item nav-link link-nav" role="tab"
+                                    [ngClass]="{ 'show active': activeICMTab === 'Gate Pass' }"
+                                    (click)="setTab('Gate Pass')">
+                                    <i class="bi bi-folder-symlink-fill mr-2"></i> Material Gate Pass
+                                </a>
+
+                                <!-- Entry -->
+                                <a class="nav-item nav-link link-nav" role="tab"
+                                    [ngClass]="{ 'show active': activeICMTab === 'machinereading' }"
+                                    (click)="setTab('machinereading')">
+                                    <i class="bi bi-journal-richtext mr-2"></i> Vehicle Gate Pass 
+                                </a>
+
+                                <!-- Result -->
+                                <a class="nav-item nav-link link-nav" role="tab"
+                                    [ngClass]="{ 'show active': activeICMTab === 'consumption' }"
+                                    (click)="setTab('consumption')">
+                                    <i class="bi bi-journal-richtext mr-2"></i> Daily Consumption Gate Pass
+                                </a>
+
+
+                                <a class="nav-item nav-link link-nav" role="tab"
+                                    [ngClass]="{ 'show active': activeICMTab === 'rentItemGatePass' }"
+                                    (click)="setTab('rentItemGatePass')">
+                                    <i class="bi bi-journal-richtext mr-2"></i> Rent Item Gate Pass
+                                </a>                                
+
+                            </nav>
+                            <div class="col-md-12 p-2" [hidden]="activeICMTab !== 'Gate Pass'">
+
+
+                                <div class="card-body" [formGroup]="searchGateForm">
+                                    <div class="form-row ml-2">
+                                        <!-- From Date -->
+                                        <div class="col-md-2 px-1">
+                                            <div class="md-form md-outline">
+                                                <label class="active">From Date</label>
+                                                <input type="date" class="form-control" formControlName="from"
+                                                    onkeydown="return false;" />
+                                            </div>
+                                        </div>
+
+                                        <!-- To Date -->
+                                        <div class="col-md-2 px-1">
+                                            <div class="md-form md-outline">
+                                                <label class="active">To Date</label>
+                                                <input type="date" class="form-control" formControlName="to"
+                                                    onkeydown="return false;" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2.5 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="text" id="form-projectmanager" class="form-control"
+                                                    formControlName="gate_pass_number">
+                                                <label for="form-projectmanager" class="active">Gate Pass Number</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2.5 md-form md-outline">
+                                            <label for="transferType" class="ml-2 active">Transfer Type</label>
+                                            <select id="transferType" formControlName="transferType"
+                                                class="form-control" (change)="onTransferTypeChange($event)">
+                                                <option value="" disabled selected>Select Transfer Type</option>
+                                                <option value="project_type">Project Type</option>
+                                                <option value="warehouse_type">Warehouse Type</option>
+                                            </select>
+                                        </div>
+
+
+                                        <!-- Category -->
+                                        <div class="col-md-2 px-2 md-form md-outline">
+
+                                            <ng-select [items]="categoryLists" bindLabel="group_name"
+                                                bindValue="group_id" placeholder="Select Category"
+                                                formControlName="category" (change)="onCategoryChangeSearch($event)"
+                                                [searchable]="true" [clearable]="true">
+                                            </ng-select>
+                                            <label class="active ml-2">Category</label>
+                                        </div>
+
+                                        <!-- Sub Category -->
+                                        <div class="col-md-2 px-2 md-form md-outline">
+
+                                            <ng-select [items]="filteredSubcategoryListsSearch"
+                                                bindLabel="sub_group_name" bindValue="sub_group_id"
+                                                placeholder="Select Sub Category" formControlName="subCategory"
+                                                (change)="onSubCategoryChangeSearch($event)" [searchable]="true"
+                                                [clearable]="true">
+                                            </ng-select>
+                                            <label class="active ml-2">Sub Category</label>
+                                        </div>
+
+                                        <div class="col-md-2 md-form md-outline">
+                                            <ng-select [items]="filteredMaterialsList" bindValue="master_item_id"
+                                                bindLabel="itemname" formControlName="item"
+                                                (change)="onMaterialChangeSearch($event)" placeholder="Select Item"
+                                                notFoundText="No items found" [searchable]="true" [clearable]="true">
+
+                                                <!-- Dropdown options -->
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div *ngIf="item" [title]="item?.itemname">
+                                                        {{ item?.itemname }}
+                                                        <span *ngIf="item?.unit_name" class="text-muted">
+                                                            , {{ item?.unit_name }}
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+
+                                                <!-- Selected value -->
+                                                <ng-template ng-label-tmp let-item="item">
+                                                    <div *ngIf="item" [title]="item?.itemname">
+                                                        {{ item?.itemname }}
+                                                        <span *ngIf="item?.unit_name" class="text-muted">
+                                                            , {{ item?.unit_name }}
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+
+                                            </ng-select>
+                                            <label class="active ml-2">Items</label>
+
+                                            <!-- Clear button -->
+                                            <span *ngIf="searchGateForm.get('item')?.value"
+                                                class="position-absolute text-primary font-weight-bold"
+                                                style="right: 2.3rem; top: 0.4rem; cursor: pointer; font-size: 1.5rem; line-height: 1;"
+                                                (click)="clearItemSelection()">
+                                                &times;
+                                            </span>
+
+                                        </div>
+
+
+                                        <!-- To Project (Visible when transferType = project_type) -->
+                                        <div class="col-md-2 px-2 md-form md-outline"
+                                            *ngIf="searchGateForm.get('transferType')?.value === 'project_type'">
+
+                                            <label class="active ml-2">To Project</label>
+
+                                            <ng-select [items]="respProject" bindLabel="projectName"
+                                                placeholder="Select Project" formControlName="to_project"
+                                                [searchable]="true" [clearable]="true">
+                                            </ng-select>
+                                        </div>
+
+                                        <!-- To Warehouse (Visible when transferType = warehouse_type) -->
+                                        <div class="col-md-2 px-2 md-form md-outline"
+                                            *ngIf="searchGateForm.get('transferType')?.value === 'warehouse_type'">
+
+                                            <label class="active ml-2">To Warehouse</label>
+
+                                            <ng-select [items]="warehouseList" bindLabel="godown_name"
+                                                placeholder="Select Warehouse" formControlName="to_warehouse"
+                                                [searchable]="true" [clearable]="true">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- Inline Unit Conversion -->
+                                    <!-- <div class="form-row mt-3">
+                                        <div class="col-12">
+
+                                            <div class="d-flex align-items-center bg-light p-2 rounded">
+
+                                                
+                                                <input type="number" class="form-control form-control-sm mr-2"
+                                                    style="width:100px;" placeholder="Qty" formControlName="quantity">
+
+                                                
+                                                <input type="text"
+                                                    class="form-control form-control-sm mr-3 text-center bg-white"
+                                                    style="width:90px;" formControlName="baseUnit" readonly>
+
+                                              
+                                                <i class="bi bi-arrow-right mx-2 text-dark"></i>
+
+
+                                                
+                                                <span class="mx-2 font-weight-bold">=</span>
+
+                                               
+                                                <input type="text" class="form-control form-control-sm bg-white"
+                                                    formControlName="convertedValue" style="width:120px;"
+                                                    placeholder="Result" readonly>
+
+                                                
+                                                <select formControlName="convertToUnit">
+                                                    <option value="">Select Unit</option>
+                                                    <option *ngFor="let unit of convertUnitDropdown" [value]="unit">
+                                                        {{ unit }}
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                    </div> -->
+
+                                    <!-- Button Row -->
+                                    <div class="form-row mt-2" [formGroup]="searchGateForm">
+                                        <div class="col-12 d-flex justify-content-end">
+
+                                            <button type="button"
+                                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect mr-2"
+                                                (click)="searchGate()">
+                                                <i class="fa fa-search mr-2" aria-hidden="true"></i>Search
+                                            </button>
+
+                                            <button type="button"
+                                                class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                                (click)="resetGate()">
+                                                <i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <div class="table-responsive card-body">
+                                    <table id="buyertable" datatable [dtOptions]="dtOptionsGatePass"
+                                        [dtTrigger]="dtTriggerGatePass" class="table table-striped" cellspacing="0"
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th>S.No.
+                                                </th>
+                                                <th> Gate Pass Date
+                                                </th>
+                                                <th> Transfer Type
+                                                </th>
+                                                <th> Gate Pass No.
+                                                </th>
+                                                <th> Issued Material
+                                                </th>
+                                                <th> Quantity
+                                                </th>
+                                                <th> From Warehouse
+                                                </th>
+                                                <th> To Project
+                                                </th>
+                                                <th> To Warehouse
+                                                </th>
+                                                <th width="5%">Action
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of workContractData;let i=index">
+                                                <td>
+                                                </td>
+                                                <td>{{i+1}}
+                                                </td>
+                                                <td>{{item.date | date:'dd/MM/yyyy'}}
+                                                </td>
+                                                <td>{{item.transfer_type == 'project_type' ? 'Project Type' : 'Warehouse Type'}} </td>
+                                                <td>{{item.gate_pass}}
+                                                </td>
+                                                <td>{{item.issued_material}}
+                                                </td>
+                                                <td>{{item.quantity}}
+                                                </td>
+                                                <td>{{item.from_warehouse_name}}
+                                                </td>
+                                                <td>{{item.to_project_name}}
+                                                </td>
+                                                <td>{{item.to_warehouse_name}}
+                                                </td>
+                                                <td width="5%">
+                                                    <a class="black-text" id="{{i+1}}" ngbTooltip="View Gate Pass"
+                                                        placement="top" (click)="ViewGatePass('view_gate_pass',item)"><i
+                                                            class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    &nbsp;&nbsp;
+                                                    <!-- <a class="teal-text" id="{{i+1}}" ngbTooltip="Edit Gate Pass"
+                                                            placement="top" data-toggle="modal"
+                                                            data-target="#add_gatepass_modal"
+                                                            (click)="ViewGatePass('edit_gate_pass',item.gatepass_id)"><i
+                                                                class="fa-pencil-alt px-1 fas"></i></a> -->
+                                                    <a class="red-text" (click)="removeGatePass(item)"
+                                                        mdbtooltip="Remove" placement="top"><i
+                                                            class="fa-times px-1 fas"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="workContractData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 p-2" [hidden]="activeICMTab !== 'machinereading'">
+
+                                <div class="card-body" [formGroup]="searchMachineForm">
+
+                                    <div class="form-row ml-2">
+
+                                        <!-- From Date -->
+                                        <div class="col-md-2 px-1">
+                                            <div class="md-form md-outline">
+                                                <label class="active">From Date</label>
+                                                <input type="date" class="form-control" formControlName="from"
+                                                    onkeydown="return false;" />
+                                            </div>
+                                        </div>
+
+                                        <!-- To Date -->
+                                        <div class="col-md-2 px-1">
+                                            <div class="md-form md-outline">
+                                                <label class="active">To Date</label>
+                                                <input type="date" class="form-control" formControlName="to"
+                                                    onkeydown="return false;" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Project Name -->
+                                        <div class="col-md-2 px-2 md-form md-outline">
+                                            <label class="active ml-2">Project Name</label>
+                                            <select class="form-control" formControlName="project">
+                                                <option value="">Select Project</option>
+                                                <option *ngFor="let p of respProject" [value]="p.projectId">
+                                                    {{ p.projectName }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Vehicle Name -->
+                                        <div class="col-md-3 px-2 md-form md-outline">
+                                            <label class="active ml-2">Vehicle Name</label>
+                                            <select class="form-control" formControlName="vehicle">
+                                                <option value="">Select Vehicle</option>
+                                                <option *ngFor="let v of vehicleList" [value]="v.vehicleid">
+                                                    {{ v.vehiclename }} , {{ v.vehicleno }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Gate Pass -->
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="text" class="form-control"
+                                                    formControlName="gate_pass_number">
+                                                <label class="active">Gate Pass</label>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Total Time Spent -->
+                                        <div class="col-md-2 md-form md-outline">
+                                            <label class="active">Total Time Spent</label>
+                                            <input type="text" class="form-control" formControlName="totalTimeSpent"
+                                                readonly>
+                                        </div>
+
+                                        <!-- Total Run -->
+                                        <div class="col-md-2 md-form md-outline">
+                                            <label class="active">Total Run</label>
+                                            <input type="text" class="form-control" formControlName="totalRun" readonly>
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Button Row -->
+                                    <div class="form-row mt-2">
+                                        <div class="col-12 d-flex justify-content-end">
+
+                                            <button type="button" class="btn dusty-grass-gradient btn-sm mr-2"
+                                                (click)="searchMachine()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+
+                                            <button type="button" class="btn warm-flame-gradient btn-sm"
+                                                (click)="resetMachine()">
+                                                <i class="fas fa-redo-alt mr-2"></i>Reset
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="table-responsive card-body">
+                                    <table id="machinetable" datatable [dtOptions]="dtOptionsMachine"
+                                        [dtTrigger]="dtTriggerMachine" class="table table-striped" cellspacing="0"
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th>S.No.
+                                                </th>
+                                                <th> Reading Date
+                                                </th>
+                                                <th> Vehicle No.
+                                                </th>
+                                                <th> Start Time
+                                                </th>
+                                                <th> Stop Time
+                                                </th>
+                                                <th> Time Spent
+                                                </th>
+                                                <th> Project Name
+                                                </th>
+                                                <th> Reading Start
+                                                </th>
+                                                <th> Reading End
+                                                </th>
+                                                <th> Total Run
+                                                </th>
+                                                <th width="5%">Action
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of machineReadingData;let i=index" [ngStyle]="{'background-color': (!item.ReadingEnd || !item.TimeEnd) ? '#fff3cd' : ''}">
+                                                <td>
+                                                </td>
+                                                <td>{{i+1}}
+                                                </td>
+                                                <td>{{item.ReadingDt}}
+                                                </td>
+                                                <td>{{item.vehicalName}}
+                                                </td>
+                                                <td>{{item.TimeStart}}
+                                                </td>
+                                                <td>{{item.TimeEnd}}
+                                                </td>
+                                                <td>{{item.ExpendedTime}}
+                                                </td>
+                                                <td>{{item.projectName}}
+                                                </td>
+                                                <td>{{item.ReadingStart}}
+                                                </td>
+                                                <td>{{item.ReadingEnd}}
+                                                </td>
+                                                <td>{{item.total_run}}
+                                                </td>
+                                                <td width="5%">
+                                                    <a class="black-text" id="{{i+1}}" ngbTooltip="View Gate Pass"
+                                                        placement="top"
+                                                        (click)="viewMachine('view_machine',item.ReadingId)"><i
+                                                            class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="{{i+1}}" ngbTooltip="View Gate Pass"
+                                                        placement="top"
+                                                        (click)="viewMachine('edit_machine',item.ReadingId)"><i
+                                                            class="fa-pencil-alt px-1 fas" aria-hidden="true"></i></a>
+
+                                                    <!-- <a class="teal-text" id="{{i+1}}" ngbTooltip="Edit Gate Pass"
+                                                            placement="top" data-toggle="modal"
+                                                            data-target="#add_gatepass_modal"
+                                                            (click)="ViewGatePass('edit_gate_pass',item.gatepass_id)"><i
+                                                                class="fa-pencil-alt px-1 fas"></i></a> -->
+                                                    <a class="red-text" (click)="deleteMachine(item.ReadingId)"
+                                                        mdbtooltip="Remove" placement="top"><i
+                                                            class="fa-times px-1 fas"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="machineReadingData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 p-2" [hidden]="activeICMTab !== 'consumption'">
+
+                                <div class="card-body" [formGroup]="searchConsumptionForm">
+
+                                    <div class="form-row ml-2">
+
+                                        <!-- From Date -->
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="date" class="form-control" formControlName="from"
+                                                    onkeydown="return false;">
+                                                <label class="active mt-3">From Date</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- To Date -->
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="date" class="form-control" formControlName="to"
+                                                    onkeydown="return false;">
+                                                <label class="active mt-3">To Date</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Project Name -->
+                                        <div class="col-md-3 px-2">
+                                            <div class="md-form md-outline">
+                                                <select class="form-control" formControlName="project">
+                                                    <option value="">Select Project</option>
+                                                    <option *ngFor="let p of respProject" [value]="p.projectId">
+                                                        {{ p.projectName }}
+                                                    </option>
+                                                </select>
+                                                <label class="active">Project Name</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Gate Pass -->
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="text" class="form-control" formControlName="gate_pass">
+                                                <label class="active">Gate Pass</label>
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Category -->
+                                        <div class="col-md-2 px-2 md-form md-outline">
+                                            <label class="active ml-2">Category</label>
+                                            <select formControlName="category" class="form-control"
+                                                (change)="onCategoryChangeConsumption($event)">
+                                                <option value="">Select Category</option>
+                                                <option *ngFor="let c of categoryLists" [value]="c.group_id">
+                                                    {{ c.group_name }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Sub Category -->
+                                        <div class="col-md-2 px-2 md-form md-outline">
+                                            <label class="active ml-2">Sub Category</label>
+                                            <select formControlName="subCategory" class="form-control"
+                                                (change)="onSubCategoryChangeConsumption($event)">
+                                                <option value="">Select Sub Category</option>
+                                                <option *ngFor="let s of filteredSubcategoryListsConsumption"
+                                                    [value]="s.sub_group_id">
+                                                    {{ s.sub_group_name }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                        <!-- Item -->
+                                        <div class="col-md-3 md-form md-outline">
+
+                                            <ng-select [items]="filteredMaterialsListConsumption"
+                                                bindValue="master_item_id" bindLabel="itemname" formControlName="item"
+                                                (change)="onMaterialChangeConsumption($event)" placeholder="Select Item"
+                                                notFoundText="No items found" [searchable]="true" [clearable]="true">
+
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div *ngIf="item" [title]="item?.itemname">
+                                                        {{ item?.itemname }}
+                                                        <span *ngIf="item?.unit_name" class="text-muted">
+                                                            , {{ item?.unit_name }}
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+
+                                                <ng-template ng-label-tmp let-item="item">
+                                                    <div *ngIf="item" [title]="item?.itemname">
+                                                        {{ item?.itemname }}
+                                                        <span *ngIf="item?.unit_name" class="text-muted">
+                                                            , {{ item?.unit_name }}
+                                                        </span>
+                                                    </div>
+                                                </ng-template>
+
+                                            </ng-select>
+
+                                        </div>
+
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="form-row mt-2">
+                                        <div class="col-12 d-flex justify-content-end">
+
+                                            <button type="button" class="btn dusty-grass-gradient btn-sm mr-2"
+                                                (click)="searchConsumption()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+
+                                            <button type="button" class="btn warm-flame-gradient btn-sm"
+                                                (click)="resetConsumption()">
+                                                <i class="fas fa-redo-alt mr-2"></i>Reset
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="table-responsive card-body">
+                                    <table id="machinetable" datatable [dtOptions]="dtOptionsConsumption"
+                                        [dtTrigger]="dtTriggerConsumption" class="table table-striped" cellspacing="0"
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th>S.No.
+                                                </th>
+                                                <th> Date
+                                                </th>
+                                                <th> Project Name
+                                                </th>
+                                                <th> Gate Pass
+                                                </th>
+                                                <th> Materials
+                                                </th>
+                                                <th> Used Qty.
+                                                </th>
+                                                <th> Scrap/Waste
+                                                </th>
+                                                <th> Balance
+                                                </th>
+                                                <th> Rate
+                                                </th>
+                                                <th> Total Amount
+                                                </th>
+                                                <th width="5%">Action
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of consumptionListsData;let i=index">
+                                                <td>
+                                                </td>
+                                                <td>{{i+1}}
+                                                </td>
+                                                <td>{{item.date | date:'dd/MM/yyyy'}}
+                                                </td>
+                                                <td>{{item.project_name}}
+                                                </td>
+                                                <td>{{item.gatePass}}
+                                                </td>
+                                                <td>{{item.item}}
+                                                </td>
+                                                <td>{{item.used_quantity}}
+                                                </td>
+                                                <td>{{item.scrap}}
+                                                </td>
+                                                <td>{{item.balance_quantity}}
+                                                </td>
+                                                <td>{{item.rate}}
+                                                </td>
+                                                <td>{{item.total_amount}}
+                                                </td>
+                                                <td width="5%">
+                                                    <a class="black-text" mdbtooltip="View" data-toggle="modal"
+                                                        data-target="#add_material_consumed_modal"
+                                                        (click)="editMaterialConsumed('view_consumed',item.consumption_id,i)">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="workContractData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 p-2" [hidden]="activeICMTab !== 'rentItemGatePass'">
+
+                                <div class="card-body" [formGroup]="searchRentItemGatePassForm">
+
+                                    <div class="form-row ml-2">
+
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="date" class="form-control" formControlName="issued_date"
+                                                    onkeydown="return false;">
+                                                <label class="active mt-3">Issued Date</label>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-md-2 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="text" class="form-control" formControlName="gate_pass">
+                                                <label class="active">Gate Pass</label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 px-2 md-form md-outline">
+                                            <ng-select
+                                                [items]="rentedItemsList"
+                                                bindLabel="itemname"
+                                                bindValue="master_item_id"
+                                                placeholder="Select Item"
+                                                formControlName="item"
+                                                [searchable]="true"
+                                                [clearable]="true">
+                                                
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    {{ item.itemname }}
+                                                    {{ item.unit_name ? ', ' + item.unit_name : '' }}
+                                                </ng-template>
+                                                
+                                            </ng-select>
+                                            <label class="active ml-2">Item</label>
+                                        </div>
+
+
+                                        <div class="col-md-2 px-2 md-form md-outline">
+                                            <ng-select
+                                                [items]="respProject"
+                                                bindLabel="projectName"
+                                                bindValue="projectId"
+                                                placeholder="Select Project"
+                                                formControlName="project"
+                                                [searchable]="true"
+                                                [clearable]="true">
+                                            </ng-select>
+                                            <label class="active ml-2">Project</label>
+                                        </div>
+
+                                        <div class="col-md-2 px-2 md-form md-outline">
+                                            <ng-select
+                                                [items]="warehouseList"
+                                                bindLabel="godown_name"
+                                                bindValue="godown_id"
+                                                placeholder="Select Warehouse"
+                                                formControlName="fromWarehouse"
+                                                [searchable]="true"
+                                                [clearable]="true">
+                                            </ng-select>
+                                            <label class="active ml-2">Warehouse</label>
+                                        </div>                                      
+                                    </div>
+
+                                    <div class="form-row mt-2">
+                                        <div class="col-12 d-flex justify-content-end">
+
+                                            <button type="button" class="btn dusty-grass-gradient btn-sm mr-2"
+                                                (click)="searchRentItemGatePass()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+
+                                            <button type="button" class="btn warm-flame-gradient btn-sm"
+                                                (click)="resetRentItemGatePass()">
+                                                <i class="fas fa-redo-alt mr-2"></i>Reset
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="table-responsive card-body">
+                                    <table id="rentitemgatepasstable" datatable
+                                        [dtOptions]="dtOptionsRentItemGatePass"
+                                        [dtTrigger]="dtTriggerRentItemGatePass" class="table table-striped"
+                                        cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th>S.No.
+                                                </th>
+                                                <th>Issued Date
+                                                </th>
+                                                <th>Gate Pass No.
+                                                </th>
+                                                <th>From Warehouse
+                                                </th>
+                                                <th>Project
+                                                </th>
+                                                <th>Item Name
+                                                </th>
+                                                <th>Issued Qty
+                                                </th>
+                                                <th>Received Qty
+                                                </th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of rentItemGatePassData;let i=index" [ngStyle]="{'background-color': (!item.total_received_qty) ? '#fff3cd' : ''}">
+                                                <td>
+                                                </td>
+                                                <td>{{i+1}}
+                                                </td>
+                                                <td>{{item.issue_datetime | date:'dd/MM/yyyy'}}
+                                                </td>
+                                                <td>{{item.gate_pass_no}}
+                                                </td>
+                                                <td>{{item.warehouse}}
+                                                </td>
+                                                <td>{{item.project_name || item.notes}}
+                                                </td>
+                                                <td>{{item.item_name}}
+                                                </td>
+                                                <td>{{item.issued_qty}}
+                                                </td>
+                                                <td>{{item.total_received_qty }}
+                                                </td>
+                                                <td >
+                                                    <a class="black-text mr-2"
+                                                        mdbtooltip="View"
+                                                        (click)="viewRentGatePass(item.gate_pass_id, item.item_row_id)">
+
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </a>
+
+                                                    <a class="teal-text mr-2"
+                                                        mdbtooltip="Edit"
+                                                        (click)="editRentGatePass(item.gate_pass_id, item.item_row_id)">
+
+                                                        <i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </a>
+
+                                                    <a class="red-text"
+                                                        mdbtooltip="Delete"
+                                                        (click)="deleteRentGatePass(item.gate_pass_id,item.item_row_id)">
+
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                    </a>
+                                                </td>                                             
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="rentItemGatePassData?.length == 0">
+                                            <tr>
+                                                <td colspan="7" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+
+        <!-- ========================================================= -->
+        <!-- ADD / EDIT GATE PASS MODAL (FULLY COMMENTED – NOTHING RUNS) -->
+        <!-- ========================================================= -->
+
+        <!--
+                <div class="modal fade"
+                    id="add_gatepass_modal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-hidden="true">
+
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <div class="modal-content">
+
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">
+                        Add New Gate Pass
+                        </p>
+
+                        <button type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                                (click)="clearMaterials()">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <form [formGroup]="gatePassForm"
+                            (ngSubmit)="saveMaterialForm()">
+
+                        <div class="modal-body">
+
+                        <input type="hidden" formControlName="gatepass_id">
+
+                        <div class="form-row">
+
+                            <div class="col md-form md-outline">
+                            <label class="active">Transfer Type</label>
+                            <select class="form-control"
+                                    formControlName="transferType"
+                                    (change)="onTransferTypeChange($event)">
+                                <option value="" disabled selected>
+                                Select Transfer Type
+                                </option>
+                                <option value="warehouse_type">
+                                Warehouse Type
+                                </option>
+                                <option value="project_type">
+                                Project Type
+                                </option>
+                            </select>
+                            </div>
+
+                            <div class="col md-form md-outline">
+                            <input type="datetime-local"
+                                    class="form-control"
+                                    formControlName="date">
+                            </div>
+                        </div>
+
+                        <div class="form-row" *ngIf="selectedTransferType">
+
+                            <ng-container *ngIf="isProjectType">
+                            <div class="col md-form md-outline">
+                                <label class="active">To Project</label>
+                                <select class="form-control"
+                                        formControlName="projectName">
+                                <option value="">Select Project</option>
+                                <option *ngFor="let p of projectsList"
+                                        [value]="p.project_id">
+                                    {{ p.project_name }}
+                                </option>
+                                </select>
+                            </div>
+                            </ng-container>
+
+                            <ng-container *ngIf="!isProjectType">
+                            <div class="col md-form md-outline">
+                                <label class="active">To Warehouse</label>
+                                <select class="form-control"
+                                        formControlName="toWarehouse">
+                                <option value="">Select Warehouse</option>
+                                <option *ngFor="let w of warehouseList"
+                                        [value]="w.godown_id">
+                                    {{ w.godown_name }}
+                                </option>
+                                </select>
+                            </div>
+                            </ng-container>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="col md-form md-outline">
+                            <label class="active">Vehicle</label>
+                            <select class="form-control"
+                                    formControlName="vehicleNameNo">
+                                <option value="">Select Vehicle</option>
+                                <option *ngFor="let v of vehicleList"
+                                        [value]="v.vehicleid">
+                                {{ v.vehiclename }} {{ v.vehicleno }}
+                                </option>
+                            </select>
+                            </div>
+
+                            <div class="col md-form md-outline">
+                            <label class="active">Issued To</label>
+                            <select class="form-control"
+                                    formControlName="issuedTo">
+                                <option value="">Select Person</option>
+                                <option *ngFor="let e of employee"
+                                        [value]="e.EmployeeId">
+                                {{ e.EmployeeName }}
+                                </option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+
+                            <div class="col md-form md-outline">
+                            <label class="active">Issued By</label>
+                            <select class="form-control"
+                                    formControlName="issuedBy">
+                                <option value="">Select Person</option>
+                                <option *ngFor="let e of employee"
+                                        [value]="e.EmployeeId">
+                                {{ e.EmployeeName }}
+                                </option>
+                            </select>
+                            </div>
+
+                            <div class="col md-form md-outline">
+                            <input type="text"
+                                    class="form-control"
+                                    formControlName="gatePass">
+                            <label class="active">Gate Pass</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col md-form md-outline">
+                            <textarea class="form-control"
+                                        rows="3"
+                                        formControlName="description">
+                            </textarea>
+                            <label class="active">Description</label>
+                            </div>
+                        </div>
+
+                        <button type="button"
+                                class="btn btn-sm btn-primary"
+                                (click)="addMaterial()">
+                            + Add Material
+                        </button>
+
+                        <div formArrayName="materials">
+
+                            <div *ngFor="let material of materials.controls; let i = index"
+                                [formGroupName]="i">
+
+                            <select formControlName="fromWarehouse"></select>
+                            <select formControlName="category"></select>
+                            <select formControlName="subcategory"></select>
+                            <select formControlName="materialUsed"></select>
+
+                            <input formControlName="quantity">
+                            <input formControlName="used_quantity">
+                            <input formControlName="scrap">
+                            <input formControlName="rate">
+                            <input formControlName="amount">
+
+                            </div>
+                        </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-danger"
+                                data-dismiss="modal">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Save
+                        </button>
+                        </div>
+
+                    </form>
+                    </div>
+                </div>
+                </div>
+            -->
+
+
+
+
+
+
+
+        <!-- Add/view Material Consumed Modal-->
+        <div class="modal fade" id="add_material_consumed_modal" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info material-consumed-modal" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add Material Consumption</p>
+                        <button (click)="clearMaterialsConsumed()" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" [formGroup]="materialConsumedForm">
+                        <input type="hidden" formControlName="consumption_id">
+                        <div class="form-row">
+                            <div class="md-form md-outline">
+                                <label for="projectName" class="active">Project Name</label>
+                                <select id="project" formControlName="projectName" class="form-control">
+                                    <option [ngValue]="''">Select Project</option>
+                                    <option *ngFor="let p of projectsList" [ngValue]="p.project_id">
+                                        {{ p.project_name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col md-form md-outline">
+                                <input type="datetime-local" (input)="onDateSelected($event)" id="consumedDate"
+                                    formControlName="consumedDate" class="form-control"
+                                    [ngClass]="{ 'is-invalid': (submitted && materialConsumedForm.controls['consumedDate'].invalid ) || (materialConsumedForm.controls['consumedDate'].invalid && materialConsumedForm.controls['consumedDate'].touched)}">
+                                <div *ngIf=" (submitted && materialConsumedForm.controls['consumedDate'].invalid) || (materialConsumedForm.controls['consumedDate'].invalid && materialConsumedForm.controls['consumedDate'].touched)"
+                                    class="invalid-feedback">Date is required</div>
+                            </div>
+                            <div class="col md-form md-outline">
+                                <input type="text" formControlName="gatePass" class="form-control"
+                                    [ngClass]="{ 'is-invalid': (submitted && materialConsumedForm.controls['gatePass'].invalid ) || (materialConsumedForm.controls['gatePass'].invalid && materialConsumedForm.controls['gatePass'].touched)}">
+                                <label for="gatePass" class="ml-2 active">Gate Pass (Daily Usage)</label>
+                                <div *ngIf=" (submitted && materialConsumedForm.controls['gatePass'].invalid) || (materialConsumedForm.controls['gatePass'].invalid && materialConsumedForm.controls['gatePass'].touched)"
+                                    class="invalid-feedback">Gate Pass is required</div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Button to add material -->
+                        <button type="button" class="btn btn-sm btn-primary mb-3" (click)="addConsumedMaterial()">
+                            + Add Material
+                        </button>
+
+                        <div formArrayName="consumedMaterials">
+                            <div *ngFor="let conMaterial of consumedMaterials.controls; let i= index"
+                                [formGroupName]="i" class="border p-2 mb-2">
+                                <!-- Material Used -->
+                                <div class="form-row">
+                                    <input type="hidden" formControlName="consumedWarehouse">
+                                    <div class="col-md-3 md-form md-outline">
+                                        <label for="consumedMaterial" class="ml-2 active">Material Used</label>
+                                        <select formControlName="consumedMaterial" class="form-control"
+                                            (click)="onMaterialUsedChange($event, i)">
+                                            <option value="">Select Material</option>
+                                            <option *ngFor="let m of getAvailableMaterials(i)" [value]="m.material_id"
+                                                [title]="m.material_used">
+                                                {{m.material_used}} , {{m.balance}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <label for="balanceQuantity" class="ml-2 active">Bal. Quan.</label>
+                                        <input type="number" formControlName="balanceQuantity" class="form-control">
+                                    </div>
+                                    <!-- <div class="col md-form md-outline">
+                                            <label for="consumedUnit" class="ml-2 active">Unit</label> 
+                                            <input type="text" id="consumedUnit" formControlName="consumedUnit" class="form-control">                                           
+                                        </div> -->
+                                    <div class="col-md-2 md-form md-outline">
+                                        <label for="usedQuantity" class="ml-2 active">Used Quantity</label>
+                                        <input type="number" formControlName="usedQuantity" class="form-control" min="1"
+                                            step="1" pattern="[0-9]*"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            (input)="onQuantityChange('usedQuantity',i)">
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input type="number" id="consumedScrap" class="form-control"
+                                            formControlName="consumedScrap" min="1" step="1" pattern="[0-9]*"
+                                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            (input)="onQuantityChange('consumedScrap',i)">
+                                        <label for="consumedScrap" class="ml-2 active">Scrap</label>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input type="number" formControlName="consumedRate" class="form-control"
+                                            (input)="onRateChange(i)">
+                                        <label for="consumedRate" class="ml-2 active">Rate</label>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input type="text" id="consumedAmount" formControlName="consumedAmount"
+                                            class="form-control">
+                                        <label for="consumedAmount" class="ml-2 active"> Amount</label>
+                                    </div>
+                                    <button (click)="removeConsumedMaterial(i)" type="button"
+                                        class="close  btn btn-danger btn-sm remove-btn" id="removeButton"
+                                        data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true" class="white-text">&times;</span>
+                                    </button>
+                                </div>
+
+
+                                <div class="mt-2 px-2" *ngIf="conMaterial.get('category')?.value">
+
+                                    <span class="badge badge-info mr-2 p-2">
+                                        Category: {{ conMaterial.get('category')?.value }}
+                                    </span>
+
+                                    <span class="badge badge-secondary p-2">
+                                        Sub Category: {{ conMaterial.get('subCategory')?.value }}
+                                    </span>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" #closeMaterialConModal (click)="clearMaterialsConsumed()"
+                            class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="submit" (click)="saveMaterialConsumption()"
+                            class="btn btn-sm btn-outline-success waves-effect" *ngIf="isQuantityValid"
+                            [disabled]="isConSaveDisabled">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </main>
+    <!-- Main layout -->
+</body>

@@ -1,0 +1,517 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    {{ headerTitle }}
+                </h5>
+                <div class="card-body" [formGroup]="purchaseOrderForm">
+                    <input type="hidden" formControlName="purchase_order_id">
+                    <div class="row px-4">
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="purchase-order-no" class="active">Purchase Order No.</label>
+                                <input id="purchase-order-no" type="text" class="form-control"
+                                    formControlName="poNumber">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="indent-number" class="active">PR Number</label>
+
+                                <!-- If mode = edit or view -->
+                                <input *ngIf="isEditOrViewMode" type="text" id="prNumber" class="form-control"
+                                    [disabled]="true" formControlName="prNumber" placeholder="Enter PR Number" />
+
+                                <!-- Otherwise, show dropdown -->
+                                <select *ngIf="!isEditOrViewMode" id="project" class="form-control"
+                                    (change)="onPRChange($event)" formControlName="prNumber">
+                                    <option>Select PR</option>
+                                    <option *ngFor="let p of PRLists" [value]="p.purchase_request_no">
+                                        {{ p.purchase_request_no }}
+                                    </option>
+                                </select>
+
+                                <div *ngIf="purchaseOrderForm.get('prNumber')?.invalid && purchaseOrderForm.get('prNumber')?.touched"
+                                    class="text-danger">
+                                    PR Number is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="indent-number" class="form-control ">
+                                    <label for="indent-number" class=" ">PO Number</label>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="jtd" class="active ">Order Date</label>
+                                <input type="date" id="date-picker-example" class="form-control"
+                                    formControlName="orderDate">
+                                <div *ngIf="purchaseOrderForm.get('orderDate')?.invalid && purchaseOrderForm.get('orderDate')?.touched"
+                                    class="text-danger">
+                                    Order Date is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="jtd" class="active ">Expiry Date</label>
+                                <input type="date" id="date-picker-example" class="form-control"
+                                    formControlName="expiryDate" (change)="onExpiryDateChange()">
+                                <div *ngIf="purchaseOrderForm.get('expiryDate')?.invalid && purchaseOrderForm.get('expiryDate')?.touched"
+                                    class="text-danger">
+                                    Expiry Date is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="orderType">
+                                    <option value="purchase_order">Purchase Order</option>
+                                    <option value="service_order">Service Order</option>
+                                </select>
+                                <label class="active">Order Type</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <!-- [(ngModel)]="selectedEmployeeId" -->
+                                <select formControlName="orderBy" id="state"
+                                    class="form-control field-ht colorful-select">
+                                    <option value="">Select Employee</option>
+                                    <option *ngFor="let type of employeeLists" [value]="type.EmployeeId">
+                                        {{type.EmployeeName}}</option>
+                                </select>
+                                <label class="active">Ordered By</label>
+                                <div *ngIf="purchaseOrderForm.get('orderBy')?.invalid && purchaseOrderForm.get('orderBy')?.touched"
+                                    class="text-danger">
+                                    Ordered By is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="state" formControlName="toWarehouse"
+                                    class="form-control field-ht colorful-select">
+                                    <option value="">Select Warehouse</option>
+                                    <option *ngFor="let type of warehouseLists" [value]="type.godown_id">
+                                        {{type.godown_name}}</option>
+                                </select>
+                                <label class="ml-2 active">To Warehouse</label>
+                                <div *ngIf="purchaseOrderForm.get('toWarehouse')?.invalid && purchaseOrderForm.get('toWarehouse')?.touched"
+                                    class="text-danger">
+                                    Warehouse is required
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- Add these after "To Warehouse" and before "Remarks" -->
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+
+                                <input *ngIf="isEditOrViewMode" type="text" class="form-control field-ht" [value]="
+                                    (purchaseOrderForm.get('vendorName')?.value?.split('||')[0] || purchaseOrderForm.get('vendorName')?.value) +
+                                    (globalVendorState ? ' (' + getUniqueStates(globalVendorState) + ')' : '')
+                                " disabled />
+
+
+                                <select *ngIf="!isEditOrViewMode" class="form-control field-ht colorful-select"
+                                    [value]="purchaseOrderForm.get('vendorName')?.value + '||' + globalVendorState"
+                                    (change)="onGlobalVendorChange($event.target.value)"
+                                    [disabled]="mode === 'view' || mode === 'edit'">
+                                    <option value="">Select Vendor</option>
+                                    <option *ngFor="let vendor of vendorNameState"
+                                        [value]="vendor.vendor_name + '||' + vendor.state_name">
+                                        {{ vendor.vendor_name }} ({{ vendor.state_name }})
+                                    </option>
+                                </select>
+                                <label class="active">Vendor Name</label>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+
+                                <!-- Edit/View Mode: show text input -->
+                                <input *ngIf="isEditOrViewMode" type="text" class="form-control field-ht" [value]="
+                                    (purchaseOrderForm.get('companyName')?.value?.split('||')[0] ||
+                                    purchaseOrderForm.get('companyName')?.value) +
+                                    (globalCompanyState ? ' (' + getUniqueStates(globalCompanyState) + ')' : '')
+                                " disabled />
+
+
+                                <select *ngIf="!isEditOrViewMode" class="form-control field-ht colorful-select"
+                                    [value]="purchaseOrderForm.get('companyName')?.value + '||' + globalCompanyState"
+                                    (change)="onGlobalCompanyChange($event.target.value)"
+                                    [disabled]="mode === 'view' || mode === 'edit'">
+                                    <option value="">Select Company</option>
+                                    <option *ngFor="let com of vendorNameState"
+                                        [value]="com.company_name + '||' + com.state_name">
+                                        {{ com.company_name }} ({{ com.state_name }})
+                                    </option>
+                                </select>
+                                <label class="active">Company Name</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="projectName" class="active">Project Name</label>
+                                <select id="project" formControlName="projectName" class="form-control">
+                                    <option [ngValue]="''">Select Project</option>
+                                    <option *ngFor="let p of projectsList" [ngValue]="p.project_id">
+                                        {{ p.project_name }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <label for="globalGST" class="active">Global GST</label>
+                                <select id="globalGST" class="form-control" formControlName="globalGST"
+                                    (change)="onGlobalGSTChange($event.target.value)">
+                                    <option value="">Select GST</option>
+                                    <option value="0">None</option>
+                                    <option value="0.05">GST 5%</option>
+                                    <option value="0.12">GST 12%</option>
+                                    <option value="0.18">GST 18%</option>
+                                    <option value="0.28">GST 28%</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 px-2">
+                            <div class="md-form md-outline ml-1">
+                                <textarea type="text" id="company-address" formControlName="remarks"
+                                    class="md-textarea form-control overflow-auto h-100" rows="1" value=""></textarea>
+                                <label for="company-address" class="active">Remarks</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 px-3 mt-3">
+                        <div class="border-box mb-4 mt-4">
+                            <span class="border-label">Product Listing</span>
+                            <div class="row">
+                                <div class="col-12 float-right mr-3" formArrayName="productList">
+                                    <table class="table table-striped table-responsive maxHeight text-center">
+                                        <thead>
+                                            <tr class="bg-dark text-white">
+                                                <th class="sno">
+                                                    #
+                                                </th>
+                                                <th class="itemNameUnit">
+                                                    Item Name
+                                                </th>
+                                                <th class="unit">
+                                                    Unit
+                                                </th>
+                                                <th class="description">
+                                                    Description
+                                                </th>
+                                                <th class="vendorName">
+                                                    Vendor Name
+                                                </th>
+                                                <th class="companyName">
+                                                    Company name
+                                                </th>
+                                                <th class="quantity">
+                                                    Quantity
+                                                </th>
+                                                <th class="rate">
+                                                    Rate
+                                                </th>
+                                                <th class="amount">
+                                                    Discount
+                                                </th>
+                                                <th class="amount">
+                                                    Amount
+                                                </th>
+                                                <th class="gst">
+                                                    GST
+                                                </th>
+                                                <th class="itemId">
+                                                    CGST
+                                                </th>
+                                                <th class="itemId">
+                                                    SGST
+                                                </th>
+                                                <th class="itemId">
+                                                    IGST
+                                                </th>
+                                                <th class="itemId">
+                                                    Total Amount
+                                                </th>
+                                                <th class="action">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let product of products.controls; let i=index"
+                                            [formGroupName]="i">
+                                            <tr>
+                                                <td scope="row" class="sno">{{i+1}}</td>
+                                                <td class="itemName">
+                                                    <input type="text" id="unit" formControlName="itemName"
+                                                        class="form-control" value="" disabled>
+                                                </td>
+                                                <td class="unitName">
+                                                    <input type="text" id="unit" formControlName="unit"
+                                                        class="form-control" value="" disabled>
+                                                </td>
+                                                <td class="description">
+                                                    <!-- NEW: Description field for brand/model -->
+                                                    <input type="text" formControlName="description"
+                                                        class="form-control" placeholder="Enter Brand / Model">
+                                                </td>
+                                                <td class="VendorName">
+
+                                                    <!-- If mode = edit or view, show text input -->
+
+                                                    <input *ngIf="isEditOrViewMode" type="text" class="form-control"
+                                                        [value]="(product.get('vendorName')?.value?.split('||')[0] || '') + 
+                                                        (vendorStates[i] ? ' (' + vendorStates[i] + ')' : '')"
+                                                        disabled />
+
+
+
+                                                    <select *ngIf="!isEditOrViewMode" formControlName="vendorName"
+                                                        class="form-control"
+                                                        [value]="product.get('vendorName')?.value + '||' + vendorStates[i]"
+                                                        (change)="onVendorChange($event.target.value, i)">
+                                                        <option value="" disabled>Select Vendor</option>
+                                                        <option *ngFor="let vendor of vendorNameState"
+                                                            [value]="vendor.vendor_name + '||' + vendor.state_name">
+                                                            {{ vendor.vendor_name }} ({{ vendor.state_name }})
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="product.get('vendorName')?.invalid && (product.get('vendorName')?.touched || submitted)"
+                                                        class="text-danger small ml-n2">
+                                                        Vendor Name is required
+                                                    </div>
+                                                </td>
+                                                <td class="companyName">
+
+                                                    <!-- If mode = edit or view, show text input -->
+                                                    <input *ngIf="isEditOrViewMode" type="text" class="form-control"
+                                                        [value]="(product.get('companyName')?.value?.split('||')[0] || '') + 
+                                                        (companyStates[i] ? ' (' + companyStates[i] + ')' : '')"
+                                                        disabled />
+
+                                                    <select *ngIf="!isEditOrViewMode" formControlName="companyName"
+                                                        class="form-control"
+                                                        [value]="product.get('companyName')?.value + '||' + companyStates[i]"
+                                                        (change)="onCompanyChange($event.target.value, i)">
+                                                        <option value="" disabled>Select Company</option>
+                                                        <option *ngFor="let com of vendorNameState"
+                                                            [value]="com.company_name + '||' + com.state_name">
+                                                            {{ com.company_name }} ({{ com.state_name }})
+                                                        </option>
+                                                    </select>
+                                                    <div *ngIf="product.get('companyName')?.invalid && (product.get('companyName')?.touched || submitted)"
+                                                        class="text-danger small ml-n2">
+                                                        Company Name is required
+                                                    </div>
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="quantity" formControlName="quantity"
+                                                        class="form-control text-right" disabled>
+                                                </td>
+                                                <td class="rate">
+                                                    <input type="text" id="rate" formControlName="rate"
+                                                        class="form-control text-right" (input)="onRateChange(i)">
+                                                    <div *ngIf="product.get('rate')?.invalid && (product.get('rate')?.touched || submitted)"
+                                                        class="text-danger small ml-n2">
+                                                        Rate is required
+                                                    </div>
+                                                </td>
+                                                <td class="rateamount">
+                                                    <input type="number" id="amount" formControlName="discount"
+                                                        class="form-control " (input)="onDiscountChange(i)">
+                                                </td>
+                                                <td class="rate">
+                                                    <input type="text" id="amount" formControlName="amount"
+                                                        class="form-control " disabled>
+                                                </td>
+                                                <td class="gst">
+                                                    <select id="gst" formControlName="gst" class="form-control"
+                                                        (change)="onGstChange(i)">
+                                                        <option value="" selected disabled>Select GST</option>
+                                                        <option value="0">None</option>
+                                                        <option value="0.05">GST 5%</option>
+                                                        <option value="0.12">GST 12%</option>
+                                                        <option value="0.18">GST 18%</option>
+                                                        <option value="0.28">GST 28%</option>
+                                                    </select>
+                                                </td>
+                                                <td class="totalamount">
+                                                    <input type="text" id="CGST" formControlName="cgst"
+                                                        class="form-control " [disabled]="!showCgstSgst" readonly>
+                                                </td>
+                                                <td class="totalamount">
+                                                    <input type="text" id="SGST" formControlName="sgst"
+                                                        class="form-control " [disabled]="!showCgstSgst" readonly>
+                                                </td>
+                                                <td class="totalamount">
+                                                    <input type="text" id="IGST" formControlName="igst"
+                                                        class="form-control " [disabled]="!showIgst" readonly>
+                                                </td>
+                                                <td class="totalamount">
+                                                    <input type="text" id="TAmount" formControlName="tamount"
+                                                        class="form-control text-right">
+                                                </td>
+                                                <td class="action">
+                                                    <button type="button" class="btn btn-sm btn-danger"
+                                                        *ngIf="showRemoveButton" (click)="removeProduct(i)">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemName"></td>
+                                                <td class="unit"></td>
+                                                <td class="description"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity">
+                                                    <!-- <h6>GST Total</h6> -->
+                                                </td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId">
+                                                    <!-- <h6>Grand Total</h6> -->
+                                                </td>
+                                                <td class="action"></td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemName"></td>
+                                                <td class="unit"></td>
+                                                <td class="description"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity">
+                                                    <!-- <input type="text" id="SGST" class="form-control "> -->
+                                                </td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId">
+                                                    <!-- <input 
+                                                        type="text" 
+                                                        id="grandTotal" 
+                                                        class="form-control text-right" 
+                                                        formControlName="grandTotal"
+                                                        [value]="grandTotal | number:'1.2-2'" 
+                                                        readonly> -->
+                                                </td>
+                                                <td class="action"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                    <button type="button" (click)="addProduct()" *ngIf="showAddButton"
+                                        class="btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i
+                                            class="fa fa-plus" aria-hidden="true"></i> More Products
+                                    </button>
+                                </div>
+                                <div class="container">
+                                    <div class="row justify-content-end">
+                                        <div class="col-12 col-md-2">
+                                            <div class="form-group text-left">
+                                                <label for="grandCgst"><strong>Grand CGST</strong></label>
+                                                <input type="text" id="grandCgst" class="form-control text-left"
+                                                    [value]="grandCgst | number:'1.2-2'" formControlName="grandCgst"
+                                                    readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-2">
+                                            <div class="form-group text-left">
+                                                <label for="grandSgst"><strong>Grand SGST</strong></label>
+                                                <input type="text" id="grandSgst" class="form-control text-left"
+                                                    [value]="grandSgst | number:'1.2-2'" formControlName="grandSgst"
+                                                    readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-2">
+                                            <div class="form-group text-left">
+                                                <label for="grandIgst"><strong>Grand IGST</strong></label>
+                                                <input type="text" id="grandIgst" class="form-control text-left"
+                                                    [value]="grandIgst | number:'1.2-2'" formControlName="grandIgst"
+                                                    readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-md-2">
+                                            <div class="form-group text-left">
+                                                <label for="grandTotal"><strong>Grand Total</strong></label>
+                                                <input type="text" id="grandTotal" class="form-control text-left"
+                                                    [value]="grandTotal | number:'1.2-2'" formControlName="grandTotal"
+                                                    readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row px-2 mb-3">
+                        <div class="col text-right">
+                            <!-- Back to PO/PR Button -->
+                            <button type="button" class="btn blue-gradient btn-sm waves-light waves-effect float-left"
+                                (click)="goBackToPO()">
+                                <i class="fas fa-arrow-left mr-2" aria-hidden="true"></i>Back to PO
+                            </button>
+                            <!-- Save Button -->
+                            <button type="button" *ngIf="showSubmitButton"
+                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect mr-2"
+                                [disabled]="isSubmitting" (click)="savePurchaseOrder()">
+                                <i class="fas fa-save mr-2" aria-hidden="true"></i>{{ isSubmitting ? 'Submitting...' :
+                                'Submit' }}
+                            </button>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

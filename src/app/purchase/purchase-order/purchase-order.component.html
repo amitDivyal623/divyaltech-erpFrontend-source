@@ -1,0 +1,153 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Purchase Order List
+                    <button type="button" (click)="route('add-purchase-order')" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Order</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-customername" class="form-control">
+                                <label for="form-customername" class="">PO Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="date-picker-example" class="active">PO Date</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select">
+                                <option value="" disabled selected>Select Requirement Area</option>
+                                <option value="1">Area 1</option>
+                                <option value="2">Area 2</option>
+                            </select>
+                            <label class="top-lb active">Requirement Area</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select">
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="1">Area 1</option>
+                                <option value="2">Area 2</option>
+                            </select>
+                            <label class="top-lb active">Status</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" data-toggle="modal" data-target="#add_emp_modal"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <!-- Main docs tabs -->
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>PO Number
+                                    </th>
+                                    <th>PO Date
+                                    </th>
+                                    <th>Project Name
+                                    </th>
+                                    <th>Requisition Type
+                                    </th>
+                                    <th>PO Status
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>12345</td>
+                                    <td>14 April,2020</td>
+                                    <td>Enquiry detail</td>
+                                    <td>Requisition Type 1</td>
+                                    <td>Requisition status</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="view" placement="top" (click)="route('crm-view-indent')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="green-text" (click)="route('crm-update-indent')" mdbtooltip="update" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>12345</td>
+                                    <td>14 April,2020</td>
+                                    <td>Enquiry detail</td>
+                                    <td>Requisition Type 1</td>
+                                    <td>Requisition status</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="view" placement="top" (click)="route('crm-view-indent')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="green-text" (click)="route('crm-update-indent')" mdbtooltip="update" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>12345</td>
+                                    <td>14 April,2020</td>
+                                    <td>Enquiry detail</td>
+                                    <td>Requisition Type 1</td>
+                                    <td>Requisition status</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="view" placement="top" (click)="route('crm-view-indent')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="green-text" (click)="route('crm-update-indent')" mdbtooltip="update" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>12345</td>
+                                    <td>14 April,2020</td>
+                                    <td>Enquiry detail</td>
+                                    <td>Requisition Type 1</td>
+                                    <td>Requisition status</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="view" placement="top" (click)="route('crm-view-indent')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="green-text" (click)="route('crm-update-indent')" mdbtooltip="update" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Main docs tabs -->
+            </section>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

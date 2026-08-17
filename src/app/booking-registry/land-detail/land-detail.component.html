@@ -1,0 +1,104 @@
+<div class="row px-2">
+    <div class="col-md-12">
+        <button type="button" (click)="openLandButton()" id="openLandButton"
+            class="btn btn-elegant btn-sm waves-light waves-effect float-right my-0"><i class="fa fa-plus"
+                aria-hidden="true"></i> Add New Entry</button>
+    </div>
+</div>
+<div class="table-responsive card-body">
+    <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+        class="table table-striped" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>S.No.</th>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Available Qty</th>
+                <th>Size in Acre</th>
+                <th>Size in Hect</th>
+                <th>Khasra No</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of data;let i=index">
+                <td>{{i+1}}</td>
+                <td>{{item.ProductCode}}</td>
+                <td>{{item.ProductName}}</td>
+                <td>{{item.TotalAvailableQuantity}}</td>
+                <td>{{item.Acre}}</td>
+                <td>{{item.Hect}}</td>
+                <td>{{item.KhasraNo}}</td>
+                <td>
+                    <!-- <a class="black-text" ngbTooltip="View Customer" placement="top" (click)="viewLand(item.id)"><i class="fa fa-eye " aria-hidden="true"></i></a>
+                    <a class="text-success" ngbTooltip="Edit Customer" placement="top" (click)="editLand(item.id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                    <a class="text-primary pr-1" ngbTooltip="Download File" placement="top" (click)="downloadLand(item.id)"><i class="fas fa-file-download"></i></a> -->
+                    <a class="text-danger" ngbTooltip="Remove Customer" placement="top"
+                        (click)="update_landDetails(item.ProductId)"><i class="fa-times px-1 fas"></i></a>
+                </td>
+            </tr>
+        </tbody>
+        <tbody *ngIf="data?.length == 0">
+            <tr>
+                <td colspan="3" class="no-data-available">No data!</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ng-template #content let-modal>
+    <!-- <div class="modal fade" id="add_land_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-notify modal-info " role="document "> -->
+    <div class="modal-content">
+        <div class="modal-header mdb-color ">
+            <!-- <p class="heading lead font-weight-bold">{{PopupTitle}}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button> -->
+            <p class="heading lead white-text font-weight-bold">{{PopupTitle}}</p>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true" class="white-text">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div [formGroup]="landDetails">
+                <div class="row p-2">
+                    <input type="hidden" id="reglandlord_Id" formControlName="reglandlord_Id">
+                    <input type="hidden" id="reglandlord_Id" formControlName="reglandlord_Id">
+                    <!-- <input type="hidden" id="product_id" formControlName="product_id"> -->
+                    <div class="col-md-12 px-2">
+                        <div class="md-form md-outline">
+                            <input type="hidden" id="product_id" formControlName="product_id" name="product_id"
+                                [readonly]="Access">
+                            <ng-autocomplete [readonly]="Access" [data]="productdataList" id="khasraNumber"
+                                formControlName="khasraNumber" [searchKeyword]="keyword"
+                                (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+                                (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+                                [notFoundTemplate]="notFoundTemplate"
+                                [ngClass]="{ 'is-invalid': (submitted && landDetails.controls['khasraNumber'].errors ) || (landDetails.controls['khasraNumber'].errors && landDetails.controls['khasraNumber'].touched)}">
+                            </ng-autocomplete>
+                            <ng-template #itemTemplate let-item>
+                                <a [innerHTML]="item.name + ' (' + item.productName + ')'"></a>
+                            </ng-template>
+                            <ng-template #notFoundTemplate let-notFound>
+                                <div [innerHTML]="notFound" [readonly]="Access"></div>
+                            </ng-template>
+                            <label for="khasraNumber" class="active" style="z-index: 1000">khasra Number*</label>
+                            <div *ngIf=" (submitted && landDetails.controls['khasraNumber'].errors) || (landDetails.controls['khasraNumber'].errors && landDetails.controls['khasraNumber'].touched)"
+                                class="invalid-feedback">
+                                Please Enter khasra Number
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="btn btn-sm btn-danger" (click)="add_landDetails()"
+                [disabled]="landDetails.invalid">Link To Landlord</button>
+            <!-- <button type="button" class="btn btn-sm btn-outline-success waves-effect" (click)="add_landDetails()">Save</button> -->
+        </div>
+    </div>
+    <!-- </div>
+    </div> -->
+</ng-template>

@@ -1,0 +1,49 @@
+.grn-items-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.grn-items-table {
+  width: 100%;
+  min-width: 1500px;
+  table-layout: auto;
+
+  th,
+  td {
+    vertical-align: top;
+    white-space: nowrap;
+  }
+
+  .form-control {
+    min-width: 100%;
+  }
+
+  .col-sno {
+    min-width: 60px;
+    width: 60px;
+  }
+
+  .col-item-name {
+    min-width: 280px;
+    width: 100%;
+  }
+
+  .col-description {
+    min-width: 280px;
+    width: 100%;
+  }
+
+  .col-unit {
+    min-width: 120px;
+  }
+
+  .col-qty {
+    min-width: 130px;
+  }
+
+  .col-financial {
+    min-width: 140px;
+  }
+}

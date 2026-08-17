@@ -1,0 +1,191 @@
+<div class="modal-header mdb-color">
+    <p class="heading lead font-weight-bold text-white m-2">{{transactionTitle}}</p>
+    <button type="button" #closebutton class="close" (click)="modal.dismiss()" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+</div>
+
+<div class="modal-body">
+    <div class="row" [formGroup]="addTranscform">
+        <div class="col-md-12 form-row">
+            <div class="col-md-3 px-2">
+                <div class=" md-form md-outline">
+                    <input formControlName="addtranscDate" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                    <label for="date-picker-example" class="ml-1 active">Date</label>
+                </div>
+            </div>
+            <div class="col-md-3 px-2">
+                <div class="md-form md-outline">
+                    <input type="time" class="form-control" mdbInput id="addtranscTime" name="addtranscTime" formControlName="addtranscTime">
+                    <label for="addtranscTime" class="Active">Time </label>
+                </div>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2">
+                <select class="form-control field-ht colorful-select" formControlName="addtransType" id="addtransType" (change)="onAddSelectChange($event)">
+                            <option value="" selected >Select Transaction Type</option>
+                            <option value="1">Payment Received</option>
+                            <option value="2">Expenses</option>
+                            <option value="3">Inter Cash Management</option>
+                        </select>
+                <label class="ml-2 active">Transaction Type</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2">
+                <select class="form-control field-ht colorful-select" formControlName="addpayMode" id="addpayMode" (change)="onSelectPaymentMode($event)">
+                            <option value="" selected >Select Payment Mode</option>
+                            <option value="1">Cheque</option>
+                            <option value="2">Cash</option>
+                            <option value="3">Bank Transfer</option>
+                        </select>
+                <label class="ml-2 active">Payment Mode</label>
+            </div>
+            <div class="col-md-3 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" formControlName="addtransAmt" id="addtransAmt" class="form-control">
+                    <label for="addtransAmt" class="active">Amount</label>
+                </div>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2">
+                <select class="form-control field-ht colorful-select" formControlName="addtransStatus" id="addtransStatus">
+                            <option value="" selected >Select Status</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                        </select>
+                <label class="ml-2 active">Status</label>
+            </div>
+        </div>
+        <div class="form-row col-md-12">
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addPaySelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTransReceived" id="addTransReceived">
+                        <option value="" selected >Select Received From </option> 
+                    </select>
+                <label class="ml-2 active">Received From </label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addPaySelect">
+                <select class="form-control field-ht colorful-select" formControlName="addtransReason" id="addtransReason">
+                            <option value="" selected >Select Reason</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                            <option value="3"></option>
+                        </select>
+                <label class="ml-2 active">Reason</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addPaySelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTransHolder" id="addTransHolder">
+                        <option value="" selected >Select Received Holder </option> 
+                    </select>
+                <label class="ml-2 active">Received Holder </label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addPaySelect">
+                <select class="form-control field-ht colorful-select" formControlName="addaccHead" id="addaccHead">
+                        <option value="" selected >Select Account Head</option> 
+                    </select>
+                <label class="ml-2 active">Account Head</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addPaySelect">
+                <select class="form-control field-ht colorful-select" formControlName="addreceviedBy" id="addreceviedBy">
+                        <option value="" selected >Select Received By</option> 
+                    </select>
+                <label class="ml-2 active">Received By</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addExpenseSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTransParty" id="addTransParty">
+                        <option value="" selected >Select Party</option> 
+                    </select>
+                <label class="ml-2 active">Sent to Party</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addExpenseSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTransaccHold" id="addTransaccHold">
+                        <option value="" selected >Select Holder</option> 
+                    </select>
+                <label class="ml-2 active">Sent from Holder</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addExpenseSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTransHead" id="addTransHead">
+                        <option value="" selected >Select Account Head</option> 
+                    </select>
+                <label class="ml-2 active">Account Head</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addExpenseSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addTranssendBy" id="addTranssendBy">
+                        <option value="" selected >Select Send By</option> 
+                    </select>
+                <label class="ml-2 active">Send By</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addInterSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addtransFromHead" id="addtransFromHead">
+                            <option value="" selected >Select</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                        </select>
+                <label class="ml-2 active">From Account Head</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addInterSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addtransaccSrc" id="addtransaccSrc">
+                            <option value="" selected >Select</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                        </select>
+                <label class="ml-2 active">From Account Source</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addInterSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addtransToHead" id="addtransToHead">
+                            <option value="" selected >Select</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                        </select>
+                <label class="ml-2 active">To Account Head</label>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addInterSelect">
+                <select class="form-control field-ht colorful-select" formControlName="addtranstoaccSrc" id="addtranstoaccSrc">
+                            <option value="" selected >Select</option>
+                            <option value="1"></option>
+                            <option value="2"></option>
+                        </select>
+                <label class="ml-2 active">To Account Source</label>
+            </div>
+        </div>
+        <div class="form-row col-md-12">
+            <div class="col-md-3 px-2" *ngIf="addChequeMode">
+                <div class="md-form md-outline">
+                    <input type="text" formControlName="addtransAmt" id="addtransAmt" class="form-control">
+                    <label for="addtransAmt" class="active">Cheque Number</label>
+                </div>
+            </div>
+            <div class="col-md-3 px-2" *ngIf="addChequeMode">
+                <div class=" md-form md-outline">
+                    <input formControlName="" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                    <label for="date-picker-example" class="ml-1 active">Cheque Date</label>
+                </div>
+            </div>
+            <div class="col-md-3 px-2" *ngIf="addChequeMode">
+                <div class=" md-form md-outline">
+                    <input formControlName="" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                    <label for="date-picker-example" class="ml-1 active">Submitted Date</label>
+                </div>
+            </div>
+            <div class="col-md-3 px-2" *ngIf="addChequeMode">
+                <div class=" md-form md-outline">
+                    <input type="text" formControlName="addtransName" id="addtransName" class="form-control">
+                    <label for="addtransName" class="active">Name on Cheque</label>
+                </div>
+            </div>
+            <div class="col-md-3 md-form md-outline px-2" *ngIf="addBankMode">
+                <select class="form-control field-ht colorful-select" formControlName="searchtoAcc" id="searchtoAcc">
+                        <option value="" selected >Select Bank Name</option> 
+                    </select>
+                <label class="active">Bank Name</label>
+            </div>
+            <div class="col-md-3 px-2" *ngIf="addBankMode">
+                <div class="md-form md-outline">
+                    <input type="text" formControlName="addtransAmt" id="addtransAmt" class="form-control">
+                    <label for="addtransAmt" class="active">Account Number</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-danger" (click)="modal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+</div>

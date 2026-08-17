@@ -1,0 +1,208 @@
+<body class="fixed-sn white-skin">
+
+  <!-- Main Navigation -->
+  <header>
+
+    <!-- Sidebar navigation -->
+    <app-header></app-header>
+
+    <!-- Navbar -->
+    <app-navbar></app-navbar>
+
+    <!-- /.Navbar -->
+
+  </header>
+  <!-- Main Navigation -->
+
+  <!-- Main layout -->
+  <main>
+    <div class="container-fluid mb-3 px-4">
+      <div class="card">
+        <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;"> Goods Recieved Note
+          <ng-container>
+            <button type="button" (click)="navigateToGRN()"
+              class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+              data-toggle="modal" data-target="#add_gatepass_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add
+              Goods Recieved Note</button>
+          </ng-container>
+        </h5>
+        <div class="card-body">
+
+
+          <div class="form-row ml-2" [formGroup]="searchGRNForm">
+
+            <!-- FROM DATE -->
+            <div class="col-md-2">
+              <div class="md-form md-outline">
+                <label class="active">From Date</label>
+                <input type="date" class="form-control" formControlName="from" onkeydown="return false;">
+              </div>
+            </div>
+
+            <!-- TO DATE -->
+            <div class="col-md-2">
+              <div class="md-form md-outline">
+                <label class="active">To Date</label>
+                <input type="date" class="form-control" formControlName="to" onkeydown="return false;">
+              </div>
+            </div>
+
+            <!-- GRN NO -->
+            <div class="col-md-2">
+              <div class="md-form md-outline">
+                <input type="text" class="form-control" formControlName="grn_no">
+                <label class="active">GRN No.</label>
+              </div>
+            </div>
+
+            <!-- GATE ENTRY NO -->
+            <div class="col-md-2">
+              <div class="md-form md-outline">
+                <ng-select [items]="GENList" bindLabel="gen_no" bindValue="gen_id" placeholder="Select Gate Entry"
+                  formControlName="gate_entry_no" [searchable]="true" [clearable]="true" [dropdownPosition]="'auto'">
+                </ng-select>
+                <label class="active">Gate Entry No.</label>
+              </div>
+            </div>
+
+            <!-- VEHICLE NO -->
+            <div class="col-md-2">
+              <div class="md-form md-outline">
+                <input type="text" class="form-control" formControlName="vehicle_no">
+                <label class="active">Vehicle No.</label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="form-row ml-2 mt-2">
+
+            <div class="col-md-12 text-right">
+              <button type="button" class="btn dusty-grass-gradient btn-sm mr-2" (click)="searchGRN()">
+                <i class="fa fa-search mr-1"></i>Search
+              </button>
+
+              <button type="button" class="btn warm-flame-gradient btn-sm" (click)="resetGRN()">
+                <i class="fas fa-redo-alt mr-1"></i>Reset
+              </button>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid px-4 my-4">
+      <section>
+        <div class="card">
+          <div class="table-responsive card-body">
+            <div class="tab-pane pb-0" id="docsTabsBank" role="tabpanel">
+
+              <div class="form-row px-1">
+
+              </div>
+
+              <div class="col-md-12 p-2">
+                <div class="table-responsive card-body">
+                  <table id="buyertable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                    class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>S.No.</th>
+                        <th>GRN No.</th>
+                        <th style="min-width:80px;">Date</th>
+                        <th>Gate Entry No.</th>
+                        <th>PO Number</th>
+                        <th>Vehicle No.</th>
+                        <th>From Vendor</th>
+                        <th>Requested By</th>
+                        <th style="min-width:200px;">Item names</th>
+                        <th style="min-width:100px;">Action</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr *ngFor="let item of grnTableData; let i = index">
+                        <td></td>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ item.grn_no }}</td>
+                        <td style="min-width:80px;">{{ item.grn_date | date:'dd-MM-yyyy' }}</td>
+                        <td>{{ item.gen_no }}</td>
+                        <td>{{ item.po_no }}</td>
+                        <td>{{ item.vehicle_no }}</td>
+                        <td>{{ item.from_vendor }}</td>
+                        <td>{{ item.requested_by }}</td>
+                        <td style="min-width:200px;">
+                          <span [ngbTooltip]="item.item_name" tooltipClass="wide-tooltip" placement="top"
+                            container="body" triggers="hover">
+
+                            {{
+                            item.item_name?.length > 30
+                            ? (item.item_name | slice:0:30) + '...'
+                            : item.item_name
+                            }}
+
+                          </span>
+                        </td>
+                        <td style="min-width:100px;">
+                          <a class="black-text px-1" ngbTooltip="View GRN" (click)="viewGRN('view_grn', item.grn_id)">
+                            <i class="fa fa-eye"></i>
+                          </a>
+                          <a class="text-grey px-2" ngbTooltip="Download" (click)="openGRNPdf(item.grn_id)">
+                            <i class="fa fas fa-file-download"></i>
+                          </a>
+                          <a *ngIf="canShowPayButton" class="text-primary px-2" ngbTooltip="PAY"
+                            (click)="redirectToTransaction(item.grn_id)">
+                            <i class="fa fas fa-exchange-alt"></i>
+                          </a>
+                          <a class="red-text px-2" ngbTooltip="Remove" (click)="removeGRN(item)">
+                            <i class="fa fa-times"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+
+
+                    <tbody *ngIf="grnTableData?.length == 0">
+                      <tr>
+                        <td colspan="3" class="no-data-available">
+                          No
+                          data!
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+
+
+    <!-- Success Popup -->
+    <!-- <div class="overlay" id="overlay" *ngIf="showSuccessPopup"></div>
+    <div class="success-popup" id="successPopup" *ngIf="showSuccessPopup">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h4>Gate Entry Saved Successfully!</h4>
+      <p>Your GE Number is:</p>
+      <div class="ge-number">{{ generatedGENumber }}</div>
+      <button class="btn btn-primary mt-3" (click)="closeSuccessPopup()">OK</button>
+    </div> -->
+
+
+
+
+
+
+  </main>
+  <!-- Main layout -->
+</body>

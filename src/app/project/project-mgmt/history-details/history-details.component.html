@@ -1,0 +1,35 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="px-2 float-right">
+                <!-- <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect" data-toggle="modal" data-target="#add_history_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New History</button> -->
+            </div>
+        </div>
+    </div>
+    <!--Grid column: Content-->
+    <div class=" col-md-12">
+        <div class="card">
+            <div class="table-responsive card-body">
+                <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th width="15%">Date & Time</th>
+                            <th width="20%">User</th>
+                            <th width="65%">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of historyData;let i=index">
+                            <td></td>
+                            <td>{{item.date}}</td>
+                            <td>{{item.username}}</td>
+                            <td>{{item.description}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Grid column: Content-->
+</div>

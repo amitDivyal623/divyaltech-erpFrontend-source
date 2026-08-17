@@ -1,0 +1,264 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="main-tabs-docs">
+                <nav class="nav nav-pills nav-justified">
+                    <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active" [ngClass]="{ 'active':activeTab==='Vendor'}" href="#docsTabsVendor" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-user mr-2" aria-hidden="true"></i>Vendor Details</a>
+                    <a id="docs-tab-attach" class="nav-item nav-link link-nav" href="#docsTabsMachinery" [ngClass]="{ 'active':activeTab==='Machinery'}" (click)="result('Machinery')" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-cog mr-2" aria-hidden="true"></i>Machinery Details</a>
+                </nav>
+                <div class="tab-content panel-tab pb-1 p-1">
+                    <div class="tab-pane pb-0" [ngClass]="{ 'active':activeTab==='Vendor'}" id="docsTabsVendor">
+                        <div class="row p-2">
+                            <div class="col-lg-12 col-md-12" [formGroup]="searchvendor">
+                                <div class="row py-2 px-2">
+                                    <div class="col-md-2 px-2">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select" formControlName="vendortype">
+                                                <option value="" disabled selected>Select Vendor type</option>
+                                                <option *ngFor="let VendorTypeList of respVendorType" value={{VendorTypeList.LookupDataId}}>
+                                                    {{VendorTypeList.LookupValue}}
+                                                </option>
+                                            </select>
+                                            <label for="vendortype"></label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <select id="vendorname" formControlName="vendorname" class="form-control field-ht colorful-select" required="" >
+                                                <option value="" selected="true">Select Vendor</option>
+                                                <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                                                    {{contractorlist.contractorName}}
+                                                </option>
+                                            </select>
+                                            <label for="vendorname" class="active">Vendor Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 pl-2">
+                                        <div class="md-form md-outline input-group margin-mdform">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">+91</span>
+                                            </div>
+                                            <input type="text" class="form-control" id="vendorContact" formControlName="vendorContact" placeholder="Contact Number" aria-label="Contact Number" aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="vendorSearch()"><i class="fa fa-search mr-2" aria-hidden="true" ></i>Search</button>
+                                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"  (click)="AddvendorPopu()"><i class="fa fa-plus " aria-hidden="true" ></i>Add Vendor</button>
+                                        <button type="button" #VendorPopup data-toggle="modal" data-target="#add_vendor_modal" style="display: none;"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 mb-2">
+                                <section>
+                                    <div class="card px-2 my-2">
+                                        <div class="table-responsive">
+                                            <table id="vendor" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                                                <thead class="winter-neva-gradient">
+                                                    <tr>
+                                                        <th>S.No.</th>
+                                                        <th>Vendor Name</th>
+                                                        <th>Vendor Type</th>
+                                                        <th>Payment Schedule</th>
+                                                        <th>Rate type</th>
+                                                        <th>Rate</th>
+                                                        <th>Contact</th>
+                                                        <th>Address</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tr *ngFor="let vendors of vendor">
+                                                    <td>{{vendors.counter}}</td>
+                                                    <td>{{vendors.vendorName}}</td>
+                                                    <td>{{vendors.vendorType}}</td>
+                                                    <td>{{vendors.payschedule}}</td>
+                                                    <td>{{vendors.rateType}}</td>
+                                                    <td>{{vendors.rate}}</td>
+                                                    <td>{{vendors.vendorContact}}</td>
+                                                    <td>{{vendors.vendorAddress}}</td>
+                                                    <td >{{vendors.status}}</td>
+                                                    <td>
+                                                        <a class="teal-text" style="display: none;" #EditViewPopup id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_vendor_modal" ></a>
+                                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="getViewVendors(vendors.vendorId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <a class="teal-text" id="" mdbtooltip="Edit" placement="top"  (click)="getEditVendors(vendors.vendorId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                        <a class="red-text" id="" mdbtooltip="Remove" placement="top" (click)="deletevendor(vendors.vendorId)"><i class="fa-times px-1 fas"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tbody *ngIf="vendor?.length == 0">
+                                                    <tr>
+                                                        <td colspan="7" class="no-data-available">No data!</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="float-right btn blue-gradient btn-sm waves-light waves-effect" (click)="result('Machinery')"><i class="fas fa-forward mr-2" aria-hidden="true"></i>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" [ngClass]="{ 'active':activeTab==='Machinery'}" id="docsTabsMachinery">
+                        <project-machinery-details></project-machinery-details>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add New Vendor modal -->
+        <div class="modal fade" id="add_vendor_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">{{PopupTitle}}</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div [formGroup]="addvendor" class="modal-body">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="vendorname" formControlName="vendorname" name="vendorname" class="form-control field-ht colorful-select" required="" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendorname'].errors) || (addvendor.controls['vendorname'].touched && addvendor.controls['vendorname'].invalid)}">
+                                        <label for="vendorname" class="{{filedClass}}">Vendor Name *</label>
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorname'].errors) || (addvendor.controls['vendorname'].touched && addvendor.controls['vendorname'].invalid)" class="invalid-feedback">Please Enter Vendor Name.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="rateType" name="rateType" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['rateType'].invalid ) || (addvendor.controls['rateType'].invalid && addvendor.controls['rateType'].touched)}">
+                                        <option value="" selected="true">Select Rate Type</option>
+                                        <option *ngFor="let RatedTypeList of respRateType" value={{RatedTypeList.LookupDataId}}>
+                                            {{RatedTypeList.LookupValue}}
+                                        </option>
+                                    </select>
+                                    <label class="active ml-2">Rate Type *</label>
+                                    <div class="invalid-feedback">Please Select Rate Type</div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="rate" formControlName="rate" name="rate" class="form-control" maxlength="8" required="" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['rate'].invalid ) || (addvendor.controls['rate'].invalid && addvendor.controls['rate'].touched)}">
+                                        <label for="rate" class="{{filedClass}}">Rate *</label>
+                                        <div *ngIf="(submitted && addvendor.controls['rate'].invalid && addvendor.controls['rate'].errors.required) || (addvendor.controls['rate'].invalid && addvendor.controls['rate'].touched && addvendor.controls['rate'].errors.required )" class="invalid-feedback">Please Enter Rate</div>
+                                        <div *ngIf="(submitted && addvendor.controls['rate'].invalid && addvendor.controls['rate'].errors.maxlength) || (addvendor.controls['rate'].invalid && addvendor.controls['rate'].touched && addvendor.controls['rate'].errors.maxlength )" class="invalid-feedback">
+                                            Only 7 Characters Allowed
+                                        </div>
+                                        <div *ngIf="(submitted && addvendor.controls['rate'].invalid && addvendor.controls['rate'].errors.pattern) || (addvendor.controls['rate'].invalid && addvendor.controls['rate'].touched && addvendor.controls['rate'].errors.pattern)" class="invalid-feedback">
+                                            Only Numeric value
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="payschedule" formControlName="payschedule" name="payschedule" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['payschedule'].invalid ) || (addvendor.controls['payschedule'].invalid && addvendor.controls['payschedule'].touched)}">
+                                            <option value="" selected="true">Select Schedule</option>
+                                            <option *ngFor="let RatedTypeList of respRateType" value={{RatedTypeList.LookupDataId}}>
+                                                {{RatedTypeList.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label for="payschedule" class="active">Payment Schedule *</label>
+                                        <div class="invalid-feedback">Please Enter Payment Schedule</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="vendortype" name="vendortype" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendortype'].invalid ) || (addvendor.controls['vendortype'].invalid && addvendor.controls['vendortype'].touched)}">
+                                        <option value="" selected="true" >Select Vendor Type</option>
+                                        <option *ngFor="let VendorTypeList of respVendorType" value={{VendorTypeList.LookupDataId}}>
+                                            {{VendorTypeList.LookupValue}}
+                                        </option>
+                                    </select>
+                                    <label for="vendortype" class="ml-2 active">Vendor Type *</label>
+                                    <div class="invalid-feedback">Please Enter Vendor Type</div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text" id="basic-addon1 ">+91</span>
+                                        </div>
+                                        <input type="text" class="form-control" formControlName="vendorContact" name="vendorContact" placeholder="Contact Number" aria-describedby="basic-addon1" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendorContact'].invalid ) || (addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].touched)}">
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].errors.pattern) || (addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].touched && addvendor.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Only Numeric Number. </div>
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].errors.maxlength) || (addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].touched && addvendor.controls['vendorContact'].errors.maxlength && !addvendor.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorContact'].invalid && addvendor.controls['vendorContact'].errors.minlength ) || (addvendor.controls['vendorContact'].errors && addvendor.controls['vendorContact'].touched && addvendor.controls['vendorContact'].errors.minlength && !addvendor.controls['vendorContact'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="vendorAddress" name="vendorAddress" class="md-textarea form-control" rows="2"></textarea>
+                                        <label for="form10" class="{{filedClass}}">Address</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="form-country" class="form-control" formControlName="country" name="country">
+                                            <option value="">Select Country</option>
+                                            <option *ngFor="let Nationalitylist of respCountry" value={{Nationalitylist.LookupDataId}}>
+                                                {{Nationalitylist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label for="form-state" class="active">Country</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-state" class="form-control" formControlName="state" [ngbTypeahead]="search" />
+                                        <label for="form-state" class="{{filedClass}}">State</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-city" formControlName="city" name="city" class="form-control" [ngbTypeahead]="search" />
+                                        <label for="form-city" class="{{filedClass}}">City</label>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="emp_postcode" class="form-control" formControlName="postcode" name="postcode" [ngClass]="{ 'is-invalid': ( addvendor.controls['postcode'].touched  && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.pattern) || (addvendor.controls['postcode'].touched  && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.maxlength && !addvendor.controls['postcode'].errors.pattern) || (addvendor.controls['postcode'].touched && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.minlength && !addvendor.controls['postcode'].errors.pattern)}">
+                                        <label for="emp_postcode" class="{{filedClass}}">Pin Code</label>
+                                        <div *ngIf="(addvendor.controls['postcode'].touched && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.pattern)" class="invalid-feedback">Please Enter Only Numeric Number. </div>
+                                        <div *ngIf="(addvendor.controls['postcode'].touched && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.maxlength && !addvendor.controls['postcode'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 6 Digit Number. </div>
+                                        <div *ngIf="(addvendor.controls['postcode'].touched && addvendor.controls['postcode'].errors && addvendor.controls['postcode'].errors.minlength && !addvendor.controls['postcode'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 6 Digit Number</div>
+                                    </div>
+                                </div> -->
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="form-status" class="form-control" formControlName="status" name="status">
+                                            <option value="">Select Status</option>
+                                            <option *ngFor="let Statuslist of respStatus" value={{Statuslist.LookupDataId}}>
+                                                {{Statuslist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label for="form-state" class="active">Status</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" #addvendorCancelButton data-dismiss="modal">Cancel</button>
+                        <button *ngIf="saveButton" type="button" [disabled]="isButtonDisabled" (click)="insertvendor()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

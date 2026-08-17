@@ -1,0 +1,682 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+        <app-header></app-header>
+        <app-navbar></app-navbar>
+    </header>
+
+    <!-- Main layout -->
+    <main>
+
+        <div class="container-fluid px-4 mb-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    Contractor Credit/Debit Details
+
+                    <!-- <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm waves-light waves-effect float-right my-0"
+                        data-toggle="modal" data-target="#add_contractor_debit_modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Contractor Debit
+                    </button>
+
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm waves-light waves-effect float-right my-0 mr-2"
+                        data-toggle="modal" data-target="#add_contractor_credit_modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Contractor Credit
+                    </button> -->
+                    <button type="button" (click)="openAddContractModal()"
+                        class="btn btn-white heavy-rain-gradient btn-sm waves-light waves-effect float-right my-0 mr-2"
+                        data-toggle="modal" data-target="#add_work_detail_modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Work Contract
+                    </button>
+                </h5>
+
+                <div class="card-body" [formGroup]="contractorTransForm">
+                    <div class="form-row align-items-end">
+
+                        <!-- From Date -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="date" class="form-control" formControlName="from_date" (change)="onContractorSelectTogetTotalCount()">
+                                <label class="active mt-3">From Date</label>
+                            </div>
+                        </div>
+
+                        <!-- To Date -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="date" class="form-control" formControlName="to_date" (change)="onContractorSelectTogetTotalCount()">
+                                <label class="active mt-3">To Date</label>
+                            </div>
+                        </div>
+
+                        <!-- Contractor -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="contractor_name"
+                                    (change)="onContractorSelectTogetTotalCount()">
+                                    <option value="" disabled>Select Contractor Name</option>
+                                    <option *ngFor="let type of respcontractor" [value]="type.contractor_id">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                                <label class="ml-1 active">Contractor Name</label>
+                            </div>
+                        </div>
+
+                        <!-- Total Credit -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="text" class="form-control" readonly formControlName="total_credit">
+                                <label class="active">Total Credit</label>
+                            </div>
+                        </div>
+
+                        <!-- Total Debit -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="text" class="form-control" readonly formControlName="total_debit">
+                                <label class="active">Total Debit</label>
+                            </div>
+                        </div>
+
+                        <!-- Balance -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="text" class="form-control" readonly formControlName="balance">
+                                <label class="active">Balance</label>
+                            </div>
+                        </div>
+
+                        <!-- Overall Balance -->
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="text" class="form-control" readonly formControlName="overall_balance">
+                                <label class="active">Overall Balance</label>
+                            </div>
+                        </div>
+
+                        <!-- Buttons (Right Aligned) -->
+                        <div class="col-md-4 ml-auto d-flex justify-content-end px-3">
+
+                            <button type="button" class="btn btn-info btn-sm mr-2" (click)="openLedger()"
+                                [disabled]="!contractorTransForm.get('from_date')?.value || !contractorTransForm.get('to_date')?.value || !contractorTransForm.get('contractor_name')?.value">
+                                <i class="fas fa-book mr-2"></i> Ledger
+                            </button>
+
+
+                            <!-- Reset Button -->
+                            <button type="button" class="btn warm-flame-gradient btn-sm"
+                                (click)="resetContractorTransForm()">
+                                <i class="fas fa-redo-alt mr-2"></i> Reset
+                            </button>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="container-fluid px-4 mb-4">
+            <section>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class="nav nav-pills nav-justified" role="tablist">
+                            <li class="nav-item link-nav">
+                                <a class="nav-item nav-link link-nav active" data-toggle="tab" href="#contractorCredit"
+                                    role="tab">
+                                    Contractor Credit Details
+                                </a>
+                            </li>
+                            <li class="nav-item link-nav">
+                                <a class="nav-item nav-link link-nav" data-toggle="tab" href="#contractorDebit"
+                                    role="tab">
+                                    Contractor Debit Details
+                                </a>
+                            </li>
+                            <li class="nav-item link-nav">
+                                <a class="nav-item nav-link link-nav" data-toggle="tab" href="#workContract" role="tab">
+                                    Work Contract Details
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <!-- Contractor Credit Table -->
+                            <div class="tab-pane fade show active" id="contractorCredit" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table id="buyertable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                        class="table table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Credit Date</th>
+                                                <th>Contractor name</th>
+                                                <th>Project name</th>
+                                                <th>Description</th>
+                                                <th>Credit Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let item of contractorCreditData;let i=index">
+                                                <td></td>
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.credit_date | date:'dd/MM/yyyy'}}</td>
+                                                <td>{{item.contractor_name}} </td>
+                                                <td>{{item.project_name}} </td>
+                                                <td>{{item.remarks}}</td>
+                                                <td>{{item.credit_amount}} </td>
+                                                <td>
+                                                    <a class="black-text" (click)="openContractorCredit(item.credit_id)"
+                                                        data-toggle="modal" data-target="#add_credit_modal"><i
+                                                            class="fa fa-eye"></i></a>
+                                                    <a class="text-primary px-2" ngbTooltip="PAY"
+                                                        (click)="redirectToTransaction(item.credit_id)">
+                                                        <i class="fa fas fa-exchange-alt"></i>
+                                                    </a>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tbody *ngIf="contractorCreditData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Contractor Debit Table -->
+                            <div class="tab-pane fade" id="contractorDebit" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" cellspacing="0" width="100%" datatable
+                                        [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Debit Date</th>
+                                                <th>Contractor name</th>
+                                                <th>Payment Mode</th>
+                                                <th>Debit Amount</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let item of contractorDebitData;let i=index">
+                                                <td></td>
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.debit_date | date:'dd/MM/yyyy'}}</td>
+                                                <td>{{item.contractor_name}} </td>
+                                                <td>{{item.payment_mode}}</td>
+                                                <td>{{item.debit_amount}} </td>
+                                                <td>
+                                                    <a class="black-text" (click)="openContractorDebit(item.debit_id)"
+                                                        data-toggle="modal" data-target="#add_debit_modal"><i
+                                                            class="fa fa-eye"></i></a>
+
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="contractorDebitData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Work Contract Table -->
+                            <div class="tab-pane fade" id="workContract" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table class="table table-striped" cellspacing="0" width="100%" datatable
+                                        [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Contract Date</th>
+                                                <th>contractor name</th>
+                                                <th>project</th>
+                                                <th>work type</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of contractorWorkDetailsData;let i=index">
+                                                <td></td>
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.contract_date | date:'dd/MM/yyyy'}}</td>
+                                                <td>{{item.contractor_name}} </td>
+                                                <td>{{item.project_name}}</td>
+                                                <td>{{item.work_type}} </td>
+                                                <td>
+                                                    <a class="black-text"
+                                                        (click)="viewConWorkDt(item.contract_id,'view')"
+                                                        data-toggle="modal" data-target="#add_work_detail_modal"><i
+                                                            class="fa fa-eye"></i></a> &nbsp;
+                                                    <a class="teal-text"
+                                                        (click)="viewConWorkDt(item.contract_id,'edit')"
+                                                        data-toggle="modal" data-target="#add_work_detail_modal"><i
+                                                            class="fas fa-pencil-alt px-1"></i></a> &nbsp;
+                                                    <a class="red-text" (click)="removeconWorkDt(item.contract_id)"><i
+                                                            class="fas fa-times px-1"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="contractorWorkDetailsData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+
+        <!--Starts Work Contract Add modal-->
+        <div class="modal fade" id="add_work_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Entry</p>
+                        <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body" [formGroup]="contractForm">
+                        <input type="hidden" formControlName="contract_id">
+                        <!-- Vendor & Contact -->
+                        <div class="form-row">
+                            <div class="col md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="contractor_name"
+                                    (change)="onContractorSelect($event)">
+                                    <option value="" disabled>Select Contractor Name</option>
+                                    <option *ngFor="let type of respcontractor" [value]="type.contractor_id">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                                <label class="ml-1 active">Contractor Name</label>
+
+                                <small class="text-danger"
+                                    *ngIf="contractForm.get('contractor_name')?.touched && contractForm.get('contractor_name')?.hasError('required')">
+                                    Contractor name is required
+                                </small>
+                            </div>
+
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="contact_no" />
+                                    <label class="active">Contact No.</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="date" class="form-control" formControlName="contract_date" />
+                                    <label class="active mt-3">Date</label>
+
+                                    <small class="text-danger"
+                                        *ngIf="contractForm.get('contract_date')?.touched && contractForm.get('contract_date')?.hasError('required')">
+                                        Contract date is required
+                                    </small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Codes -->
+                        <div class="form-row">
+                            <!-- <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="contract_name" />
+                                    <label class="active">Contract Name</label>
+                                </div>
+                            </div> -->
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="work_type" />
+                                    <label class="active">Contract Name / Work Type</label>
+
+                                    <small class="text-danger"
+                                        *ngIf="contractForm.get('work_type')?.touched && contractForm.get('work_type')?.hasError('required')">
+                                        Work type is required
+                                    </small>
+                                </div>
+                            </div>
+
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <label class="active ml-1">Project Name</label>
+                                    <select formControlName="project_name" class="form-control">
+                                        <option value="">Project Name</option>
+                                        <option *ngFor="let m of projectLists" [value]="m.project_id">{{m.project_name}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <small class="text-danger"
+                                    *ngIf="contractForm.get('project_name')?.touched && contractForm.get('project_name')?.hasError('required')">
+                                    Project name is required
+                                </small>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-row">
+                            <div class="col-12 px-2">
+                                <div class="md-form md-outline">
+                                    <textarea class="md-textarea form-control" rows="2"
+                                        formControlName="contract_description"></textarea>
+                                    <label class="active">Contract Description*</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Work Details Header -->
+                        <div class="d-flex justify-content-between align-items-center mt-3 px-2 py-1"
+                            style="border:1px solid #dcdcdc; border-radius:6px 6px 0 0; background:#fafafa;">
+                            <span class="font-weight-bold" style="font-size:14px;">Work Details</span>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect"
+                                (click)="addWorkRow()">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </div>
+
+                        <!-- Work Details Body -->
+                        <div class="p-2" formArrayName="workDetails"
+                            style="border:1px solid #dcdcdc; border-top:0; border-radius:0 0 6px 6px;">
+
+                            <div *ngFor="let row of workDetails.controls; let i = index" [formGroupName]="i"
+                                class="border rounded p-2 mb-2 d-flex align-items-center">
+
+                                <!-- Bigger Checkbox -->
+                                <div class="custom-control custom-checkbox"
+                                    *ngIf="row.get('credit_created')?.value !== 1"
+                                    style="transform: scale(1.3); margin-top:4px;">
+
+                                    <input type="checkbox" class="custom-control-input" [id]="'workChk' + i"
+                                        formControlName="isChecked">
+
+                                    <label class="custom-control-label" [for]="'workChk' + i"></label>
+                                </div>
+
+                                <!-- Credit Date -->
+                                <div class="md-form md-outline mx-1" style="width:140px; min-width:140px;">
+                                    <input type="date" class="form-control" formControlName="credit_date">
+                                    <label class="active mt-3">Date</label>
+
+                                    <small class="text-danger"
+                                        *ngIf="row.get('credit_date')?.touched && row.get('credit_date')?.hasError('required')">
+                                        Date is required
+                                    </small>
+                                </div>
+
+
+                                <!-- Description (slightly reduced width) -->
+                                <div class="md-form md-outline mx-1" style="flex:1.5;">
+                                    <input type="text" class="form-control" formControlName="description">
+                                    <label class="active">Description</label>
+                                </div>
+                                <!-- Amount (small) -->
+                                <div class="md-form md-outline mx-1" style="width:120px; min-width:120px;">
+                                    <input type="number" class="form-control" formControlName="amount">
+                                    <label class="active">Amount</label>
+                                </div>
+
+                                <!-- Edit toggle for credited rows -->
+                                <div class="ml-2 text-primary"
+                                    *ngIf="row.get('credit_created')?.value === 1 && !isViewMode"
+                                    style="cursor:pointer; font-size:18px;" title="Edit" (click)="toggleRowEdit(i)">
+                                    <i
+                                        [class]="row.get('isEditing')?.value ? 'bi bi-x-circle' : 'bi bi-pencil-square'"></i>
+                                </div>
+
+                                <!-- Remove -->
+                                <div class="ml-2 text-danger" *ngIf="row.get('credit_created')?.value !== 1"
+                                    style="cursor:pointer; font-size:18px;" title="Remove" (click)="removeWorkRow(i)">
+                                    <i class="bi bi-trash"></i>
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button #closebutton type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                            (click)="onCancelContract()">Cancel</button>
+                        <button *ngIf="!isViewMode" type="button" (click)="addContractData()" [disabled]="isSaving"
+                            class="btn btn-sm btn-outline-success waves-effect">
+                            <span *ngIf="!isSaving">Save</span>
+                            <span *ngIf="isSaving">
+                                <i class="spinner-border spinner-border-sm mr-1"></i>
+                                Saving...
+                            </span>
+                        </button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--End modal-->
+
+        <!-- Contractor Credit Modal -->
+        <div class="modal fade" id="add_credit_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLablel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Entry</p>
+                        <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+
+                    <!-- Body -->
+                    <div class="modal-body" [formGroup]="contractCreditForm">
+
+                        <!-- Vendor & Contact -->
+                        <div class="form-row">
+                            <div class="col md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="contractor_name"
+                                    (change)="onContractorSelect($event)">
+                                    <option value="" disabled>Select Contractor Name</option>
+                                    <option *ngFor="let type of respcontractor" [value]="type.contractor_id">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                                <label class="ml-1 active">Contractor Name</label>
+
+                            </div>
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="date" class="form-control" formControlName="credit_date" />
+                                    <label class="active mt-3">Credit Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="credit_amount" />
+                                    <label class="active"> Credit Amount</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-row">
+                            <div class="col-12 px-2">
+                                <div class="md-form md-outline">
+                                    <textarea class="md-textarea form-control" rows="2"
+                                        formControlName="remarks"></textarea>
+                                    <label class="active">Description</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button #Creditclosebutton type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                            (click)="onCancelCredit()">Cancel</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- Ends Contractor Credit Modal-->
+
+
+
+
+        <!-- Contractor Debit Modal -->
+        <div class="modal fade" id="add_debit_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLablel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Entry</p>
+                        <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+
+                    <!-- Body -->
+                    <div class="modal-body" [formGroup]="contractDebitForm">
+
+                        <!-- Vendor & Contact -->
+                        <div class="form-row">
+                            <div class="col md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="contractor_name"
+                                    (change)="onContractorSelect($event)">
+                                    <option value="" disabled>Select Contractor Name</option>
+                                    <option *ngFor="let type of respcontractor" [value]="type.contractor_id">
+                                        {{ type.name }}
+                                    </option>
+                                </select>
+                                <label class="ml-1 active">Contractor Name</label>
+
+                            </div>
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="date" class="form-control" formControlName="debit_date" />
+                                    <label class="active mt-3">Debit Date</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="payment_mode">
+                                    <option value="">Select Payment Mode</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="Online">Online</option>
+                                    <option value="DD">DD/option>
+                                </select>
+                            </div>
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="cheque_no" />
+                                    <label class="active">Cheque No.</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" formControlName="debit_amount" />
+                                    <label class="active">Debit Amount</label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-row">
+                            <div class="col-12 px-2">
+                                <div class="md-form md-outline">
+                                    <textarea class="md-textarea form-control" rows="2"
+                                        formControlName="description"></textarea>
+                                    <label class="active">Description</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button #Creditclosebutton type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                            (click)="onCancelCredit()">Cancel</button>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+        <!-- Ends Contractor Debit Modal-->
+
+
+
+    </main>
+    <!-- Main layout -->
+
+</body>

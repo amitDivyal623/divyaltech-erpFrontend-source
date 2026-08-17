@@ -1,0 +1,416 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Product List
+                    <button type="button" (click)="route('add-project')" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Product</button>
+                </h5>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline margin-mdform">
+                                <input type="text" id="payer_name" class="form-control" required="">
+                                <label for="payer_name" class="">Product Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-autocomplete" class="form-control">
+                                <label for="form-autocomplete" class="">Product Master</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Product Code
+                                    </th>
+                                    <th>Product Name
+                                    </th>
+                                    <th>Group Name
+                                    </th>
+                                    <th>Sub Group Name
+                                    </th>
+                                    <th>Quantity
+                                    </th>
+                                    <th>Product Unit
+                                    </th>
+                                    <th>Product Rate
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>P Name</td>
+                                    <td>G1</td>
+                                    <td>SG1</td>
+                                    <td>10</td>
+                                    <td>25kg</td>
+                                    <td>25,000</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-project')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-project')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>P Name</td>
+                                    <td>G1</td>
+                                    <td>SG1</td>
+                                    <td>10</td>
+                                    <td>25kg</td>
+                                    <td>25,000</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-project')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-project')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>3</td>
+                                    <td>P Name</td>
+                                    <td>G1</td>
+                                    <td>SG1</td>
+                                    <td>10</td>
+                                    <td>25kg</td>
+                                    <td>25,000</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-project')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-project')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4</td>
+                                    <td>P Name</td>
+                                    <td>G1</td>
+                                    <td>SG1</td>
+                                    <td>10</td>
+                                    <td>25kg</td>
+                                    <td>25,000</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-project')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-project')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New property sale modal -->
+            <div class="modal fade" id="add_property_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Product</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="prod-id" class="form-control">
+                                        <label for="prod-id" class="">Product Id</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="prod-name" class="form-control">
+                                        <label for="prod-name" class="">Product Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="pshort-name" class="form-control">
+                                        <label for="pshort-name" class="">Product Short Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="prod-desp" class="md-textarea form-control" rows="1" required=""></textarea>
+                                        <label for="prod-desp">Product Description</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2 md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Group Name</option>
+                                        <option value="default" >Kg</option>
+                                        <option value="2">Dozan</option>
+                                        <option value="3">Mole</option>
+                                    </select>
+                                    <label class="ml-2 active">Group Name</label>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2 md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Sub Group Name</option>
+                                        <option value="default" >Kg</option>
+                                        <option value="2">Dozan</option>
+                                        <option value="3">Mole</option>
+                                    </select>
+                                    <label class="ml-2 active">Sub Group Name</label>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="location" class="form-control">
+                                        <label for="location" class="">Location</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="new-qty" class="form-control">
+                                        <label for="new-qty" class="">Quantity</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Unit</option>
+                                        <option value="default" >Kg</option>
+                                        <option value="2">Dozan</option>
+                                        <option value="3">Mole</option>
+                                    </select>
+                                    <label class="ml-2 active">Product Unit</label>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Product Rate" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="hsn-code" class="form-control">
+                                        <label for="hsn-code" class="">HSN Code</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="prod-remark" class="md-textarea form-control" rows="2" required=""></textarea>
+                                        <label for="prod-remark">Remarks</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- View property sale modal -->
+            <div class="modal fade" id="view_property_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Property Sales</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="2015-15-12" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()" disabled>
+                                        <label for="date-picker-example" class="active">Transaction date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-autocomplete" class="form-control" disabled>
+                                        <label for="form-autocomplete" class="">Property</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                            <option value="" selected="true" disabled="disabled">Select Booking</option>
+                                            <option value="default" selected>Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Booking</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Sales Amount" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="default" selected>Reo</option>
+                                        <option value="2">Insane</option>
+                                        <option value="3">Riya</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="qty" class="form-control" required="" disabled>
+                                        <label for="qty" class="">Sales Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3" required="" disabled></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Edit property sale modal -->
+            <div class="modal fade" id="edit_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Edit Property Sales</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="2015-15-12" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()">
+                                        <label for="date-picker-example" class="active">Transaction date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-autocomplete" class="form-control">
+                                        <label for="form-autocomplete" class="">Property</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Booking</option>
+                                            <option value="default" selected>Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Booking</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Sales Amount" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="default" selected>Reo</option>
+                                        <option value="2">Insane</option>
+                                        <option value="3">Riya</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="qty" class="form-control" required="">
+                                        <label for="qty" class="">Sales Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- Main layout -->
+</body>

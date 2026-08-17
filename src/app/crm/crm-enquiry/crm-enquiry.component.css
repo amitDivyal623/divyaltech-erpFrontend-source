@@ -1,0 +1,10 @@
+.shown-by {
+  max-width: 200px;
+  white-space: normal;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+table {
+  table-layout: fixed;
+}

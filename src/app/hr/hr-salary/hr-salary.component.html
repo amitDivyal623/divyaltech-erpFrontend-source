@@ -1,0 +1,29 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Employee Salary History</h5>
+                <app-salary-history></app-salary-history>
+            </div>
+        </div>
+        <div class="col-sm-12" *ngIf="!employeeSalaryProcess">
+            <button type="button" (click)="route('salary-process')" class="float-right btn btn-sm dusty-grass-gradient waves-light waves-effect"><i class="fas fa-save mr-2 "></i>Salary Process</button>
+        </div>
+    </main>
+</body>

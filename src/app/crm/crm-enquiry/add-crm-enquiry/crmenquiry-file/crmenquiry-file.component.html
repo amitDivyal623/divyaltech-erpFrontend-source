@@ -1,0 +1,117 @@
+      
+        <!-- <div class="container-fluid my-4 px-4" *ngIf="div1"> -->
+            <!-- Main docs tabs -->
+            <!-- <div class="main-tabs-docs">               
+                <div class="tab-content panel-tab pt-1"> 
+                    <div class="tab-pane fade" id="docsTabsAttach" role="tabpanel"> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="px-2 float-right">
+                                        <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect enquryButton" (click)="Newattachmentadd()"><i class="fa fa-plus" aria-hidden="true"></i> Add New Attachment</button>
+                                        <button type="button" style="display: none;" #attachmentModalButton data-toggle="modal" data-target="#add_attach_modal"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+                            <div class=" col-md-12">
+                                <div class="card">
+                                    <div class="table-responsive card-body">
+                                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr >
+                                                    <th></th>
+                                                    <th>S.No.
+                                                    </th>
+                                                    <th>Date & Time
+                                                    </th>
+                                                    <!-- <th>Uploader Name
+                                                    </th> -->
+                                                    <th>Filename
+                                                    </th>
+                                                    <th>Action
+                                                    </th>
+                                                    <th *ngIf="fileStatus">status
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of attachmentdata;let i=index">
+                                                    <td></td>
+                                                    <td>{{item.counter}}</td>
+                                                    <td>{{item.attachmentDate}}</td>
+                                                    <!-- <td>{{item.uploaderName}}</td> -->
+                                                    <td>{{item.FileName}}</td>
+                                                    <td><a class="black-text" id="{{i+1}}" ngbTooltip="View Customer" placement="top" 
+                                                        (click)="viewAttchement(item.path,'view')"><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                        <a class="text-primary." id="{{i+1}}" ngbTooltip="Download" placement="top" (click)="viewAttchement(item.path,'download')"><i class="fas fa-download px-1"></i></a></td>
+                                                    <td *ngIf="fileStatus">
+                                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" (click)="editAttachment(item.attachmentid)" ><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text" mdbtooltip="Remove" placement="top" (click)="Deleteattachment(item.attachmentid)"><i class="fa-times px-1 fas"></i></a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+                        </div>
+                    <!-- </div>
+                </div>
+
+            </div> -->
+            <!-- Main docs tabs -->
+           
+           
+            
+            <!-- Add New Attach modal -->
+            <div class="modal fade" id="add_attach_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">{{attachmentModalHadding}}</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <form [formGroup]="attachmenDetails" >
+                            <!-- Body -->
+                            <div class="modal-body">
+                                <div class="form-row">
+                                    <div class="col-lg-8 col-md-8 px-2">
+                                        <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                            <input type="hidden" name="attachmeid_id" formControlName="attachmeid_id">
+                                            <input formControlName="attachmentimage" name="attachmentimage" type="file" class="custom-file-input" multiple id="attachmentimage" (change)="AttachmentImage($event.target.files, $event )">
+                                            <label class="custom-file-label" #labelImport id="labelImport" for="attachmentimage">Upload File</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf= "(attachmentstatus == 'Update')" class="col-lg-4 col-md-4 px-2 py-2">
+                                        <div class="md-form md-outline" style="position: relative; top:-6px">
+                                            <select formControlName="attachmentstatus" class="form-control field-ht colorful-select">
+                                                <option value=" " selected disabled>Select Status</option>
+                                                <option value="Enable">Enable</option>
+                                                <option value="Disable">Disable</option>
+                                            </select>
+                                            <label class="active">Status</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- Footer -->
+                        </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm  btn-danger" #attachmentclosebutton data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect" id="attachmentsave" (click)="attachmentSubmit()">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            
+        <!-- </div> -->
+       
+  

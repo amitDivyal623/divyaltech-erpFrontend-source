@@ -1,0 +1,179 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Stock List
+                    <!-- <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_cust_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Stock</button> -->
+                    <button type="button" #stockModal style="display: none;" data-toggle="modal" data-target="#add_stock_modal"></button>
+                </h5>
+                <div class="card-body" [formGroup]="searchStock">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" class="form-control" id="search_product" formControlName="search_product">
+                                <label for="search_product" class="">Product</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" id="search_producttype" formControlName="search_producttype">
+                                    <option value="" selected>Select Product Type</option>
+                                    <option value="1">New Product</option>
+                                    <option value="2">Existing Product</option>
+                                </select>
+                            <label class="top-lb active">Product Type</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="search_godown" class="form-control" formControlName="search_godown">
+                                <label for="search_godown" class="">Godown</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <!-- Main docs tabs -->
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <!-- <table class="table table-striped" cellspacing="0" width="100%"> -->
+                          <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Product
+                                    </th>
+                                    <th>Product Type
+                                    </th>
+                                    <th>Last Updated Date
+                                    </th>
+                                    <th>Godown
+                                    </th>
+                                    <th>Quantity
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data; let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.ProductName}}</td>
+                                    <td>{{item.productType_name}}</td>
+                                    <td>{{item.updatedDt}}</td>
+                                    <td>{{item.GodownName}}</td>
+                                    <td>{{item.Quantity}}</td>
+
+                                    <td>
+
+                                      <!-- <a class="text-success" ngbTooltip="Edit Stock" placement="top" data-toggle="#add_cust_modal" ><i class="fa-pencil-alt px-1 fas" (click)="editStock(item.stockId)"></i></a> -->
+                                      <a class="black-text" id="{{i+1}}" ngbTooltip="View Godown" placement="top" (click)="editStock(item.productId)"><i class="fa-pencil-alt px-1 fas" aria-hidden="true"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="text-danger" id="" ngbTooltip="Remove Stock" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <!-- <tbody *ngIf="data?.length == 0">
+                                <tr>
+                                  <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody> -->
+                        </table>
+                    </div>
+                </div>
+                <div class="modal fade"  id="add_stock_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                        <!-- Content -->
+                        <div class="modal-content ">
+                            <!-- Header -->
+                            <div class="modal-header mdb-color ">
+                                <p class="heading lead font-weight-bold" id="modaltextheader">{{heading}}</p>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true" class="white-text">&times;</span>
+                                </button>
+                            </div>
+                            <!-- Body -->
+                            <div class="modal-body" [formGroup]="addStockDetails">
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" formControlName="add_product" id="add_product">
+                                            <option value="" selected="true">Select Product Name</option>
+                                              <option *ngFor="let productlist of resProduct" value={{productlist.productId}}>
+                                                  {{productlist.productName}}  /  {{productlist.productType}}
+                                              </option>
+                                            <!-- <option value="">Select Project Name</option>
+                                            <option value="1">New Project</option>
+                                            <option value="2">Existing Project</option> -->
+                                        </select>
+                                        <label class="ml-2 active">Product </label>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" formControlName="add_ProductType" disabled>
+                                            <option value="">Select Product Type</option>
+                                            <option  [ngValue]="producttypelist.productId"  *ngFor="let producttypelist of resProductType" value={{producttypelist.productId}}>
+                                                  {{producttypelist.ProductTypeName}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Product Type</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="add_godown"  formControlName="add_godown">
+                                            <option value="">Select Godown</option>
+                                            <!-- <option *ngFor="let godownDatalist of resProductType" value={{godownDatalist.GodownId}}>
+                                                  {{godownDatalist.godownName}}
+                                            </option> -->
+                                        </select>
+                                        <label class="ml-2 active">Godown</label>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input formControlName="stock_quantity" min="0" type="number" id="stock_quantity" value="{{stock_quantity}}" class="form-control" required="">
+                                        <label class="ml-2 active">Quantity</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <input placeholder="Select date" formControlName="lastupdated_date" name="lastupdted_date" [minDate]="minDate" [maxDate]="maxDate" value="{{lastupdated_date | date: 'yyyy-MM-dd'}}" readonly ngbDatepicker #dateadd="ngbDatepicker" (click)="dateadd.toggle()" type="text" id="date" class="form-control datepicker">
+                                        <label for="date" class="ml-2 active">Last updated date</label>
+                                    </div>
+                                </div>
+                                <!-- Footer -->
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-outline-success waves-effect">Update</button>
+                            </div>
+                            <!-- Content -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Main docs tabs -->
+            </section>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

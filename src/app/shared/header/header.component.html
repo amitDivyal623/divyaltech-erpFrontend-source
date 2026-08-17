@@ -1,0 +1,458 @@
+<!-- Sidebar navigation -->
+<div id="slide-out" class="side-nav sn-bg-4 fixed slim">
+
+    <ul class="custom-scrollbar navscroll">
+
+        <!-- Logo -->
+        <li class="logo-sn waves-effect">
+            <div class="text-center">
+                <a class="pl-0">
+                    <img src="assets/img/mrlayout.jpg" style="height: 50px;width: 100%;">
+                </a>
+            </div>
+        </li>
+
+        <li>
+            <ul class="collapsible collapsible-accordion">
+
+                <!-- Dashboard -->
+                <li>
+                    <a (click)="route('dashboard')" class="collapsible-header waves-effect arrow-r">
+                        <i class="fas fa-tachometer-alt"></i>Dashboards
+                    </a>
+                </li>
+
+                <!-- Task -->
+                <li
+                    *ngIf="!(hradminTab || hrUserTab || Admin || employeeTab || Administrator || CRMAdmin || projectCoordinator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="route('hr-task')">
+                        <i class="fas fa-user"></i>Task
+                    </a>
+                </li>
+
+                <!-- HR -->
+                <li *ngIf="hasAny(hradminTab, hrUserTab, Admin, employeeTab, Administrator, CRMAdmin)">
+                    <a class="collapsible-header waves-effect arrow-r arrow-down" (click)="isHRCollapsed=!isHRCollapsed"
+                        [attr.aria-expanded]="!isHRCollapsed">
+                        <i class="fas fa-user"></i>HR
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isHRCollapsed">
+                        <ul>
+
+                            <li *ngIf="!employeeTab && !CRMAdmin">
+                                <a (click)="route('hr-machine-reading')" class="waves-effect">Machine Reading</a>
+                            </li>
+
+                            <li *ngIf="!CRMAdmin">
+                                <a (click)="route('hr-working-daily-diary')" class="waves-effect">Working Daily
+                                    Diary</a>
+                            </li>
+
+                            <li *ngIf="hasAny(hradminTab, Admin, Administrator)">
+                                <a (click)="route('hr-employee')" class="waves-effect">Employee</a>
+                            </li>
+
+                            <li *ngIf="hasAny(hradminTab, hrUserTab, Admin, Administrator, employeeTab) || !CRMAdmin">
+                                <a class="waves-effect arrow-r" (click)="isAttendanceCollapsed=!isAttendanceCollapsed"
+                                    [attr.aria-expanded]="!isAttendanceCollapsed">
+                                    Attendance
+                                    <i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+
+                                <div [ngbCollapse]="!isAttendanceCollapsed">
+                                    <ul>
+                                        <li><a (click)="route('hr-employee-attendance')" class="waves-effect">Employee
+                                                Attendance</a></li>
+                                        <li><a (click)="route('hr-vendor-attendance')" class="waves-effect">Vendor
+                                                Attendance</a></li>
+                                        <li><a (click)="route('hr-machine-attendance')" class="waves-effect">Machine
+                                                Attendance</a></li>
+                                        <li *ngIf="!CRMAdmin">
+                                            <a (click)="route('hr-attendance')" class="waves-effect">Attendance
+                                                Report</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li *ngIf="hasAny(hradminTab, hrUserTab, Admin, Administrator, employeeTab) || !CRMAdmin">
+                                <a class="waves-effect arrow-r" (click)="isSalaryCollapsed=!isSalaryCollapsed"
+                                    [attr.aria-expanded]="!isSalaryCollapsed">
+                                    Salary
+                                    <i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+
+                                <div [ngbCollapse]="!isSalaryCollapsed">
+                                    <ul>
+                                        <li *ngIf="hasAny(hradminTab, Admin, Administrator) || !employeeTab">
+                                            <a (click)="route('vendor-salary')" class="waves-effect">Vendor Salary</a>
+                                        </li>
+                                        <li>
+                                            <a (click)="route('employee-salary')" class="waves-effect">Employee
+                                                Salary</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li *ngIf="hasAny(hradminTab, hrUserTab, Admin, Administrator, employeeTab) || !CRMAdmin">
+                                <a class="waves-effect arrow-r" (click)="isReportCollapsed=!isReportCollapsed"
+                                    [attr.aria-expanded]="!isReportCollapsed">
+                                    Report
+                                    <i class="fas fa-angle-down rotate-icon"></i>
+                                </a>
+
+                                <div [ngbCollapse]="!isReportCollapsed">
+                                    <ul>
+                                        <li *ngIf="hasAny(hradminTab, Admin, Administrator) || !employeeTab">
+                                            <a (click)="route('hr-report')" class="waves-effect">Vendor Report</a>
+                                        </li>
+                                        <li><a (click)="route('hr-labour-report')" class="waves-effect">Labour
+                                                Report</a></li>
+                                        <li><a (click)="route('hr-machine-report')" class="waves-effect">Machine
+                                                Report</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li *ngIf="!employeeTab">
+                                <a (click)="route('hr-vendor')" class="waves-effect">Vendor</a>
+                            </li>
+
+                            <li><a (click)="route('hr-contractors')" class="waves-effect">Contractor</a></li>
+                            <li><a (click)="route('hr-company')" class="waves-effect">Company</a></li>
+                            <li><a (click)="route('hr-task')" class="waves-effect">Task</a></li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- CRM -->
+                <li *ngIf="hasAny(CRMAdmin, CRMUser, Admin, Administrator, hradminTab, salesRecord)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isCRMCollapsed=!isCRMCollapsed"
+                        [attr.aria-expanded]="!isCRMCollapsed">
+                        <i class="fas fa-handshake"></i>CRM
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isCRMCollapsed">
+                        <ul>
+
+                            <!-- Customer Management (NOT for salesRecord) -->
+                            <li *ngIf="!hasAny(salesRecord) && !hradminTab">
+                                <a (click)="route('crm-customer')" class="waves-effect">
+                                    Customer Management
+                                </a>
+                            </li>
+
+                            <!-- Customer Profile (ALL incl salesRecord) -->
+                            <li *ngIf="!hradminTab">
+                                <a (click)="route('crm-enquiry')" class="waves-effect">
+                                    Customer Profile
+                                </a>
+                            </li>
+
+                            <!-- WhatsApp Bridge (NOT for salesRecord) -->
+                            <li *ngIf="!hasAny(salesRecord)">
+                                <a (click)="route_wabridge('wabridge-page')" class="waves-effect">
+                                    WhatsApp Bridge Login
+                                </a>
+                            </li>
+
+                            <!-- Task Management (NOT for salesRecord) -->
+                            <li *ngIf="!hasAny(salesRecord)">
+                                <a (click)="route('crm-task')" class="waves-effect">
+                                    Task Management
+                                </a>
+                            </li>
+
+                            <!-- Visitors Management (ALL incl salesRecord) -->
+                            <li *ngIf="!hradminTab">
+                                <a (click)="route('crm-visitors')" class="waves-effect">
+                                    Visitors Management
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Registry & Booking -->
+                <li
+                    *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal, salesRecord)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isRADCollapsed=!isRADCollapsed"
+                        [attr.aria-expanded]="!isRADCollapsed">
+                        <i class="fas fa-book"></i>Registry & Booking
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isRADCollapsed">
+                        <ul>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal, salesRecord)">
+                                <a (click)="route('reg-record')" class="waves-effect">Registry Record</a>
+                            </li>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal)">
+                                <a (click)="route('reg-landlord')" class="waves-effect">Landlord Vendor</a>
+                            </li>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal)">
+                                <a (click)="route('reg-booking-task')" class="waves-effect">Task Management</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, Accountant, Accounts_Internal)">
+                                <a (click)="route('reg-trans-list')" class="waves-effect">Transaction List</a>
+                            </li>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal)">
+                                <a (click)="route('reg-payment-followup')" class="waves-effect">Payment Followup</a>
+                            </li>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager, Accountant, Accounts_Internal)">
+                                <a (click)="route('reg-document-followup')" class="waves-effect">Document Followup</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                <!-- Com Admin -->
+                <li *ngIf="hasAny(Admin, Administrator, hradminTab)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isAdnCollapsed=!isAdnCollapsed"
+                        [attr.aria-expanded]="!isAdnCollapsed">
+                        <i class="fas fa-user-circle"></i>Com Admin
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isAdnCollapsed">
+                        <ul>
+                            <li>
+                                <a (click)="route('admin-master-entry')" class="waves-effect">
+                                    Lookup Values
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="route('admin-item-master')" class="waves-effect">
+                                    Item master
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="route('warehouse')" class="waves-effect">
+                                    WareHouse
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="route('admin-company-calendar')" class="waves-effect">
+                                    Company Calendar
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="route('admin-administration-users')" class="waves-effect">
+                                    Users Management
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)="route('admin-administration-role')" class="waves-effect">
+                                    User Roles
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
+                <!-- Product Management -->
+                <li *ngIf="hasAny(Admin, Administrator, hradminTab, CRMAdmin, CRMUser, productManager)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isProdCollapsed=!isProdCollapsed"
+                        [attr.aria-expanded]="!isProdCollapsed">
+                        <i class="fab fa-product-hunt"></i>Product Management
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isProdCollapsed">
+                        <ul>
+                            <li><a (click)="route('product-master')" class="waves-effect">Product Master</a></li>
+                            <li><a (click)="route('product-stock')" class="waves-effect">Stock Management</a></li>
+                            <li><a (click)="route('settings')" class="waves-effect">Settings</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Project Management -->
+                <li *ngIf="hasAny(Admin, Administrator, projectManager)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isPrjCollapsed=!isPrjCollapsed"
+                        [attr.aria-expanded]="!isPrjCollapsed">
+                        <i class="fas fa-tasks"></i>Project Management
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isPrjCollapsed">
+                        <ul>
+                            <li><a (click)="route('project-work-contract')" class="waves-effect">Work Contract</a></li>
+                            <li><a (click)="route('project-mgmt')" class="waves-effect">Projects</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Stock -->
+                <li
+                    *ngIf="hasAny(Admin, Administrator, Accountant, Accounts_Internal, hradminTab, projectManager, projectCoordinator, projectSubCoordinator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isStcCollapsed=!isStcCollapsed"
+                        [attr.aria-expanded]="!isStcCollapsed">
+                        <i class="fas fa-balance-scale"></i>Stock Management
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isStcCollapsed">
+                        <ul>
+                            <li *ngIf="hasAny(Admin, Administrator, Accountant, Accounts_Internal, projectManager)">
+                                <a (click)="route('stock-inventory')" class="waves-effect">Inventory</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, projectManager, projectCoordinator)">
+                                <a (click)="route('stock-gate-pass')" class="waves-effect">Gate pass</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, projectManager, projectCoordinator)">
+                                <a (click)="route('stock-po-pr')" class="waves-effect">{{ poPrLabel }}</a>
+                            </li>
+                            <li
+                                *ngIf="hasAny(Admin, Administrator, projectManager, projectCoordinator, projectSubCoordinator)">
+                                <a (click)="route('stock-gate-entry-number')" class="waves-effect">Gate Entry (GEN)</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, projectManager, projectCoordinator)">
+                                <a (click)="route('stock-goods-received-notes')" class="waves-effect">Goods Received
+                                    Notes</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Account -->
+                <li *ngIf="hasAny(Admin, Administrator, Accountant, Accounts_Internal, projectManager)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isActCollapsed=!isActCollapsed"
+                        [attr.aria-expanded]="!isActCollapsed">
+                        <i class="fas fa-coins"></i>Account
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isActCollapsed">
+                        <ul>
+                            <li *ngIf="hasAny(Admin, Administrator, projectManager)">
+                                <a (click)="route('account-vendordetails')" class="waves-effect">Vendor Details</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, projectManager)">
+                                <a (click)="route('account-contractorDetails')" class="waves-effect">Contractor
+                                    Details</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator)">
+                                <a (click)="route('account-billing')" class="waves-effect">Billings</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator)">
+                                <a (click)="route('account-transaction')" class="waves-effect">Transactions</a>
+                            </li>
+                            <li *ngIf="hasAny(Admin, Administrator, Accountant)">
+                                <a (click)="route('account-bank-accounts')" class="waves-effect">Bank Accounts</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Files -->
+                <li *ngIf="hasAny(Admin, Administrator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="route('file-mgmt')">
+                        <i class="fas fa-file"></i>Files
+                    </a>
+                </li>
+
+                <!-- Report -->
+                <li *ngIf="hasAny(Admin, Administrator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isRptCollapsed=!isRptCollapsed"
+                        [attr.aria-expanded]="!isRptCollapsed">
+                        <i class="fas fa-chart-pie"></i>Report
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isRptCollapsed">
+                        <ul>
+                            <li *ngIf="Admin"><a (click)="route('report-user-activity-logs')" class="waves-effect">User Activity Logs</a></li>
+                            <li><a (click)="route('report-attendance')" class="waves-effect">Attendance Report</a></li>
+                            <li><a (click)="route('report-enquiry')" class="waves-effect">Enquiry Report</a></li>
+                            <li><a (click)="route('report-projects')" class="waves-effect">Projects Report</a></li>
+                            <li><a (click)="route('report-booking')" class="waves-effect">Booking Report</a></li>
+                            <li><a (click)="route('report-expense')" class="waves-effect">Expense Report</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Sales Management -->
+                <li *ngIf="hasAny(Admin, Administrator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isSlsCollapsed=!isSlsCollapsed"
+                        [attr.aria-expanded]="!isSlsCollapsed">
+                        <i class="fas fa-chart-line"></i>Sales Management
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isSlsCollapsed">
+                        <ul>
+                            <li>
+                                <a (click)="route('sale-order')" class="waves-effect">Sale Order</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Purchase Management -->
+                <li *ngIf="hasAny(Admin, Administrator)">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isPchsCollapsed=!isPchsCollapsed"
+                        [attr.aria-expanded]="!isPchsCollapsed">
+                        <i class="fas fa-shopping-cart"></i>Purchase Management
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isPchsCollapsed">
+                        <ul>
+                            <li><a (click)="route('purchase-seller')" class="waves-effect">Seller Info</a></li>
+                            <li><a (click)="route('purchase-order')" class="waves-effect">Purchase Order</a></li>
+                            <li><a (click)="route('purchase-expense')" class="waves-effect">Office Expense</a></li>
+                            <li><a (click)="route('purchase-material')" class="waves-effect">Purchase Building
+                                    Materials</a></li>
+                            <li><a (click)="route('purchase-propinfo')" class="waves-effect">Purchase Info</a></li>
+                            <li><a (click)="route('purchase-property')" class="waves-effect">Property Purchase</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Sys Admin -->
+                <li *ngIf="sysAdmin">
+                    <a class="collapsible-header waves-effect arrow-r" (click)="isAdmCollapsed=!isAdmCollapsed"
+                        [attr.aria-expanded]="!isAdmCollapsed">
+                        <i class="fas fa-shopping-cart"></i>Sys Admin
+                        <i class="fas fa-angle-down rotate-icon"></i>
+                    </a>
+
+                    <div [ngbCollapse]="!isAdmCollapsed">
+                        <ul>
+                            <li><a (click)="route('administration-company-info')" class="waves-effect">Companies
+                                    Info</a></li>
+                            <li><a (click)="route('administration-users')" class="waves-effect">Users Management</a>
+                            </li>
+                            <li><a (click)="route('administration-role')" class="waves-effect">User Roles</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- Trading -->
+                <li *ngIf="hasAny(Admin, Administrator)">
+                    <a class="collapsible-header waves-effect arrow-r">
+                        <i class="fas fa-map"></i>Treading
+                    </a>
+                </li>
+
+            </ul>
+        </li>
+
+    </ul>
+
+    <div class="sidenav-bg mask-strong"></div>
+</div>

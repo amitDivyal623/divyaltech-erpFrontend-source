@@ -1,0 +1,203 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Employee List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_emp_desg_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Designation</button>
+                    <button type="button" (click)=addemployee() class="btn btn-white heavy-rain-gradient btn-sm  float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Employee</button>
+                </h5>
+                <form [formGroup]="searchemp">
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-3 px-4">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="form-employee" class="form-control" formControlName="EmployeeName" name="EmployeeName">
+                                    <label for="form-employee" class="active">Select Employee Name</label>
+                                </div>
+                            </div>
+
+<!--                            
+                            <div class="col-md-3 px-4">
+                                <div class="md-form md-outline">
+                                    <ng-select
+                                        formControlName="Designation"
+                                        items="designation1"
+                                        bindLabel="Designation"
+                                        bindValue="DesignationId"
+                                        placeholder="Select Designation"
+                                        appendTo="body"
+                                        multiple="true"
+                                        (change)="SelectedDesigValue($event)">
+                                    </ng-select>
+                                </div>
+                                <label class="top-lb active">Designation</label>
+                            </div> -->
+                            
+
+                            <div class="col-md-3 md-form md-outline px-4">
+                                <select class="form-control field-ht colorful-select" formControlName="Designation" name="Designation">
+                                        <option value="">Select Designation</option>
+                                        <option *ngFor="let Designationlist of resplookupDesignation" value={{Designationlist.DesignationId}}>
+                                            {{Designationlist.Designation}}
+                                        </option>
+                                </select>
+                                <label class="top-lb active">Designation</label>
+                            </div> 
+
+                            <!-- <div class="col-md-3 px-4">
+                                <div class="md-form md-outline">
+                                    <input type="hidden" formControlName="desig_id" value="{{EmpDesigID}}">
+                                    <ng-select
+                                        formControlName="emp_desig"
+                                        items="empdesig"
+                                        bindLabel="name"
+                                        placeholder="Select Designation"
+                                        appendTo="body"
+                                        multiple="true"
+                                        (change)="SelectedDesigValue($event)">
+                                    </ng-select>
+                                </div>
+                                <label class="top-lb active">Designation</label>
+                            </div> -->
+                            <div class="col-md-3 md-form md-outline px-4">
+                                <select class="form-control field-ht colorful-select" formControlName="EmployeeType" name="EmployeeType">
+                                    <option value="">Select Employee Type</option>
+                                    <option *ngFor="let EmployeeTypelist of resplookupEmployeeType" value={{EmployeeTypelist.LookupDataId}}>
+                                        {{EmployeeTypelist.LookupValue}}
+                                    </option>
+                                </select>
+                                <label class="top-lb active">Employee Type</label>
+                            </div>
+                            <div class="col-md-3 px-4">
+                                <div class="md-form md-outline input-group margin-mdform">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">+91</span>
+                                    </div>
+                                    <input type="text" class="form-control" formControlName="Contact" name="Contact" placeholder="Contact Number" aria-label="Contact Number" aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row float-right mr-3">
+                            <button type="button" (click)="employeeReset()" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i class="fas fa-redo-alt mr-2" aria-hidden="true" ></i>Reset</button>
+                            <button type="button" (click)="employeeSearch()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true" ></i>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="employeeDataTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead class="winter-neva-gradient">
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Employee Name
+                                    </th>
+                                    <th>Joining Date
+                                    </th>
+                                    <th>Designation
+                                    </th>
+                                    <th>Email Id
+                                    </th>
+                                    <th>Contact Number
+                                    </th>
+                                    <th>Address
+                                    </th>
+                                    <th>Status
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td>{{item.JoiningDate}}</td>
+                                    <td>{{item.DesignationCode}}</td>
+                                    <td>{{item.EmailId}}</td>
+                                    <td>{{item.MobileNo}}</td>
+                                    <td>{{item.EmpPermAdd}}</td>
+                                    <td>{{item.WorkStatus}}</td>
+                                    <td>
+                                        <a class="black-text"  (click)="viewemployee(item.Action)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a *ngIf="!EmployeeRole" class="teal-text"  (click)="editmployee(item.Action)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="!EmployeeRole" class="red-text"  (click)="deletemployee(item.Action)" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- designation modal -->
+            <div class="modal fade" id="add_emp_desg_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add Employee Designation </p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="adddesignation" class="modal-body">
+                            <div class="form-row">
+                                <div class="col-lg-6 col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="Department" name="Department" id="Department" class="form-control field-ht colorful-select" >
+                                            <option value="" selected >Select Department</option>
+                                            <option *ngFor="let Departmentlist of resplookupDepartment" value={{Departmentlist.LookupDataId}} >
+                                            {{Departmentlist.LookupValue}}
+                                            </option>
+                                        </select>
+                                            <label class="active">Department</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="emp_designation" id="emp_designation" class="form-control " value="">
+                                        <label for="emp_designation" class="">Designation*</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button"  #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="insertDesignation()" [disabled]="isButtonDisabled" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

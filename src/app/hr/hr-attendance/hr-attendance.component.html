@@ -1,0 +1,368 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+    
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Attendance Report
+                    <button type="button" *ngIf="!employeeTab && !hruser" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"  data-toggle="modal" data-target="#import_AttendanceModal">Import Attendence File</button>
+                    <button type="button" *ngIf="!employeeTab && !hruser" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="add_attendance()" ><i class="fa fa-plus" aria-hidden="true"></i> Add Attendance</button>
+                    <button type="button" style="display: none;" #add_attendancePopup data-toggle="modal" data-target="#add_master_modal"></button>
+                </h5>
+                <div class="card-body" [formGroup]="SearcAttendanceDetails">
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" (change)="ReportTypeChanges($event)" formControlName="reportType">
+                                <option *ngFor="let ReportTypelist of resplookupReportType" selected="true" value={{ReportTypelist.LookupDataId}}>
+                                    {{ReportTypelist.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Report Type</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" (change)="ReportForChanges($event)" formControlName="reportFor">
+                                <option value="" >Select Report For</option>
+                                <option value="Employees" >Employees</option>
+                                <option value="Machines" >Machines</option>
+                                <option value="labour" >labour</option>
+                            </select>
+                            <label class="top-lb active">Report For</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="employeeDepartments">
+                            <select class="form-control field-ht colorful-select" formControlName="EmployeeId">
+                                <option value="" selected="true" >Select Employee Name</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Employee Name</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="vendorDetails">
+                            <select class="form-control field-ht colorful-select" formControlName="vendor_id">
+                                <option value="" selected="true">Select Venders  </option>
+                                <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                                    {{contractorlist.contractorName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Venders  </label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="attendance_duration" >
+                            <select class="form-control field-ht colorful-select" formControlName="duration" (change)="durationChanges($event)">
+                                <option value="Monthly" selected="true">Monthly </option>
+                                <option value="Weekly" >Weekly </option>
+                                <!-- <option value="Day" >Day </option> -->
+                            </select>
+                            <label class="top-lb active">Duration </label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="attendance_date">
+                            <input placeholder="Select date" formControlName="SearchattendanceDate" id="SearchattendanceDate" name="SearchattendanceDate" readonly ngbDatepicker #SearchattendanceDate="ngbDatepicker"  (click)="SearchattendanceDate.toggle()" type="text" class="form-control datepicker" >
+                            <label class="top-lb active">Date From</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="Monthlyduration">
+                            <input formControlName="SearchattendanceMonth" id="SearchattendanceMonth" name="SearchattendanceMonth" type="text" class="form-control" >
+                            <label class="top-lb active">Month </label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="Monthlyduration">
+                            <input formControlName="SearchattendanceYear" id="SearchattendanceYear" name="SearchattendanceYear"  type="text" class="form-control" >
+                            <label class="top-lb active">Year </label>
+                        </div>
+                        <!-- <div class="col-md-3 md-form md-outline px-4" *ngIf="Monthlyduration">
+                            <input formControlName="SearchattendanceYear" id="SearchattendanceYear" name="SearchattendanceYear"  type="text" class="form-control" >
+                            <label class="top-lb">Year </label>
+                        </div> -->
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="attendance_date">
+                            <input placeholder="Select date" formControlName="SearchattendanceDateTo" id="SearchattendanceDate" name="SearchattendanceDate" readonly ngbDatepicker #SearchattendanceDate="ngbDatepicker"  (click)="SearchattendanceDate.toggle()" type="text" class="form-control datepicker" >
+                            <label class="top-lb active">Date To</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" *ngIf="employeeDepartments">
+                            
+                            <select class="form-control field-ht colorful-select" formControlName="Departments">
+                                <option value="" selected="true">Select Departments </option>
+                                <option *ngFor="let Departmentlist of resplookupDepartment" value={{Departmentlist.LookupDataId}}>
+                                    {{Departmentlist.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Departments </label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="searchAttendance()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" ><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid  px-4 my-4">
+            <section>
+                <div class="card ">
+                    <div class="table-responsive">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead *ngIf="attendance_DetailedReport">
+                                <tr *ngIf="attendance_forEmployee">
+                                    <th><p>S.No.</p></th>
+                                    <th><p>Date</p></th>
+                                    <th>Employee Name</th>
+                                    <th><p>Start Time</p></th>
+                                    <th><p>End Time</p></th>
+                                    <th>Attendance</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr *ngIf="attendance_forMachines">
+                                    <th><p>S.No.</p></th>
+                                    <th><p>Date</p></th>
+                                    <th>Vendor Name</th>
+                                    <th>Machines/Machines Number</th>
+                                    <th>Project Name</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Total Hours</th>
+                                </tr>
+                                <tr *ngIf="attendance_forlabour">
+                                    <th><p>S.No.</p></th>
+                                    <th><p>Date</p></th>
+                                    <th>Employee / Vendor Name</th>
+                                    <th>Project Name</th>
+                                    <th>Labour Name</th>
+                                    <th>Total Labour</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="attendance_DetailedReport">
+                                <ng-container *ngIf="attendance_forEmployee">
+                                    <tr *ngFor="let item of data;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.attenaceDate}}</td>
+                                        <td>
+                                            <p *ngIf="attendance_forEmployee">{{item.EmployeeName}}</p>
+                                            <p *ngIf="attendance_forMachines">{{item.machine}}</p>
+                                            <p *ngIf="attendance_forlabour">{{item.VendorName}}</p>
+                                        </td>
+                                        <td>{{item.TimeeIn}}</td>
+                                        <td>{{item.TimeOut}}</td>
+                                        <td>{{item.Attendance}}</td>
+                                        <td>
+                                            <p *ngIf="attendance_forEmployee"><a class="teal-text" value="{{item.AttendanceID}}" (click)=editattenance(item.AttendanceID)><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                <a class="red-text" value="{{item.AttendanceID}}" (click)=viewattendance(item.AttendanceID) mdbtooltip="Remove" placement="top"><i class="fa fa-eye"></i></a></p>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="attendance_forMachines">
+                                    <tr *ngFor="let item of data;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.attenaceDate}}</td>
+                                        <td>{{item.vendorName}}</td>
+                                        <td>{{item.machine}} </td>
+                                        <td>{{item.projectName}} </td>
+                                        <td>{{item.TimeeIn}}</td>
+                                        <td>{{item.TimeOut}}</td>
+                                        <td>{{item.Attendance}}</td>
+                                    </tr>
+                                </ng-container>
+                                <ng-container *ngIf="attendance_forlabour">
+                                    <tr *ngFor="let item of data;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.attenaceDate}}</td>
+                                        <td>{{item.VendorName}}</td>
+                                        <td>{{item.projectName}} </td>
+                                        <td>{{item.labourName}} </td>
+                                        <td>{{item.Attendance}}</td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                            <thead *ngIf="attendance_summaryReprt">
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>
+                                        <p *ngIf="attendance_forEmployee">Employee Name</p>
+                                        <p *ngIf="attendance_forMachines">Machines/Machines Number</p>
+                                        <p *ngIf="attendance_forlabour">Vendor Name</p>
+                                    </th>
+                                    <th *ngFor="let item of totaldays;let j=index">
+                                        {{j+1}}/{{Monthname}}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody *ngIf="attendance_summaryReprt">
+                                <tr *ngFor="let item1 of data;let k=index">
+                                    <td>{{k+1}}</td>
+                                    <td>
+                                        <p *ngIf="attendance_forEmployee">{{item1.EmployeeName}}</p>
+                                        <p *ngIf="attendance_forMachines">{{item1.machine}}</p>
+                                        <p *ngIf="attendance_forlabour">{{item1.VendorName}}</p>
+                                    </td>
+                                    <td *ngFor="let item3 of totaldays;let j=index">
+                                        <p id="{{k}}_{{j}}"></p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <div class="float-right m-3" *ngIf="DwownloadDiv">
+                <button type="submit" (click)=dwonloadAttendance() class="float-right btn btn-lg dusty-grass-gradient waves-light waves-effect"><i class="fas fa-save mr-2"></i>Download Attendance Report</button>
+            </div> 
+        </div>
+        <!-- <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Import Attendence File</h5>
+                <div [formGroup]="ImportFileForm" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <input formControlName="attendenceImportFile" type="file" class="custom-file-input"  multiple  id="attendenceImportFile" accept=".csv" (change)="incomingfile($event)" [ngClass]="{ 'is-invalid': (submitted && ImportFileForm.controls['attendenceImportFile'].errors ) || (ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].touched)}">
+                            <label class="custom-file-label" #labelImport for="attendenceImportFile">Select Excel file</label>
+                            <div *ngIf="(submitted && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.pattern && !ImportFileForm.controls['attendenceImportFile'].errors.required)|| (ImportFileForm.controls['attendenceImportFile'].touched && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.pattern && !ImportFileForm.controls['attendenceImportFile'].errors.required)" class="invalid-feedback" style="margin-top: 12px;">Please Upload Only .csv file. </div>
+                            <div *ngIf="(submitted && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.required) || (ImportFileForm.controls['attendenceImportFile'].touched && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.required)" style="margin-top: 12px;" class="invalid-feedback">Please Upload file. </div>
+                        </div>                    
+                        <div class="float-right mr-3 col-3 px-4">
+                            <button type="button" class="float-right btn btn-lg dusty-grass-gradient waves-light waves-effect" (click)="insertImportAttendence()">
+                                <i class="fas fa-save mr-2"></i>Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div> -->
+        <!-- Imprt Attendance modal -->
+        <div class="modal fade" id="import_AttendanceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Import Attendence File</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div  class="modal-body">
+                            
+                            <div class="form-row">
+                                
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <div [formGroup]="ImportFileForm" class="card-body">
+                                            <div class="form-row">
+                                                <div class="col-md-12 md-form md-outline px-4">
+                                                    <input formControlName="attendenceImportFile" type="file" class="custom-file-input"  multiple  id="attendenceImportFile" accept=".csv" (change)="incomingfile($event)" [ngClass]="{ 'is-invalid': (submitted && ImportFileForm.controls['attendenceImportFile'].errors ) || (ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].touched)}">
+                                                    <label class="custom-file-label" #labelImport for="attendenceImportFile">Select Excel file</label>
+                                                    <div *ngIf="(submitted && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.pattern && !ImportFileForm.controls['attendenceImportFile'].errors.required)|| (ImportFileForm.controls['attendenceImportFile'].touched && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.pattern && !ImportFileForm.controls['attendenceImportFile'].errors.required)" class="invalid-feedback" style="margin-top: 12px;">Please Upload Only .csv file. </div>
+                                                    <div *ngIf="(submitted && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.required) || (ImportFileForm.controls['attendenceImportFile'].touched && ImportFileForm.controls['attendenceImportFile'].errors && ImportFileForm.controls['attendenceImportFile'].errors.required)" style="margin-top: 12px;" class="invalid-feedback">Please Upload file. </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" #closeImportbutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="float-right btn btn-lg dusty-grass-gradient waves-light waves-effect" style="padding: 10px;" (click)="insertImportAttendence()">
+                                <i class="fas fa-save mr-2"></i>Submit
+                            </button>
+                           <!-- changes for commit -->
+                        </div>
+                    </div>
+                    <!-- Content -->
+            </div>
+        </div>
+        <!-- Add New modal -->
+        <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                <form [formGroup]="attendanceForm">
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Attendance</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div  class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <input type="hidden" id="attendance_id" name="attendance_id" formControlName="attendance_id">
+                                    <select class="form-control field-ht colorful-select" formControlName="employeeName" name="employeeName" [ngClass]="{ 'is-invalid': (attendancesubmitted && attendanceForm.controls['employeeName'].invalid ) || (attendanceForm.controls['employeeName'].invalid && attendanceForm.controls['employeeName'].touched)}">
+                                        <option value="" selected="true">Select Employee Name</option>
+                                        <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                            {{Employeelist.EmployeeName}}
+                                        </option>
+                                    </select>
+                                    <label class="top-lb active">Employee Name</label>
+                                    <div class="invalid-feedback">Please Select Employee Name</div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input placeholder="Select date" formControlName="attendanceDate" id="attendanceDate" name="attendanceDate" readonly ngbDatepicker #leavefrom="ngbDatepicker"  (click)="leavefrom.toggle()" type="text" class="form-control datepicker" >
+                                        <label for="cust_contprn" class="Active">Attendance Date</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" formControlName="employeeShift" name="employeeShift" [ngClass]="{ 'is-invalid': (attendancesubmitted && attendanceForm.controls['employeeShift'].invalid ) || (attendanceForm.controls['employeeShift'].invalid && attendanceForm.controls['employeeShift'].touched)}">
+                                            <option value="">Select Employee Shift</option>
+                                            <option *ngFor="let shhiftlist of resplookupShift" value={{shhiftlist.LookupDataId}}>
+                                                {{shhiftlist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="top-lb active">Employee Shift</label>
+                                        <div class="invalid-feedback">Please Select Employee Shift</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="time" placeholder="Select Time" formControlName="checkinTime" id="checkinTime" name="checkinTime" class="form-control datepicker CalendarForm" >
+                                        <label for="cust_contprn" class="Active">Check In</label>
+                                    </div>
+                                </div>
+                                <div class="col" *ngIf="editView">
+                                    <div class=" md-form md-outline">
+                                        <input type="time" placeholder="Select Time" formControlName="checkOutTime" id="checkOutTime" name="checkOutTime" class="form-control datepicker CalendarForm" >
+                                        <label for="cust_contprn" class="Active">Check Out</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" *ngIf="viewAttendance" (click)="attendanceAdd()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>
+<!-- <ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner> -->

@@ -1,0 +1,255 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Master Company List
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openStateModal()" data-target="#add_company_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add Company</button>
+                </h5>
+                <!-- <div [formGroup]="searchTask" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="customerName" class="form-control field-ht colorful-select" id="form-customername">
+                                <option value="" selected="true">Select Assignee</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Assignee</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="userName" class="form-control field-ht colorful-select" id="form-username">
+                                <option value="" selected="true">Select Reporter</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Reporter</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="task_date" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                <label for="date-picker-example" class="active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="task_status" class="form-control field-ht colorful-select">
+                                <option value="" selected="true">Select Status</option>
+                                <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                    {{Status.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Status</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button"  class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" data-toggle="modal" data-target="#add_emp_modal"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Sr No.</th>
+                                    <th>Company Name
+                                    </th>
+                                    <th>GST No.
+                                    </th>
+                                    <th>PAN No.
+                                    </th>
+                                    <th>Sate name
+                                    </th>
+                                    <th>Company Address
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of companyDatalists;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.company_name}}</td>
+                                    <td>{{item.gst_no}}</td>
+                                    <td>{{item.pan_no}}</td>
+                                    <td>{{item.state_name}}</td>
+                                    <td>{{item.company_address}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                            (click)="editCompanyDetail('view_company',item.master_company_id)"
+                                            data-target="#add_company_name_modal"><i class="fa fa-eye"
+                                                aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                            (click)="editCompanyDetail('edit_company', item.master_company_id)"
+                                            data-target="#add_company_name_modal"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="!CRMAdmin" class="red-text" mdbtooltip="Remove" placement="top"
+                                            (click)="deleteCompanyDetail(item.master_company_id)"><i
+                                                class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tbody *ngIf="companyDatalists?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">
+                                        No
+                                        data!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New Company modal -->
+            <div class="modal fade" id="add_company_name_modal" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddCompany">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Company Name</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <input type="hidden" formControlName="master_company_id">
+                                <div class="col-lg-6 col-md-3 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="item-id" class="form-control"
+                                            formControlName="company_name"
+                                            [ngClass]="{'is-invalid': AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid}">
+                                        <label for="item-id" class="active">Company Name*</label>
+                                        <div *ngIf="AddCompany.get('company_name').touched && AddCompany.get('company_name').hasError('required')"
+                                            class="invalid-feedback d-block">
+                                            Company name is required
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-3 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="item-id" class="form-control" formControlName="gst_no"
+                                            [ngClass]="{'is-invalid': AddCompany.get('gst_no').touched && AddCompany.get('gst_no').invalid}">
+                                        <label for="item-id" class="active"> GST No.*</label>
+                                        <div *ngIf="AddCompany.get('gst_no').touched && AddCompany.get('gst_no').hasError('required')"
+                                            class="invalid-feedback d-block">
+                                            GST number is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-lg-6 col-md-3 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="item-id" class="form-control" formControlName="pan_no"
+                                            [ngClass]="{'is-invalid': AddCompany.get('pan_no').touched && AddCompany.get('pan_no').invalid}">
+                                        <label for="item-id" class="active">PAN No.*</label>
+                                        <div *ngIf="AddCompany.get('pan_no').touched && AddCompany.get('pan_no').hasError('required')"
+                                            class="invalid-feedback d-block">
+                                            PAN number is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                    <select
+                                        [ngClass]="{'is-invalid': AddCompany.get('state').touched && AddCompany.get('state').invalid}"
+                                        formControlName="state" id="state"
+                                        class="form-control field-ht colorful-select">
+                                        <option value="">Select States</option>
+                                        <option *ngFor="let type of showAllStates" [value]="type.state_id">
+                                            {{type.state_name}}</option>
+                                    </select>
+                                    <label class="ml-2 active">State Name*</label>
+                                    <div *ngIf="AddCompany.get('state').touched && AddCompany.get('state').hasError('required')"
+                                        class="invalid-feedback d-block">
+                                        State is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-14 px-2">
+                                <div class="md-form md-outline">
+                                    <textarea id="company-address" rows="3" class="form-control"
+                                        formControlName="company_address"
+                                        [ngClass]="{'is-invalid': AddCompany.get('company_address').touched && AddCompany.get('company_address').invalid}"></textarea>
+                                    <label for="company-address" class="active">Company Address*</label>
+                                    <div *ngIf="AddCompany.get('company_address').touched && AddCompany.get('company_address').hasError('required')"
+                                        class="invalid-feedback d-block">
+                                        Company address is required
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <!-- <div class="form-group">
+                                <label class="">Company Header Image</label>
+                                <input type="file" accept="image/*" (change)="onHeaderImageSelect($event)"
+                                    class="form-control-file" />
+
+                                
+                                <div *ngIf="headerImagePreview" class="mt-2">
+                                    <img [src]="headerImagePreview" alt="Header Preview"
+                                        style="max-width: 100%; height: auto; border: 1px solid #ccc; padding: 4px;">
+                                </div>
+                            </div>
+                            <div class="form-row mt-2">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="md-form md-outline">
+                                        <textarea id="company-footer-details" rows="2" class="form-control"
+                                            formControlName="company_footer_details">
+                                        </textarea>
+                                        <label for="company-footer-details" class="active">Company Footer
+                                            Details</label>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <a type="button" #closeCompanybutton class="btn btn-sm btn-danger"
+                                (click)="resetCompanyForm()" data-dismiss="modal">Cancel</a>
+                            <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect"
+                                (click)="saveCompanyName()">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </main>
+    <!-- Main layout -->
+
+</body>

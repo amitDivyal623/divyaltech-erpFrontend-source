@@ -1,0 +1,139 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4">
+            <div class="card">
+                <h5 class="card-header info-tab font-weight-bold white-text pl-4 py-2">
+                    Task Details
+                </h5>
+                <div class="card-body mx-4 mt-4">
+                    <div class="row">
+                        <div [formGroup]="taskDetails" class="col-lg-8 col-sm-12 mb-4 overflow-auto colheight">
+                            <div class="col-lg-12 col-md-12 px-2">
+                                <input #title (click)="editTaskTitle()" formControlName="title" class="form-control" [readonly]="Access" />
+                            </div>
+                            <code *ngIf="taskDetails.controls['title'].touched && taskDetails.controls['title'].invalid">Title is required</code>
+                            <div *ngIf="!Access" class="form-row d-flex justify-content-start">
+                                <button type="button" (click)="saveTaskTitle(taskId)" class="btn btn-sm btn-primary">Save</button>
+                                <button type="button" (click)="hideTaskTitleSave()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                            </div>
+                            <div class="form-row mt-4">
+                                <h6 class="font-weight-bold ml-2">Description</h6>
+                            </div>
+                            <div class="col-lg-12 col-md-12 px-2">
+                                <div class="md-form md-outline">
+                                    <textarea (click)="displaySave()" ngbTooltip="Click to Edit" placement="top" formControlName="description" class="form-control md-textarea text-justify border-0 " style="min-height: 6rem;" [readonly]="writeAccess"></textarea>
+                                </div>
+                            </div>
+                            <code *ngIf="taskDetails.controls['description'].touched && taskDetails.controls['description'].invalid">Description is required</code>
+                            <div *ngIf="showSave" class="form-row mt-3 d-flex justify-content-start">
+                                <button type="button" (click)="saveMsg(taskId)" class="btn btn-sm btn-primary">Save</button>
+                                <button type="button" (click)="hideSave()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                            </div>
+                            <div class="card fill-flex mt-4 mb-3">
+                                <div class="card-header bg-white text-dark">
+                                    <h5>Comments</h5>
+                                </div>
+                                <div class="card-body mt-3 mx-3">
+                                    <div class="card card-body mb-3" *ngFor="let taskData of taskBriefDetails; let i = index">
+                                        <div *ngIf="taskData[14] != ''" class="comm">
+                                            <div class="form-row mt-2 font-weight-bold">
+                                                <div class="col">{{taskData[17]}}</div>
+                                                <div class="col text-right">{{taskData[18] | date: 'dd-MM-yyyy hh:mm'}}</div>
+                                            </div>
+                                            <div class="form-row">
+                                                <textarea #swiper id="{{taskData[13]}}" class="mt-2 mx-1 flex-fill text-justify border-0 commentBox" style="min-height: 5rem;" [readonly]="writeAccess">{{taskData[14]}}</textarea>
+                                            </div>
+                                           
+                                            <div *ngIf="editable">
+                                                <div class="form-row d-flex justify-content-start">
+                                                    <button type="button" (click)="showCommentSave($event)" id="showCommentSave_{{i}}" class=" border-0 bg-white text-primary">Edit</button>
+                                                </div>
+                                                <div class="form-row d-flex justify-content-start ">
+                                                    <button type="button" id="showeditButton_{{i}}" (click)="commentSave(taskData[13])"  class="showeditButton border-0 bg-white text-primary">Save</button>
+                                                    <button type="button" id="showeditCancleButton_{{i}}" (click)="showCommentEdit($event)" class="showeditButton border-0 bg-white text-danger">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" formControlName="comment" placeholder="Add your comment"></textarea>
+                                        <div class="input-group-append">
+                                            <button id="basic-addon2" (click)="addComment(taskId)" class="input-group-text bg-dark text-white">Add</button>
+                                        </div>
+
+                                    </div>
+                                    <code *ngIf="taskDetails.controls['comment'].touched && taskDetails.controls['comment'].invalid">Field is required</code>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="card shadow-none">
+                                <div class="form-row mb-4 mt-2 ">
+                                    <h4>Other Information</h4>
+                                </div>
+                                <div [formGroup]="task_status" class="form-row">
+                                    <div class="col">
+                                        <label class="form-control border-0">Status :</label>
+                                    </div>
+                                    <div class="col-md-8" (click)="showConfirmation(editable)" ngbTooltip="Click to change task status" placement="top">
+                                        <select formControlName="status" id="status" (change)='showMsg(taskId)' class="form-control">
+                                            <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                                {{Status.LookupValue}}
+                                            </option> 
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row flex-fill mt-2">
+                                    <div class="col">
+                                        <h6 class="form-control border-0">Reporter :</h6>
+                                    </div>
+                                    <div class="col-md-8"><label class="form-control">{{reporter}}</label></div>
+                                </div>
+                                <div class="form-row flex-fill mt-2" [formGroup]="task_Assignee">
+                                    <div class="col">
+                                        <h6 class="form-control border-0">Assignee :</h6>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select formControlName="TaskAssigne" id="TaskAssigne" (change)='editTaskAssigne()' class="form-control">
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <!-- <input value="{{assigne}}" (click)="editTaskAssigne()" formControlName="TaskAssigne" class="form-control" [readonly]="AccessAssigne" /> -->
+                                        <div *ngIf="!AccessAssigne" class="form-row d-flex justify-content-start">
+                                            <button type="button" (click)="saveTaskAssgine(taskId)" class="btn btn-sm btn-primary">Save</button>
+                                            <button type="button" (click)="hideTaskAssgine()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row mt-2">
+                                    <div class="col">
+                                        <h6 class="form-control border-0">Date :</h6>
+                                    </div>
+                                    <div class="col-md-8"><label class="form-control">{{taskDate | date: 'dd/MM/yyyy'}}</label></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

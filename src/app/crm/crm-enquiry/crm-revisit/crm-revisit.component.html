@@ -1,0 +1,243 @@
+<div class="px-2 d-inline-block">
+  <button type="button" class="btn btn-elegant btn-sm waves-light waves-effect enquryButton"
+    (click)="openRevisitModal()"><i class="fa fa-redo-alt" aria-hidden="true"></i> Revisit</button>
+  <button type="button" data-toggle="modal" data-target="#add_revisit_modal" style="display: none;"
+    #addNewRevisit></button>
+</div>
+
+<!-- Revisit modal -->
+<div class="modal fade" id="add_revisit_modal" tabindex="-1" role="dialog" aria-labelledby="revisitModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+    <div class="modal-content">
+      <div class="modal-header mdb-color">
+        <div>
+          <p class="heading lead font-weight-bold mb-0" id="revisitmodaltextheader">Revisit</p>
+          <span *ngIf="!addRevisit.controls['visitor_name'].value"
+            class="white-text d-block revisit-header-hint">Select a customer to fill other fields</span>
+        </div>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+      </div>
+      <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple">Please
+        Wait...</ngx-spinner>
+      <form>
+        <div class="modal-body">
+          <form id="revisit-detail" [formGroup]="addRevisit">
+            <div class="row px-2">
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="hidden" formControlName="visitor_id" id="revisit_visitor_id">
+                  <input type="hidden" formControlName="taskId" id="revisit_taskId">
+                  <input type="hidden" formControlName="customer_id" id="revisit_customer_id">
+                  <ng-autocomplete [data]="customerdataList" formControlName="visitor_name" id="revisit_visitor_name"
+                    [searchKeyword]="keyword" [customFilter]="customerNoopFilter" (selected)="selectCust($event)"
+                    (inputChanged)="onCustomerSearch($event);onVisitorName();" (inputFocused)="onFocused($event)"
+                    [itemTemplate]="custItemTemplate" [notFoundTemplate]="custNotFoundTemplate"
+                    placeholder="Search by name or phone number"
+                    [ngClass]="{ 'is-invalid': (submitted && addRevisit.controls['visitor_name'].invalid) || (addRevisit.controls['visitor_name'].invalid && addRevisit.controls['visitor_name'].touched)}">
+                  </ng-autocomplete>
+                  <ng-template #custItemTemplate let-item>
+                    <a [innerHTML]="item.name + ' - ' + item.phone"></a>
+                  </ng-template>
+                  <ng-template #custNotFoundTemplate let-notFound>
+                    <div [innerHTML]="notFound"></div>
+                  </ng-template>
+                  <label for="revisit_visitor_name" style="z-index: 1000;" class="active">Customer Name</label>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitor_name'].invalid) || (addRevisit.controls['visitor_name'].touched && addRevisit.controls['visitor_name'].invalid)"
+                    class="invalid-feedback">Customer Name is required</div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="revisit-basic-addon1">+91</span>
+                  </div>
+                  <input type="text" formControlName="visitors_no" class="form-control" placeholder="Contact Number"
+                    aria-label="Contact Number" aria-describedby="revisit-basic-addon1"
+                    [ngClass]="{ 'is-invalid': (submitted && addRevisit.controls['visitors_no'].invalid) || (addRevisit.controls['visitors_no'].invalid && addRevisit.controls['visitors_no'].touched)}">
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].errors.required) || (addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].touched && addRevisit.controls['visitors_no'].errors.required)"
+                    class="invalid-feedback">Please Enter Contact Number</div>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].errors.pattern) || (addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].touched && addRevisit.controls['visitors_no'].errors.pattern)"
+                    class="invalid-feedback">Please Enter Only Numeric Number.</div>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].errors.maxlength) || (addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].touched && addRevisit.controls['visitors_no'].errors.maxlength)"
+                    class="invalid-feedback">Please Enter Maximum 10 Digit Number.</div>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].errors.minlength) || (addRevisit.controls['visitors_no'].errors && addRevisit.controls['visitors_no'].touched && addRevisit.controls['visitors_no'].errors.minlength)"
+                    class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="text" id="revisit_alter_name" class="form-control" formControlName="alter_Name">
+                  <label for="revisit_alter_name" class="active">Alternate Visitor Name</label>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="text" id="revisit_alter_number" class="form-control" formControlName="alter_Number">
+                  <label for="revisit_alter_number" class="active">Alternate Mobile Number</label>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="text" formControlName="visitor_date" id="revisit_visitor_date" [minDate]="minDate"
+                    [maxDate]="maxDate" placeholder="Select date" class="form-control" ngbDatepicker
+                    #ratd="ngbDatepicker" (click)="ratd.toggle()"
+                    [ngClass]="{ 'is-invalid': (submitted && addRevisit.controls['visitor_date'].invalid) || (addRevisit.controls['visitor_date'].invalid && addRevisit.controls['visitor_date'].touched)}">
+                  <label for="revisit_visitor_date" class="active" style="z-index: 1000;">Visiting Date*</label>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitor_date'].invalid) || (addRevisit.controls['visitor_date'].touched && addRevisit.controls['visitor_date'].invalid)"
+                    class="invalid-feedback">Date is required</div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="time"
+                    style="width: 374px;border-radius: 0px; height: 33px;color:grey; padding-left: 12px;"
+                    placeholder="Select Time" formControlName="visitors_Time" id="revisit_visitors_Time"
+                    class="form-control-md"
+                    [ngClass]="{ 'is-invalid': (submitted && addRevisit.controls['visitors_Time'].invalid) || (addRevisit.controls['visitors_Time'].invalid && addRevisit.controls['visitors_Time'].touched)}">
+                  <label for="revisit_visitors_Time" class="active">Visiting Time*</label>
+                  <div
+                    *ngIf="(submitted && addRevisit.controls['visitors_Time'].invalid) || (addRevisit.controls['visitors_Time'].invalid && addRevisit.controls['visitors_Time'].touched)"
+                    class="invalid-feedback">Visiting Time is required</div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="form-row" [formGroup]="plotField">
+            <div class="" formArrayName="plotFieldArrayForm"
+              style="border: 1px solid #ddd; width:98%;padding: 15px; margin: 0px 6px 4px; border-radius: 5px; background-color: white;">
+              <div class="row px-2" *ngFor="let quantity of plotFieldForm.controls; let i=index"
+                [formGroupName]="i">
+                <div class="col-lg-4 col-md-12 px-1">
+                  <div class="md-form md-outline">
+                    <input type="hidden" id="revisit_productId_{{i}}" formControlName="productId" name="productId">
+                    <ng-autocomplete [data]="productdataList" id="revisit_plotShown_{{i}}"
+                      formControlName="plotShown" [searchKeyword]="keyword" (selected)="selectEvent($event)"
+                      (inputChanged)="onChangeSearch($event)" (inputFocused)="onFocused($event)"
+                      [itemTemplate]="plotItemTemplate" [notFoundTemplate]="plotNotFoundTemplate"
+                      [ngClass]="{ 'is-invalid': (submitted && plotFieldForm.controls[i].get('plotShown').errors) || (plotFieldForm.controls[i].get('plotShown').errors && plotFieldForm.controls[i].get('plotShown').touched)}">
+                    </ng-autocomplete>
+                    <ng-template #plotItemTemplate let-item>
+                      <a [innerHTML]="item.name"></a>
+                    </ng-template>
+                    <ng-template #plotNotFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound"></div>
+                    </ng-template>
+                    <label for="revisit_plotShown_{{i}}" (click)="onPlotNameClick()" class="active"
+                      style="z-index:999;">Plot Name*</label>
+                    <div
+                      *ngIf="(submitted && plotFieldForm.controls[i].get('plotShown').errors) || (plotFieldForm.controls[i].get('plotShown').errors && plotFieldForm.controls[i].get('plotShown').touched)"
+                      class="invalid-feedback">Please Enter Plot Name</div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text" id="revisit_plotPrize_{{i}}" class="form-control" formControlName="plotPrize"
+                      name="plotPrize">
+                    <label for="revisit_plotPrize_{{i}}" class="active">Plot Prize</label>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text" id="revisit_plotArea_{{i}}" class="form-control" formControlName="plotArea"
+                      name="plotArea">
+                    <label for="revisit_plotArea_{{i}}" class="active">Plot Area</label>
+                  </div>
+                </div>
+                <div *ngIf="plotFieldForm.length > 1" class="col-md-1 pl-0 pt-1">
+                  <button type="button" (click)="removeCurrentRow(i)"
+                    class="btn warm-flame-gradient btn-sm waves-light waves-effect">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <div class="col-lg-12 col-md-12 px-2">
+                  <label for="" id="revisit-plot-number">{{plot_details[i]}}</label>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 px-0" style="margin: 0px 0px -50px 0px">
+                <button type="button" *ngIf="more_detail_btn" [disabled]="!customerSelected" (click)="addPlot()"
+                  class="btn btn-secondary btn-sm blue-gradient waves-light waves-effect ml-0"><i
+                    class="fa fa-plus mr-2" aria-hidden="true"></i> More Detail</button>
+                <div [formGroup]="OnlyPLotShownBY" class="col-lg-4 col-md-12 px-2"
+                  style="position:relative;left:450px;top:-48px">
+                  <div class="md-form md-outline">
+                    <ng-select [items]="employeedataList" bindLabel="name" bindValue="name"
+                      formControlName="selectedPlotShownBy" id="revisit_plotShowBy" name="revisit_plotShowBy"
+                      [loading]="employeeSearchLoading" loadingText="Searching..." notFoundText="No employees found"
+                      placeholder="Select" appendTo="body" (open)="onPlotShownByFocus()"
+                      (search)="onEmployeeSearch($event.term)">
+                    </ng-select>
+                    <label for="revisit_plotShowBy" class="active" style="z-index: 1000;">Plot Shown By</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12 col-md-12 px-1" style="margin: 25px 0px 0px 0px">
+            <div class="md-form md-outline">
+              <textarea type="text" #notes id="revisit_notes_id" class="md-textarea form-control" rows="2"
+                [disabled]="!customerSelected"></textarea>
+              <label class="active" for="revisit_notes_id">Notes</label>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="md-form md-outline">
+              <input class="form-check-input filled-in CalendarForm" type="checkbox" name="revisit_nextFollow"
+                value="1" id="revisit_nextFollow" [disabled]="!customerSelected" (change)="showFollowup($event)">
+              <label class="nextFollow" for="revisit_nextFollow">Next Follow Up</label>
+            </div>
+          </div>
+          <div class="form-row" [formGroup]="nextFollowup" *ngIf="additionalFollow">
+            <div class="col-lg-6 col-md-12 px-2">
+              <div class="md-form md-outline">
+                <input type="text" formControlName="followup_date" id="revisit_followup_date" [minDate]="minDate1"
+                  [maxDate]="maxDate1" placeholder="Select date" class="form-control" ngbDatepicker
+                  #rftd="ngbDatepicker" (click)="rftd.toggle()"
+                  [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_date'].invalid) || (nextFollowup.controls['followup_date'].invalid && nextFollowup.controls['followup_date'].touched)}">
+                <label for="revisit_followup_date" class="active">Date</label>
+                <div
+                  *ngIf="(submitted && nextFollowup.controls['followup_date'].invalid) || (nextFollowup.controls['followup_date'].touched && nextFollowup.controls['followup_date'].invalid)"
+                  class="invalid-feedback">Date is required</div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12 px-2">
+              <div class="md-form md-outline">
+                <input type="time" placeholder="Select Time" formControlName="followup_Time"
+                  id="revisit_followup_Time" class="form-control datepicker CalendarForm"
+                  [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_Time'].invalid) || (nextFollowup.controls['followup_Time'].invalid && nextFollowup.controls['followup_Time'].touched)}">
+                <label for="revisit_followup_Time" class="active">Time</label>
+                <div
+                  *ngIf="(submitted && nextFollowup.controls['followup_Time'].invalid) || (nextFollowup.controls['followup_Time'].touched && nextFollowup.controls['followup_Time'].invalid)"
+                  class="invalid-feedback">Time is required</div>
+              </div>
+            </div>
+            <div class="col-lg-12 col-md-12 px-2">
+              <div class="md-form md-outline">
+                <textarea type="text" formControlName="followup_notes" class="md-textarea form-control" rows="2"
+                  [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_notes'].invalid) || (nextFollowup.controls['followup_notes'].invalid && nextFollowup.controls['followup_notes'].touched)}">
+                </textarea>
+                <label class="active" for="revisit_followup_notes">Description*</label>
+                <div
+                  *ngIf="(submitted && nextFollowup.controls['followup_notes'].invalid) || (nextFollowup.controls['followup_notes'].touched && nextFollowup.controls['followup_notes'].invalid)"
+                  class="invalid-feedback">Description is required</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="modal-footer">
+        <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="button" *ngIf="customerSelected" [disabled]="isSaveButtonDisabled" (click)="saveRevisit()"
+          class="btn btn-sm btn-outline-success waves-effect">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,379 @@
+<body class="fixed-sn white-skin">
+
+    <header>
+        <app-header></app-header>
+        <app-navbar></app-navbar>
+    </header>
+
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card p-4">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    Add New Gate Pass
+                </h5>
+
+                <div class="card-body">
+
+                    <form [formGroup]="gatePassForm">
+
+                        <div class="row mb-3">
+                            <div class="col-md-2 md-form md-outline">
+                                <label class="active ml-3">Transfer Type</label>
+                                <select class="form-select w-100" (change)="onTransferTypeChange($event)"
+                                    formControlName="transferType">
+                                    <option value="" disabled selected>Select Transfer Type</option>
+                                    <option value="project_type">Project Type</option>
+                                    <option value="warehouse_type">Warehouse Type</option>
+                                </select>
+                                <div *ngIf="gatePassForm.get('transferType')?.touched && gatePassForm.get('transferType')?.invalid"
+                                    class="text-danger small mt-1">
+                                    Transfer Type is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 md-form md-outline">
+
+                                <!-- Hidden focus target (correct place) -->
+                                <button id="hiddenFocusTarget" type="button"
+                                    style="position:absolute; left:-9999px; top:0; width:1px; height:1px; opacity:0;">
+                                </button>
+
+                                <label class="active ml-3">Date</label>
+
+                                <input type="datetime-local" class="form-control" formControlName="date"
+                                    [title]="gatePassForm.get('date')?.value">
+                                <div class="text-danger small mt-1" *ngIf="
+                                        gatePassForm.get('date')?.touched &&
+                                        !gatePassForm.get('date')?.value
+                                    ">
+                                    Date is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 md-form md-outline" *ngIf="selectedTransferType === 'project_type'">
+                                <ng-select id="project" [items]="projectsList" bindLabel="project_name"
+                                    bindValue="project_id" formControlName="projectName" placeholder="Select Project"
+                                    [searchable]="true" [clearable]="true" class="d-block w-100"
+                                    (change)="onProjectChange()">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.project_name">{{ item.project_name }}</span>
+                                    </ng-template>
+                                </ng-select>
+                                <label class="active ml-3">To Project</label>
+                                <div class="text-danger small mt-1" *ngIf="gatePassForm.get('projectName').touched 
+                                    && gatePassForm.get('projectName').invalid 
+                                    && selectedTransferType === 'project_type'">
+                                    Project is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 md-form md-outline" *ngIf="selectedTransferType === 'warehouse_type'">
+                                <ng-select id="toWarehouse" [items]="warehouseList" bindLabel="godown_name"
+                                    bindValue="godown_id" formControlName="toWarehouse" placeholder="Select Warehouse"
+                                    [searchable]="true" [clearable]="true" class="d-block w-100">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.godown_name">{{ item.godown_name }}</span>
+                                    </ng-template>
+                                </ng-select>
+                                <label class="active ml-3">To Warehouse</label>
+                                <div class="text-danger small mt-1" *ngIf="gatePassForm.get('toWarehouse').touched 
+                                    && gatePassForm.get('toWarehouse').invalid 
+                                    && selectedTransferType === 'warehouse_type'">
+                                    Warehouse is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 md-form md-outline">
+                                <ng-select id="vehicle" [items]="vehicleList" bindLabel="vehicleDisplay"
+                                    bindValue="vehicleid" formControlName="vehicleNameNo" placeholder="Select Vehicle"
+                                    appendTo="body" [searchable]="true" [clearable]="true">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        {{ item.vehiclename }}, {{ item.vehicleno }}
+                                    </ng-template>
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.vehiclename + ', ' + item.vehicleno">{{ item.vehiclename }}, {{ item.vehicleno }}</span>
+                                    </ng-template>
+                                </ng-select>
+                                <label class="active ml-3">Vehicle No/Name</label>
+                            </div>
+
+                            <div class="col-md-2 md-form md-outline">
+                                <ng-select id="issuedTo" [items]="employee" bindLabel="EmployeeName"
+                                    bindValue="EmployeeId" formControlName="issuedTo" placeholder="Select Person"
+                                    [searchable]="true" [clearable]="true" class="d-block w-100">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.EmployeeName">{{ item.EmployeeName }}</span>
+                                    </ng-template>
+                                </ng-select>
+                                <label class="active ml-3">Issued To</label>
+                                <div class="text-danger small mt-1"
+                                    *ngIf="gatePassForm.get('issuedTo')?.touched && gatePassForm.get('issuedTo')?.invalid">
+                                    Issued To is required.
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 md-form md-outline">
+                                <ng-select id="issuedBy" [items]="employee" bindLabel="EmployeeName"
+                                    bindValue="EmployeeId" formControlName="issuedBy" placeholder="Select Person"
+                                    [searchable]="true" [clearable]="true" class="d-block w-100">
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.EmployeeName">{{ item.EmployeeName }}</span>
+                                    </ng-template>
+                                </ng-select>
+                                <label class="active ml-3">Issued By</label>
+                                <div class="text-danger small mt-1"
+                                    *ngIf="gatePassForm.get('issuedBy')?.touched && gatePassForm.get('issuedBy')?.invalid">
+                                    Issued By is required.
+                                </div>
+
+                            </div>
+                            <div class="col-md-2 md-form md-outline">
+                                <label class="active ml-3">Gate pass</label>
+
+                                <input type="text" class="form-control" formControlName="gatePass"
+                                    (keypress)="allowOnlyNumbers($event)" (paste)="blockNonNumericPaste($event)">
+                            </div>
+
+                        </div>
+
+
+                        <div class="mb-3 md-form md-outline">
+                            <label class="active ml-1 text-dark">Description</label>
+                            <textarea class="form-control" rows="3" formControlName="description"></textarea>
+                        </div>
+
+                        <hr>
+
+                        <button *ngIf="!hideAddMaterialButton" type="button" class="btn btn-primary btn-sm mb-3"
+                            (click)="addMaterial()">+ Add
+                            Material</button>
+
+                        <div formArrayName="materials">
+
+                            <div *ngFor="let mat of materialsArray.controls; let i = index" [formGroupName]="i">
+
+                                <div class="border rounded p-3 mb-3">
+
+                                    <div class="row g-3">
+
+                                        <!-- From Warehouse -->
+                                        <div class="col-md-3 md-form md-outline">
+                                            <ng-select [items]="warehouseList" bindLabel="godown_name"
+                                                bindValue="godown_id" formControlName="fromWarehouse"
+                                                placeholder="Select Warehouse" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100" (change)="onWarehouseChange($event, i)">
+                                            </ng-select>
+                                            <label class="active ml-3">From Warehouse</label>
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="mat.get('fromWarehouse').touched && mat.get('fromWarehouse').invalid">
+                                                Warehouse is required.
+                                            </div>
+                                            <div class="gatepass-full-name text-muted small mt-1"
+                                                *ngIf="mat.get('fromWarehouse')?.value">
+                                                {{ getSelectedLabel(warehouseList, mat.get('fromWarehouse')?.value, 'godown_id', 'godown_name') }}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3 md-form md-outline">
+                                            <ng-select [items]="mat.get('categoryList')?.value" bindLabel="groupname"
+                                                bindValue="groupid" formControlName="category"
+                                                placeholder="Select Category" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100" (change)="onCategoryChange($event, i)"
+                                                [loading]="mat.get('warehouseLoading')?.value"
+                                                loadingText="Loading...">
+                                            </ng-select>
+                                            <label class="active ml-3">Category</label>
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="mat.get('category').touched && mat.get('category').invalid">
+                                                Category is required.
+                                            </div>
+                                            <div class="gatepass-full-name text-muted small mt-1"
+                                                *ngIf="mat.get('category')?.value">
+                                                {{ getSelectedLabel(mat.get('categoryList')?.value, mat.get('category')?.value, 'groupid', 'groupname') }}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-md-3 md-form md-outline">
+
+                                            <ng-select [items]="mat.get('subCategoryList')?.value"
+                                                bindLabel="subgroupname" bindValue="subgroupid"
+                                                formControlName="subCategory" placeholder="Select Sub Category"
+                                                [searchable]="true" [clearable]="true" class="d-block w-100"
+                                                (change)="onSubCategoryChange($event, i)"
+                                                [loading]="mat.get('warehouseLoading')?.value"
+                                                loadingText="Loading...">
+                                            </ng-select>
+                                            <label class="active ml-3">Sub Category</label>
+
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="mat.get('subCategory').touched && mat.get('subCategory').invalid">
+                                                Sub Category is required.
+                                            </div>
+                                            <div class="gatepass-full-name text-muted small mt-1"
+                                                *ngIf="mat.get('subCategory')?.value">
+                                                {{ getSelectedLabel(mat.get('subCategoryList')?.value, mat.get('subCategory')?.value, 'subgroupid', 'subgroupname') }}
+                                            </div>
+                                        </div>
+                                        <!-- Materials multi-select (native, Angular 10 compatible) -->
+                                        <div class="col-md-3 md-form md-outline">
+                                            <ng-select [items]="mat.get('filteredAvailableItems')?.value" bindLabel="item"
+                                                [multiple]="true" placeholder="Select Materials"
+                                                formControlName="materialsSelected"
+                                                (change)="onMaterialsSelectChangeNg($event, i)"
+                                                [loading]="mat.get('warehouseLoading')?.value"
+                                                loadingText="Loading...">
+                                            </ng-select>
+                                            <label class="active ml-3">Materials</label>
+                                            <div class="text-danger small mt-1"
+                                                *ngIf="mat.get('materialsSelected').touched && mat.get('materialsSelected').invalid">
+                                                Please select at least one material.
+                                            </div>
+                                            <div class="gatepass-full-name text-muted small mt-1"
+                                                *ngIf="mat.get('materialsSelected')?.value?.length">
+                                                {{ getSelectedMaterialsLabel(i) }}
+                                            </div>
+
+                                        </div>
+
+                                        <!-- Out Time -->
+                                        <div class="col-md-2 md-form md-outline">
+                                            <label class="active ml-3">Out Time</label>
+                                            <input type="time" class="form-control" formControlName="outTime">
+                                        </div>
+
+                                        <!-- Remove Button -->
+                                        <div class="col-md-1 d-flex align-items-end">
+                                            <button class="btn btn-danger btn-sm w-100" (click)="removeMaterial(i)"
+                                                [disabled]="disableRemoveButtons">X</button>
+                                        </div>
+
+                                    </div> <!-- row g-3 ends -->
+
+                                    <!-- Materials table loader -->
+                                    <div class="gatepass-loading text-primary small mt-3"
+                                        *ngIf="mat.get('materialsLoading')?.value">
+                                        <span class="spinner-border spinner-border-sm" role="status"
+                                            aria-hidden="true"></span>
+                                        Loading materials...
+                                    </div>
+
+                                    <!--  INSERT ITEM TABLE HERE -->
+                                    <div formArrayName="items" class="mt-3">
+
+                                        <table class="table table-sm table-bordered"
+                                            *ngIf="mat.get('items')?.controls?.length > 0 && !mat.get('materialsLoading')?.value">
+
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th style="width:11%;">Item</th>
+                                                    <th style="width:6%;">Current Bal.</th>
+                                                    <th style="width:10%;">Unit</th>
+                                                    <th style="width:9%;">Category</th>
+                                                    <th style="width:9%;">Sub Category</th>
+                                                    <th style="width:8%;">Qty</th>
+                                                    <th *ngIf="selectedTransferType !== 'warehouse_type'">Consume ?</th>
+                                                    <th *ngIf="selectedTransferType !== 'warehouse_type'"
+                                                        style="width:8%;">Used</th>
+                                                    <th *ngIf="selectedTransferType !== 'warehouse_type'"
+                                                        style="width:8%;">Scrap</th>
+                                                    <th *ngIf="selectedTransferType !== 'warehouse_type'"
+                                                        style="width:8%;">Rate</th>
+                                                    <th *ngIf="selectedTransferType !== 'warehouse_type'"
+                                                        style="width:8%;">Amount</th>
+                                                    <th
+                                                        [style.width]="selectedTransferType === 'warehouse_type' ? '6%' : '10%'">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr *ngFor="let row of mat.get('items').controls; let j = index"
+                                                    [formGroupName]="j">
+
+                                                    <td>{{ row.get('itemName')?.value }}</td>
+                                                    <td>{{ row.get('displayBalance')?.value }}</td>
+
+                                                    <td>
+                                                        <select class="form-select border-0 bg-transparent p-0"
+                                                            (change)="onUnitChange(i, j)" formControlName="unit">
+                                                            <option *ngFor="let u of row.get('unitList')?.value"
+                                                                [value]="u">
+                                                                {{ u }}
+                                                            </option>
+                                                        </select>
+                                                    </td>
+
+                                                    <td>{{ row.get('categoryName')?.value }}</td>
+                                                    <td>{{ row.get('subCategoryName')?.value }}</td>
+
+                                                    <td>
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            formControlName="qty" (input)="onQtyChange(i, j)"
+                                                            onkeydown="return event.key.match(/^[0-9.]$/) || ['Backspace','Delete','ArrowLeft','ArrowRight','Tab'].includes(event.key)"
+                                                            onwheel="this.blur()">
+                                                    </td>
+
+                                                    <td class="text-center"
+                                                        *ngIf="selectedTransferType !== 'warehouse_type'">
+                                                        <input type="checkbox" formControlName="consume"
+                                                            (change)="onConsumeToggle(i, j)" style="
+                                                            position: static !important;
+                                                            pointer-events: auto !important;
+                                                            opacity: 1 !important;
+                                                            width: 18px;
+                                                            height: 18px;
+                                                            margin: 0 auto;
+                                                            display: block;
+                                                            ">
+                                                    </td>
+                                                    <td *ngIf="selectedTransferType !== 'warehouse_type'"><input
+                                                            type="number"
+                                                            class="form-control form-control-sm  ng-untouched ng-pristine ng-valid"
+                                                            formControlName="used" (input)="onUsedChange(i, j)"></td>
+                                                    <td *ngIf="selectedTransferType !== 'warehouse_type'"><input
+                                                            type="number"
+                                                            class="form-control form-control-sm  ng-untouched ng-pristine ng-valid"
+                                                            formControlName="scrap" (input)="onScrapChange(i, j)"></td>
+                                                    <td *ngIf="selectedTransferType !== 'warehouse_type'">
+                                                        <input type="hidden" formControlName="differenceBalance">
+                                                        <input type="number"
+                                                            class="form-control form-control-sm  ng-untouched ng-pristine ng-valid"
+                                                            formControlName="rate" (input)="onRateChange(i, j)">
+                                                    </td>
+                                                    <td *ngIf="selectedTransferType !== 'warehouse_type'"><input
+                                                            type="number"
+                                                            class="form-control form-control-sm  ng-untouched ng-pristine ng-valid"
+                                                            formControlName="amount" readonly></td>
+
+                                                    <td class="text-center">
+                                                        <button class="btn btn-danger btn-sm"
+                                                            (click)="removeItemRow(i, j)"
+                                                            [disabled]="disableRemoveButtons">X</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button class="btn btn-secondary" (click)="goBackToGatePass()">Back</button>
+                            <button *ngIf="!hideSaveButton" class="btn btn-success"
+                                (click)="saveMaterialForm()">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>

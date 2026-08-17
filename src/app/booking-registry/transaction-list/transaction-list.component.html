@@ -1,0 +1,2150 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Transaction Record
+                    <button type="button" (click)="openModel()" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" #transactionModel data-target="#add_trans_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Transaction</button>
+                    <!-- <button type="button" (click)="openLogs()" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fas fa-book-reader" aria-hidden="true"></i> Report Logs</button> -->
+                </h5>
+                <div [formGroup]="srcTransactionForm" class="card-body">
+                    <div class="form-row px-1">
+                        <div *ngIf="Admin || Accounts_Internal" class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input type="text" class="form-control" formControlName="availableCash" readonly  id="availableCash" name="availableCash" >
+                                <label for="availableCash" class="Active">Available Cash</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline ">
+                                <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                    #fromExcreg="ngbDatepicker" (click)="fromExcreg.toggle()" readonly type="text" formControlName="searchdateFrom">
+                                   
+                                <label for="fromExcreg" class="active"> From Recieved date</label>
+                            </div>
+                        </div> 
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline ">
+                                <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                    #toExcreg="ngbDatepicker" (click)="toExcreg.toggle()" readonly type="text" formControlName="searchdateTo">
+                                <label for="toExcreg" class="active"> To Recieved date</label>
+                            </div>
+                        </div>
+                        <button (click)="GenerateReport()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" style="float: right;">Generate Report</button> 
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetDateRange()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button> 
+                        <!-- <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select"
+                                    formControlName="bankAccHead"
+                                    (click)="onAccHeadChange($event)"
+                                    id="bankAccHead">
+                                    <option value="">
+                                        Select
+                                    </option>
+
+                                    <option *ngFor="let bankList of resplookupBank" [value]="bankList.bankCategory">
+                                        {{ bankList.bankCategory }}
+                                    </option>
+                                </select>
+                                <label class="active">Account Head</label>                                
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select"
+                                    formControlName="bankAccSubHead"
+                                    (click)="onAccSubHeadChange($event)"
+                                    id="bankAccSubHead"
+                                    >
+                                    <option  value="">Select</option>
+                                    <option *ngFor="let bankist of resplookupsubBank" [value]="bankist.subHead" >
+                                        {{ bankist.subHead }}
+                                    </option>
+                                </select>
+                                <label class="active">Account Sub Head</label>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 px-3">   
+                            <div class="md-form md-outline">
+
+                             <select (click)="onBankChange($event)" formControlName="bankAccBankName" class="form-control field-ht colorful-select" >
+                                 
+                                 <option *ngFor="let bankList of SelectedBankData" [value]="bankList.bankName">
+                                   {{bankList.bankName}}
+                                 </option>  
+
+                             </select>                                     
+                             <label class="ml-2 active">Bank Name</label>                                  
+
+                             
+                            </div>
+                       </div>
+
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input  formControlName="cashInBankAcc" class="form-control"  type="text" id="cashInBankAcc" readonly  name="cashInBankAcc">
+                                <label for="cashInBankAcc" class="active">Cash in Bank</label>
+                            </div>
+                        </div> 
+
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button> -->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+
+            <nav class="nav nav-pills nav-justified">
+                <a id="docs-tab-buyer" class="nav-item nav-link link-nav active"
+                    href="#docsTabsProfile" data-toggle="tab" role="tab"
+                    >
+                    <i class="bi bi-box-arrow-in-right mr-2" aria-hidden="true"></i>IN (Through Customers, Civil Work)
+                </a>
+                <a id="docs-tab-workdetail" class="nav-item nav-link link-nav " href="#docsTabsPersonal" 
+                    data-toggle="tab" role="tab" aria-selected="false"><i class="bi bi-box-arrow-up-right mr-2"
+                        aria-hidden="true"></i>OUT (Expenses)
+                </a>  
+                <a id="docs-tab-workdetail" class="nav-item nav-link link-nav " href="#docsTabsICM" 
+                    data-toggle="tab" role="tab" aria-selected="false"><i class="bi bi-arrow-left-right mr-2"
+                        aria-hidden="true"></i>Inter Cash Management
+                </a>  
+                <a *ngIf="Admin || Accounts_Internal" id="docs-tab-workdetail" class="nav-item nav-link link-nav " href="#docsTabsBank" 
+                    data-toggle="tab" role="tab" aria-selected="false"><i class="bi bi-bank mr-2"
+                        aria-hidden="true"></i>Bank Details
+                </a>  
+                <a id="docs-tab-workdetail" class="nav-item nav-link link-nav " href="#docsTabsLogs" 
+                    data-toggle="tab" role="tab" aria-selected="false"><i class="fas fa-book-reader mr-2"
+                        aria-hidden="true"></i>Report Logs
+                </a>  
+            </nav>
+
+            <!-- Add New modal -->
+             <div class="modal fade" id="add_trans_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">{{ isEditMode ? 'Edit Transaction Detail' : 'Add New Transaction Detail' }}</p>
+                            <button (click)="closeModal()" type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row" [formGroup]="addTranscform">
+                                <input type="hidden" id="transactions_id" formControlName="transactions_id">
+                                <input type="hidden" id="bookings_id" formControlName="bookings_id">
+                                <input type="hidden" id="expense_id" formControlName="expense_id">
+                                <input type="hidden" id="expense_booking_id" formControlName="expense_booking_id">
+                                <input type="hidden" id="icm_booking_id" formControlName="icm_booking_id">
+                                <input type="hidden" id="icm_id" formControlName="icm_id">
+                                <div class="col-md-12 form-row">
+                                    <div class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="commonTransType" id="commonTransType" (change)="onAddSelectChange($event)" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['commonTransType'].errors) || (addTranscform.controls['commonTransType'].touched && addTranscform.controls['commonTransType'].invalid)}">
+                                                <option value="select" >Select Transaction Type</option>
+                                                <!-- <option value="through_customer">Through Customer (IN)</option>
+                                                <option value="civil_work">Civil Work (IN)</option> -->
+                                                <option value="inc_income">Income (IN)</option>
+                                                <option value="expenses">Expenses (OUT)</option>
+                                                <!-- <option value="rental">Rental (IN)</option> -->
+                                                <option value="inter_cash_management">Inter Cash Management</option>
+                                        </select>
+                                        <label class="ml-2 active">Transaction Type</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['commonTransType'].errors)  ||(addTranscform.controls['commonTransType'].touched && addTranscform.controls['commonTransType'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['commonTransType'].errors.required) || (addTranscform.controls['commonTransType'].touched && addTranscform.controls['commonTransType'].invalid)">
+                                                Transaction Type is
+                                                required</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowICMmngmtType" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="icm_management_type" id="icm_management_type" (change)="onSelectMngmtType($event)"  [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_management_type'].errors) || (addTranscform.controls['icm_management_type'].touched && addTranscform.controls['icm_management_type'].invalid)}" >
+                                            <option value="select" selected >Select Type</option>
+                                            <option value="icm_internal">Internal</option>
+                                            <option value="icm_customer">Customer</option>
+                                            <option value="icm_party">Party</option>
+                                        </select>
+                                        <label class="ml-2 active">Management Type</label> 
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_management_type'].errors)  ||(addTranscform.controls['icm_management_type'].touched && addTranscform.controls['icm_management_type'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_management_type'].errors.required) || (addTranscform.controls['icm_management_type'].touched && addTranscform.controls['icm_management_type'].invalid)">
+                                                Management Type is
+                                                required</div>
+                                        </div>                                                                              
+                                    </div>
+                                    <div *ngIf="isIcmMngmtParty" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control"  id="icm_mgmt_party_name" name="icm_mgmt_party_name" formControlName="icm_mgmt_party_name">
+                                            <label for="icm_mgmt_party_name" class="active">Party Name </label>                                            
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isShowIcmSelectCust" class="col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="persons_id" />
+                                            <ng-autocomplete [data]="customerdataList" [searchKeyword]="keyword" (selected)='selectCust($event)' (inputChanged)='onCustomerSearch($event);' [itemTemplate]="itemTemplate" id="icm_customer_name" name="icm_customer_name" formControlName="icm_customer_name" >
+                                            </ng-autocomplete>
+                                            <ng-template #itemTemplate let-item>
+                                                <a [innerHTML]="(item?.cust_name || '') + (item?.ProductCode ? ', ' + item.ProductCode : '')" [readonly]="Access"></a>
+                                            </ng-template>
+                                            <ng-template #notFoundTemplate let-notFound>
+                                                <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                            </ng-template>
+                                            <label for="icm_customer_name" class="active" style="z-index: 1000;">Select Customer</label>                        
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowPayMode" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="addpayMode" id="addpayMode" (change)="onSelectPaymentMode($event)" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['addpayMode'].errors) || (addTranscform.controls['addpayMode'].touched && addTranscform.controls['addpayMode'].invalid)}">
+                                            <option value="select" selected >Select Payment Mode</option>
+                                            <option value="Cheque">Cheque</option>
+                                            <option value="Online">Online</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="DD">DD</option>
+                                            </select>
+                                        <label class="ml-2 active">Payment Mode</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['addpayMode'].errors)  ||(addTranscform.controls['addpayMode'].touched && addTranscform.controls['addpayMode'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['addpayMode'].errors.required) || (addTranscform.controls['addpayMode'].touched && addTranscform.controls['addpayMode'].invalid)">
+                                                Payment mode is
+                                                required</div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isShowPayModeForICM" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="icmaddpayMode" id="icmaddpayMode" (change)="onSelectICMPaymentMode($event)" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icmaddpayMode'].errors) || (addTranscform.controls['icmaddpayMode'].touched && addTranscform.controls['icmaddpayMode'].invalid)}">
+                                            <option value="select" selected >Select Payment Mode</option>
+                                            <option value="icm_cheque">Cheque</option>
+                                            <option value="icm_online">Online</option>
+                                            <option value="icm_cash">Cash</option>
+                                            <option *ngIf="addTranscform.get('icm_management_type')?.value === 'icm_internal'" value="icm_cash_withdrawal">Cash withdrawal</option>
+                                            <!-- <option value="icm_dd">DD</option> -->
+                                        </select>
+                                        <label class="ml-2 active">Payment Mode</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icmaddpayMode'].errors)  ||(addTranscform.controls['icmaddpayMode'].touched && addTranscform.controls['icmaddpayMode'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icmaddpayMode'].errors.required) || (addTranscform.controls['icmaddpayMode'].touched && addTranscform.controls['icmaddpayMode'].invalid)">
+                                                 icm Payment mode is
+                                                required</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isbyDefaultallTrue"  class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="common_amount_recieved_on" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker"
+                                            [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['common_amount_recieved_on'].errors) || (addTranscform.controls['common_amount_recieved_on'].touched && addTranscform.controls['common_amount_recieved_on'].invalid)}">
+                                            <label for="date-picker-example" class="ml-1 active">Date</label> <!--{{ isExpenseDate ? 'Expense Date' :  'Received Date' }}-->
+                                            <div *ngIf=" (submitted && addTranscform.controls['common_amount_recieved_on'].errors)  ||(addTranscform.controls['common_amount_recieved_on'].touched && addTranscform.controls['common_amount_recieved_on'].invalid)"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf=" (submitted && addTranscform.controls['common_amount_recieved_on'].errors.required) || (addTranscform.controls['common_amount_recieved_on'].touched && addTranscform.controls['common_amount_recieved_on'].invalid)">
+                                                    Date is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div *ngIf="isbyDefaultallTrue" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="time" class="form-control"  id="common_time" name="common_time" formControlName="common_time" [value]="addTranscform.get('common_time')?.value">
+                                            <label for="common_time" class="active">Time </label>
+                                            <!-- <div class="text-muted mt-1">Selected Time: {{ currentTime }}</div> -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Income (IN-type)-->
+                                    <div *ngIf="isShowIncome" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="ic_income_head" (change)="onAddSelectChange($event)" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['ic_income_head'].errors) || (addTranscform.controls['ic_income_head'].touched && addTranscform.controls['ic_income_head'].invalid)}">
+                                            <option value="select" >Select income Head</option>
+                                            <option value="through_customer">Through Customer</option>
+                                            <option value="civil_work">Civil Work</option>
+                                            <option *ngFor="let expHeadList of resplookupIncHead" [value]="expHeadList.LookupValue">
+                                                {{ expHeadList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Income Head</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['ic_income_head'].errors)  ||(addTranscform.controls['ic_income_head'].touched && addTranscform.controls['ic_income_head'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['ic_income_head'].errors.required) || (addTranscform.controls['ic_income_head'].touched && addTranscform.controls['ic_income_head'].invalid)">
+                                                Income head is
+                                                required</div>
+                                        </div>                                        
+                                    </div>
+                                    
+
+                                    <!-- through Customers Data-->
+                                    <div *ngIf="isThroughCustomer" class="col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="person_map_id" />
+                                            <ng-autocomplete [data]="incCustomerdatalist" [searchKeyword]="keyword1" (selected)='selectIncCust($event)' (inputChanged)='onIncCustomerSearch($event);' [itemTemplate]="itemTemplate" id="tc_cust_name" name="tc_cust_name" formControlName="tc_cust_name" >
+                                            </ng-autocomplete>
+                                            <ng-template #itemTemplate let-item>
+                                                <a [innerHTML]="(item?.tc_cust_name || '') + (item?.ProductCode ? ', ' + item.ProductCode : '')" [readonly]="Access"></a>
+                                            </ng-template>
+                                            <ng-template #notFoundTemplate let-notFound>
+                                                <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                            </ng-template>
+                                            <label for="tc_cust_name" class="active" style="z-index: 1000;">Select Customer</label>                                                                                   
+                        
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isThroughCustCBP" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="tc_contact" id="tc_contact" name="tc_contact" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['tc_contact'].errors) || (addTranscform.controls['tc_contact'].touched && addTranscform.controls['tc_contact'].invalid)}" >
+                                            <label for="tc_contact" class="Active">Contact No.</label>
+                                            <div *ngIf=" (submitted && addTranscform.controls['tc_contact'].errors)  ||(addTranscform.controls['tc_contact'].touched && addTranscform.controls['tc_contact'].invalid)"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf=" (submitted && addTranscform.controls['tc_contact'].errors.required) || (addTranscform.controls['tc_contact'].touched && addTranscform.controls['tc_contact'].invalid)">
+                                                    Contact is
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div *ngIf="isThroughCustCBP" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="tc_block_plot" id="tc_block_plot" name="tc_block_plot" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['tc_block_plot'].errors) || (addTranscform.controls['tc_block_plot'].touched && addTranscform.controls['tc_block_plot'].invalid)}" >
+                                            <label for="tc_block_plot" class="Active">Block/Plot</label>
+                                            <div *ngIf=" (submitted && addTranscform.controls['tc_block_plot'].errors)  ||(addTranscform.controls['tc_block_plot'].touched && addTranscform.controls['tc_block_plot'].invalid)"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf=" (submitted && addTranscform.controls['tc_block_plot'].errors.required) || (addTranscform.controls['tc_block_plot'].touched && addTranscform.controls['tc_block_plot'].invalid)">
+                                                    block/plot 
+                                                    required</div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+
+                                     
+                                    <!--Income Ends-->
+                                    
+                                    <!-- Civil Work Transaction type-->
+                                    <!-- <div *ngIf="isShowCivilPayMode" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="cw_recieved_source" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['cw_recieved_source'].errors) || (addTranscform.controls['cw_recieved_source'].touched && addTranscform.controls['cw_recieved_source'].invalid)}" (change)="onCwRecievedSourceChange($event)">
+                                            <option value="select" selected >Select Source</option>
+                                            <option value="cw_construction_work">Construction Work</option>
+                                            <option value="cw_material">Material</option>
+                                            <option value="cw_fabrication">Fabrication</option>
+                                            <option value="cw_rental">Rental</option> 
+                                            <option value="cw_other">Other</option>
+                                            
+                                            </select>
+                                        <label class="ml-2 active">Recieved Source</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['cw_recieved_source'].errors)  ||(addTranscform.controls['cw_recieved_source'].touched && addTranscform.controls['cw_recieved_source'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['cw_recieved_source'].errors.required) || (addTranscform.controls['cw_recieved_source'].touched && addTranscform.controls['cw_recieved_source'].invalid)">
+                                                Recieved Source is
+                                                required</div>
+                                        </div>
+                                    </div> -->
+
+                                    <!--Expense Details-->
+                                    <div *ngIf="isShowExpensePayMode" class="col-md-3 md-form md-outline px-2">
+                                        <select (change)="onExpenseHeadChange($event)" class="form-control field-ht colorful-select" formControlName="expense_head_value" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['expense_head_value'].errors) || (addTranscform.controls['expense_head_value'].touched && addTranscform.controls['expense_head_value'].invalid)}">
+                                            <option value="" selected="true" disabled="disabled">Select Head</option>
+                                            <option *ngFor="let expHeadList of resplookupExpHead" [value]="expHeadList.LookupValue">
+                                                {{ expHeadList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Expense Head</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['expense_head_value'].errors)  ||(addTranscform.controls['expense_head_value'].touched && addTranscform.controls['expense_head_value'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['expense_head_value'].errors.required) || (addTranscform.controls['expense_head_value'].touched && addTranscform.controls['expense_head_value'].invalid)">
+                                                Expense Head is
+                                                required</div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isShowExpensePayMode && isNormalExpense" class="col-md-3 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select" formControlName="exp_vendor_value" class="form-control field-ht colorful-select">
+                                           <option value="" selected="true" disabled="disabled"> Select Vendor </option>
+                                           <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}> {{contractorlist.contractorName}} </option>
+                                        </select>
+                                        <label class="ml-2 active">Vendor Name</label>
+                                    </div>
+
+                                    <div *ngIf="isShowExpensePayMode && isContractorExpense"  class="col-md-3 md-form md-outline px-2">
+
+                                        <select class="form-control field-ht colorful-select"
+                                                formControlName="exp_contractor_value">
+                                            <option value="" disabled>Select Contractor</option>
+                                            <option *ngFor="let c of respcontractors" [value]="c.contractor_id">
+                                            {{ c.name }}
+                                            </option>
+                                        </select>
+
+                                        <label class="ml-2 active">Contractor Name</label>
+                                    </div>
+
+
+                                    <!-- <div *ngIf="isShowExpensePayMode && isNormalExpense" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName="docType" class="form-control"
+                                                    (change)="onDocTypeChange()">
+                                                <option value="bill_no">Bill No.</option>
+                                                <option value="challan_no">Challan No.</option>
+                                            </select>
+                                            <label class="Active">Select Type</label>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isShowExpensePayMode && isNormalExpense" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text"
+                                                formControlName="docNumber"
+                                                class="form-control">
+                                            <label class="Active">{{ docLabel }}</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowExpensePayMode && isNormalExpense" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            
+                                            <label class="Active">PO No.</label>
+                                            <select formControlName="po_no" class="form-control field-ht colorful-select" >
+                                                <option value="">Select PO...</option>
+                                                <option *ngFor="let po of poOptions" [value]="po.value">{{ po.label }}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+
+                                    
+                                    <!-- Rental Modes -->
+                                    <div *ngIf="isRentCashMode" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <select id="vender_name"(change)='VendorfilterSelected($event)' formControlName="vender_name" class="form-control field-ht colorful-select">
+                                                <option value="" selected="true">Select Vendor </option>
+                                                <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                                                    {{contractorlist.contractorName}}
+                                                </option>
+                                            </select>
+                                            <label class="Active">Vendor Name</label>
+                                        
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isRentCashMode" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <select id="vechice_name" (change)='vechicelfilterSelected($event)'  formControlName="vechice_name" class="form-control field-ht colorful-select">
+                                                <option value="" selected>Select Vehicle *</option>
+                                                <option *ngFor="let vechicledata of setvechicalList" value="{{vechicledata.VehicleID}}">{{vechicledata.VehicleName}}</option>
+                                            </select>
+                                            <label class="Active">Vehicle Name *</label>
+                                            
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isRentCashMode" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input formControlName="vehicle_no" type="text" class="form-control" value="{{vehicleno}}" readonly id="vehicle_no" >
+                                            <label for="vehicle_no" class="Active">Vehicle No</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- ICM MODES -->
+                                    <div *ngIf="isIcmChequeMode && ishideCqNumber" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="icm_cq_submit_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                            <label for="date-picker-example" class="ml-1 active">Submit Date</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isIcmChequeMode && ishideCqNumber" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="icm_cq_clear_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker"  [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_cq_clear_date'].errors) || (addTranscform.controls['icm_cq_clear_date'].touched && addTranscform.controls['icm_cq_clear_date'].invalid)}">
+                                            <label for="date-picker-example" class="ml-1 active">Clear Date</label>
+                                            <div *ngIf=" (submitted && addTranscform.controls['icm_cq_clear_date'].errors)  ||(addTranscform.controls['icm_cq_clear_date'].touched && addTranscform.controls['icm_cq_clear_date'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_cq_clear_date'].errors.required) || (addTranscform.controls['icm_cq_clear_date'].touched && addTranscform.controls['icm_cq_clear_date'].invalid)">
+                                                Clear Date is required</div>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+
+
+                                    <!--Fields for ally options-->
+                                    <div *ngIf="isbyDefaultallTrue" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="common_amount"  id="common_amount" name="common_amount" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['common_amount'].errors) || (addTranscform.controls['common_amount'].touched && addTranscform.controls['common_amount'].invalid)}" >
+                                            <label for="common_amount" class="Active">{{ commonAmountLabel }}</label>
+                                            <div *ngIf=" (submitted && addTranscform.controls['common_amount'].errors)  ||(addTranscform.controls['common_amount'].touched && addTranscform.controls['common_amount'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['common_amount'].errors.required) || (addTranscform.controls['common_amount'].touched && addTranscform.controls['common_amount'].invalid)">
+                                                Enter Valid Amount</div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+
+
+                                    <div class="col-md-3 px-2" *ngIf="isCommonHSHBK && !isShowCashModes">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select"
+                                                formControlName="common_account_head"
+                                                (click)="commononAccHeadChange($event)">
+                                                <option value="">
+                                                    Select
+                                                </option>
+    
+                                                <option *ngFor="let bankList of commonresplookupBank" [value]="bankList.bankCategory">
+                                                    {{ bankList.bankCategory }}
+                                                </option>
+                                                <option value="Other">Other</option> 
+                                            </select>
+                                            <label class="active">Account Head</label>
+    
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3 px-2" *ngIf="isCommonHSHBK && !isShowCashModes">
+                                        <div class="md-form md-outline">
+                                            <select *ngIf="addTranscform.get('common_account_head')?.value !== 'Other'"
+                                                class="form-control field-ht colorful-select"
+                                                formControlName="common_account_sub_head"
+                                                (click)="commononAccSubHeadChange($event)"
+                                                id="common_account_sub_head">
+                                                <option  value="">Select</option>
+                                                <option *ngFor="let bankist of commonresplookupsubBank" [value]="bankist.subHead" >
+                                                    {{ bankist.subHead }}
+                                                </option>
+                                            </select>
+                                            <!-- Show text input when Account Head is 'Other' -->
+                                            <input *ngIf="addTranscform.get('common_account_head')?.value === 'Other'"
+                                                type="text"
+                                                class="form-control field-ht"
+                                                formControlName="common_account_sub_head">
+
+                                            <label class="active">Account Sub Head</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isCommonHSHBK && !isShowCashModes" class="col-md-3 px-2">   
+                                        <div class="md-form md-outline">    
+                                         <select *ngIf="addTranscform.get('common_account_head')?.value !== 'Other'"  
+                                             formControlName="common_acc_bank_name" class="form-control field-ht colorful-select">                                             
+                                             <option *ngFor="let bankList of commonSelectedBankData" [value]="bankList.bankName">
+                                               {{bankList.bankName}}
+                                             </option>      
+                                         </select>      
+                                        <!-- ADDED: Show text input when Account Head is 'Other' -->
+                                        <input *ngIf="addTranscform.get('common_account_head')?.value === 'Other'"
+                                            type="text"
+                                            class="form-control field-ht"
+                                            formControlName="common_acc_bank_name">                                                            
+                                         <label class="ml-2 active">Acc Holder Bank Name</label>       
+                                        </div>
+                                   </div>
+
+
+
+
+
+
+                                    
+                                    <!--Through Customer Payment Modes-->
+                                    <!-- Cheque Details-->
+                                    <!-- <div *ngIf="isShowChequeModes" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="cq_senders_bank_name"  id="cq_senders_bank_name" name="cq_senders_bank_name" >
+                                            <label for="cq_senders_bank_name" class="Active">Sender's Bank Name</label>
+                                        </div>
+                                    </div> -->
+                                    <div *ngIf="isShowChequeModes" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="cq_cheque_number" id="cq_cheque_number" name="cq_cheque_number" >
+                                            <label for="cq_cheque_number" class="Active">Cheque Number</label>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="isShowChequeModes" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="cq_submit_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                            <label for="date-picker-example" class="ml-1 active">Submit Date</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowChequeModes" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="cq_clear_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                            <label for="date-picker-example" class="ml-1 active">Clear Date</label>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-3 px-2" *ngIf="isShowChequeModes">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select"
+                                                formControlName="cq_recieved_by">
+                                                <option value="" disabled>
+                                                    Select
+                                                </option>
+                                                <option *ngFor="let items of employee " value="{{items.EmployeeId}}">
+                                                    {{items.EmployeeName}}
+                                                </option>
+    
+                                            </select>
+                                            <label class="active">
+                                                Received By
+                                            </label>
+                                            
+                                        </div>
+                                    </div> -->
+ 
+                                    <!--Cheque Details Ends-->
+
+                                    <!-- Online Details -->
+                                    <!-- Online Details Done-->
+
+                                    <!-- Cash Details-->
+
+                                    <!-- <div *ngIf="isShowCashModes" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="cash_submitted_by"  id="cash_submitted_by" name="cash_submitted_by" >
+                                            <label for="cash_submitted_by" class="Active">Submitted By</label>
+                                        </div>
+                                    </div> -->
+
+                                    <!-- <div class="col-md-3 px-2" *ngIf="isShowCashModes && !isShowExpensePayMode">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select"
+                                                formControlName="cash_issued_by">
+                                                <option value="select" selected >Select</option>
+                                                <option value="anukriti_singh">Anukriti Singh</option>
+                                                <option value="amar_soni">Amar Soni</option>
+                                                <option value="neha_dewangan">Neha Dewangan</option>       
+                                            </select>
+                                            <label class="active">
+                                                Issued By
+                                            </label>
+                                            
+                                        </div>
+                                    </div> -->
+                                    <div class="col-md-3 px-2" *ngIf="isShowCashModes">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select"
+                                                formControlName="cash_recieved_by">
+                                                <option value="" disabled>
+                                                    Select
+                                                </option>
+                                                <option *ngFor="let items of employee " value="{{items.EmployeeId}}">
+                                                    {{items.EmployeeName}}
+                                                </option>
+    
+                                            </select>
+                                            <label class="active">
+                                                Issued To
+                                            </label>
+                                            
+                                        </div>
+                                    </div>
+
+                                    <!-- Cash Details Done-->
+
+                                    <!-- DD Details-->
+
+                                    <!-- <div *ngIf="isShowDDModes" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="dd_sender_bank_name"  id="dd_sender_bank_name" name="dd_sender_bank_name" >
+                                            <label for="dd_sender_bank_name" class="Active">Sender's Bank Name</label>
+                                        </div>
+                                    </div> -->
+                                    <div *ngIf="isShowDDModes" class="col-md-3 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="dd_number"  id="dd_number" name="dd_number" >
+                                            <label for="dd_number" class="Active">DD Number</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowDDModes" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="dd_submit_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                            <label for="date-picker-example" class="ml-1 active">DD Submit Date</label>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isShowDDModes" class="col-md-3 px-2">
+                                        <div class=" md-form md-outline">
+                                            <input  placeholder="Select date" formControlName="dd_clear_date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #Rdate="ngbDatepicker" (click)="Rdate.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                            <label for="date-picker-example" class="ml-1 active">DD Clear Date</label>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-3 px-2" *ngIf="isShowDDModes">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select"
+                                                formControlName="dd_recieved_by">
+                                                <option value="" disabled>
+                                                    Select
+                                                </option>
+                                                <option *ngFor="let items of employee " value="{{items.EmployeeId}}">
+                                                    {{items.EmployeeName}}
+                                                </option>
+    
+                                            </select>
+                                            <label class="active">
+                                                Received By
+                                            </label>
+                                            
+                                        </div>
+                                    </div> -->
+
+                                </div>
+
+                                <!-- IN Box -->
+                                <div *ngIf="isIcmMngmtParty" class="col-md-12 px-3 mt-2">
+                                    <div class="border p-2 rounded bg-light">
+                                        <div class="form-row align-items-start">
+                                            <div class="form-group col-md-12 mb-1">
+                                                <label class="text-success font-weight-bold mb-1">IN</label>
+                                            </div>
+
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="in_date" class="mb-0">Date</label>
+                                                <input type="date" id="in_date" class="form-control form-control-sm" formControlName="party_in_date" >
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="in_mode" class="mb-0">Mode</label>
+                                                <select id="in_mode" class="form-control form-control-sm" formControlName="party_in_mode" (change)="onPartyInModeChange($event)">
+                                                    <option value="">Select Mode</option>
+                                                    <option value="party_in_cheque">Cheque</option>
+                                                    <option value="party_in_online">Online</option>
+                                                    <option value="party_in_cash">Cash</option>
+                                                    <option value="party_in_dd">DD</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="in_amount" class="mb-0">Amount</label>
+                                                <input type="number" id="in_amount" class="form-control form-control-sm" formControlName="party_in_amount">
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">  
+                                                    <label class="active" class="mb-0">Account Head</label>                                      
+                                                    <select class="form-control form-control-sm"
+                                                        formControlName="party_in_acc_head"
+                                                        (click)="onPartyInAccHeadChange($event)">
+                                                        <option value=""> Select </option>            
+                                                        <option *ngFor="let bankList of partyInresplookupBank" [value]="bankList.bankCategory">
+                                                            {{ bankList.bankCategory }}
+                                                        </option>
+                                                    </select>                                                                                       
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">   
+                                                    <label class="active" class="mb-0">Account Sub Head</label>                                     
+                                                    <select class="form-control form-control-sm"
+                                                        formControlName="party_in_acc_sub_head"
+                                                        (click)="inPartyAccSubHeadChange($event)"
+                                                        id="party_in_acc_sub_head">
+                                                        <option  value="">Select</option>
+                                                        <option *ngFor="let bankist of partyInresplookupsubBank" [value]="bankist.subHead" >
+                                                            {{ bankist.subHead }}
+                                                        </option>
+                                                    </select>                                                                                    
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">                                           
+                                                <label class="active" class="mb-0">Bank Name</label>    
+                                                <select formControlName="party_in_bank" class="form-control form-control-sm" id="party_in_bank">                                             
+                                                    <option *ngFor="let bankList of partyInSelectedBankData" [value]="bankList.bankName">
+                                                    {{bankList.bankName}}
+                                                    </option>      
+                                                </select>                                 
+                                            </div>
+                                            <div class="form-group col-md-12 mb-1">
+                                                <label for="in_description" class="mb-0">Description</label>
+                                                <textarea id="in_description" rows="2" class="form-control form-control-sm w-100" formControlName="party_in_description" ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- OUT Box -->
+                                <div *ngIf="isIcmMngmtParty" class="col-md-12 px-3 mt-2">
+                                    <div class="border p-2 rounded bg-light">
+                                        <div class="form-row align-items-start">
+                                            <div class="form-group col-md-12 mb-1">
+                                                <label class="text-danger font-weight-bold mb-1">OUT</label>
+                                            </div>
+
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="out_date" class="mb-0">Date</label>
+                                                <input type="date" id="out_date" class="form-control form-control-sm" formControlName="party_out_date" >
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="out_mode" class="mb-0">Mode</label>
+                                                <select id="out_mode" class="form-control form-control-sm" formControlName="party_out_mode" (change)="onPartyOutModeChange($event)" >
+                                                    <option value="">Select Mode</option>
+                                                    <option value="party_out_cheque">Cheque</option>
+                                                    <option value="party_out_online">Online</option>
+                                                    <option value="party_out_cash">Cash</option>
+                                                    <option value="party_out_dd">DD</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">
+                                                <label for="out_amount" class="mb-0">Amount</label>
+                                                <input type="number" id="out_amount" class="form-control form-control-sm" formControlName="party_out_amount" >
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">  
+                                                    <label class="active" class="mb-0">Account Head</label>                                      
+                                                    <select class="form-control form-control-sm"
+                                                        formControlName="party_out_acc_head"
+                                                        (click)="commononAccHeadChange($event)">
+                                                        <option value=""> Select </option>            
+                                                        <option *ngFor="let bankList of commonresplookupBank" [value]="bankList.bankCategory">
+                                                            {{ bankList.bankCategory }}
+                                                        </option>
+                                                    </select>                                                                                       
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">   
+                                                    <label class="active" class="mb-0">Account Sub Head</label>                                     
+                                                    <select class="form-control form-control-sm"
+                                                        formControlName="party_out_acc_sub_head"
+                                                        (click)="outPartyAccSubHeadChange($event)"
+                                                        id="party_out_acc_sub_head">
+                                                        <option  value="">Select</option>
+                                                        <option *ngFor="let bankist of commonresplookupsubBank" [value]="bankist.subHead" >
+                                                            {{ bankist.subHead }}
+                                                        </option>
+                                                    </select>                                                                                    
+                                            </div>
+                                            <div class="form-group col-md-3 mb-1">                                           
+                                                <label class="active" class="mb-0">Bank Name</label>    
+                                                <select formControlName="party_out_bank" class="form-control form-control-sm" id="party_out_bank">                                             
+                                                    <option *ngFor="let bankList of commonSelectedBankData" [value]="bankList.bankName">
+                                                    {{bankList.bankName}}
+                                                    </option>      
+                                                </select>                                 
+                                            </div>
+                                            <div class="form-group col-md-12 mb-1">
+                                                <label for="out_description" class="mb-0" >Description</label>
+                                                <textarea id="out_description" rows="2" class="form-control form-control-sm w-100" formControlName="party_out_description" ></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+
+                                
+                                <div *ngIf="isbyDefaultallTrue" class="col-md-11 px-2" style="margin-left: 11px;">
+                                    <div class="md-form md-outline">
+                                        <textarea name="t_Pay" class="form-control" formControlName="common_description" style="height:50px;"  rows="3
+                                        " [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['common_description'].errors) || (addTranscform.controls['common_description'].touched && addTranscform.controls['common_description'].invalid)}" ></textarea>
+                                        <label for="t_Pay" class="active">Description</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['common_description'].errors)  ||(addTranscform.controls['common_description'].touched && addTranscform.controls['common_description'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['common_description'].errors.required) || (addTranscform.controls['common_description'].touched && addTranscform.controls['common_description'].invalid)">
+                                                Description is
+                                                required</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- ICM MODES -->
+
+                                <div *ngIf="isIcmChequeMode || isCashWidrawal" class="col-md-3 px-2" style="margin-left: 11px;">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_from_acc_head'].errors) || (addTranscform.controls['icm_from_acc_head'].touched && addTranscform.controls['icm_from_acc_head'].invalid)}"
+                                            formControlName="icm_from_acc_head"
+                                            (click)="onAccHeadChangeICMFrom($event)"
+                                            id="icm_from_acc_head">
+                                            <option value="">
+                                                Select
+                                            </option>
+                                            <option *ngFor="let bankList of resplookupBankICMFrom" [value]="bankList.bankCategory">
+                                                {{ bankList.bankCategory }}
+                                            </option>
+                                        </select>
+                                        <label for="icm_from_acc_head" class="Active"> From Account Head</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_from_acc_head'].errors)  ||(addTranscform.controls['icm_from_acc_head'].touched && addTranscform.controls['icm_from_acc_head'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_from_acc_head'].errors.required) || (addTranscform.controls['icm_from_acc_head'].touched && addTranscform.controls['icm_from_acc_head'].invalid)">
+                                                Account Head is
+                                                required</div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div *ngIf="isIcmChequeMode || isCashWidrawal" class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_from_acc_sub_head'].errors) || (addTranscform.controls['icm_from_acc_sub_head'].touched && addTranscform.controls['icm_from_acc_sub_head'].invalid)}"
+                                                formControlName="icm_from_acc_sub_head"
+                                                (click)="onAccSubHeadChangeICMFrom($event)"
+                                                id="icm_from_acc_sub_head">
+                                                <option  value="">Select</option>
+                                                <option *ngFor="let bankist of resplookupsubBankICMFrom" [value]="bankist.subHead" >
+                                                    {{ bankist.subHead }}
+                                                </option>
+                                            </select>
+                                        <label for="icm_from_acc_sub_head" class="Active"> From Account SubHead</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_from_acc_sub_head'].errors)  ||(addTranscform.controls['icm_from_acc_sub_head'].touched && addTranscform.controls['icm_from_acc_sub_head'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_from_acc_sub_head'].errors.required) || (addTranscform.controls['icm_from_acc_sub_head'].touched && addTranscform.controls['icm_from_acc_sub_head'].invalid)">
+                                                Account Sub Head is
+                                                required</div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div *ngIf="isIcmChequeMode || isCashWidrawal" class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                         <select formControlName="icm_form_bank_name" class="form-control field-ht colorful-select"  [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_form_bank_name'].errors) || (addTranscform.controls['icm_form_bank_name'].touched && addTranscform.controls['icm_form_bank_name'].invalid)}">                                             
+                                             <option *ngFor="let bankList of SelectedBankDataICMFrom" [value]="bankList.bankName">
+                                               {{bankList.bankName}}
+                                             </option>      
+                                         </select>  
+                                        <label for="icm_form_bank_name" class="Active"> From Bank Name</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_form_bank_name'].errors)  ||(addTranscform.controls['icm_form_bank_name'].touched && addTranscform.controls['icm_form_bank_name'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_form_bank_name'].errors.required) || (addTranscform.controls['icm_form_bank_name'].touched && addTranscform.controls['icm_form_bank_name'].invalid)">
+                                                Bank Name is
+                                                required</div>
+                                        </div>                                         
+                                    </div>
+                                </div>
+                                <div *ngIf="isIcmChequeMode && ishideCqNumber" class="col-md-2 px-0" >
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="icm_cq_number"  id="cheque_number" name="cheque_number" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_cq_number'].errors) || (addTranscform.controls['icm_cq_number'].touched && addTranscform.controls['icm_cq_number'].invalid)}">
+                                        <label for="cheque_number" class="Active">Cheque Number</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_cq_number'].errors)  ||(addTranscform.controls['icm_cq_number'].touched && addTranscform.controls['icm_cq_number'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_cq_number'].errors.required) || (addTranscform.controls['icm_cq_number'].touched && addTranscform.controls['icm_cq_number'].invalid)">
+                                                Cq Number is
+                                                required</div>
+                                        </div>                                         
+                                    </div>
+                                </div>
+                                <div *ngIf="isIcmChequeMode && isShowIcmSelectInternal || isIcmCashMode" class="col-md-3 px-2" style="margin-left: 11px;">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_to_acc_head'].errors) || (addTranscform.controls['icm_to_acc_head'].touched && addTranscform.controls['icm_to_acc_head'].invalid)}"
+                                            formControlName="icm_to_acc_head"
+                                            (click)="onAccHeadChangeICMTo($event)"
+                                            id="icm_to_acc_head">
+                                            <option value="">
+                                                Select
+                                            </option>
+                                            <option *ngFor="let bankList of resplookupBankICMTo" [value]="bankList.bankCategory">
+                                                {{ bankList.bankCategory }}
+                                            </option>
+                                        </select>
+                                        <label for="icm_to_acc_head" class="Active"> To Account Head</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_to_acc_head'].errors)  ||(addTranscform.controls['icm_to_acc_head'].touched && addTranscform.controls['icm_to_acc_head'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_to_acc_head'].errors.required) || (addTranscform.controls['icm_to_acc_head'].touched && addTranscform.controls['icm_to_acc_head'].invalid)">
+                                                Acc head is
+                                                required</div>
+                                        </div>                                         
+                                    </div>
+                                </div>
+                                <div *ngIf="isIcmChequeMode && isShowIcmSelectInternal || isIcmCashMode" class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_to_acc_sub_head'].errors) || (addTranscform.controls['icm_to_acc_sub_head'].touched && addTranscform.controls['icm_to_acc_sub_head'].invalid)}"
+                                            formControlName="icm_to_acc_sub_head"
+                                            (click)="onAccSubHeadChangeICMTo($event)"
+                                            id="icm_to_acc_sub_head">
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of resplookupsubBankICMTo" [value]="bankist.subHead" >
+                                                {{ bankist.subHead }}
+                                            </option>
+                                        </select>
+                                    <label for="icm_to_acc_sub_head" class="Active"> To Account SubHead</label>
+                                    <div *ngIf=" (submitted && addTranscform.controls['icm_to_acc_sub_head'].errors)  ||(addTranscform.controls['icm_to_acc_sub_head'].touched && addTranscform.controls['icm_to_acc_sub_head'].invalid)"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf=" (submitted && addTranscform.controls['icm_to_acc_sub_head'].errors.required) || (addTranscform.controls['icm_to_acc_sub_head'].touched && addTranscform.controls['icm_to_acc_sub_head'].invalid)">
+                                            Acc Sub head is
+                                            required</div>
+                                    </div>                                   
+                                </div>
+                                </div>
+                                <div *ngIf="isIcmChequeMode && isShowIcmSelectInternal || isIcmCashMode" class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="icm_to_bank_name" class="form-control field-ht colorful-select"  [ngClass]="{ 'is-invalid': (submitted && addTranscform.controls['icm_to_bank_name'].errors) || (addTranscform.controls['icm_to_bank_name'].touched && addTranscform.controls['icm_to_bank_name'].invalid)}">                                             
+                                            <option *ngFor="let bankList of SelectedBankDataICMTo" [value]="bankList.bankName">
+                                              {{bankList.bankName}}
+                                            </option>      
+                                        </select>  
+                                       <label for="icm_to_bank_name" class="Active"> To Bank Name</label>
+                                        <div *ngIf=" (submitted && addTranscform.controls['icm_to_bank_name'].errors)  ||(addTranscform.controls['icm_to_bank_name'].touched && addTranscform.controls['icm_to_bank_name'].invalid)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTranscform.controls['icm_to_bank_name'].errors.required) || (addTranscform.controls['icm_to_bank_name'].touched && addTranscform.controls['icm_to_bank_name'].invalid)">
+                                                Bank is
+                                                required</div>
+                                        </div>                                        
+                                   </div>
+                                </div> 
+                                <div *ngIf="isShowIcmSelectCust" class="col-md-4 px-3">
+                                <div class="md-form md-outline">
+                                    <input type="hidden" formControlName="person_plan_id" />
+
+                                    <!-- Show dropdown when not in edit mode -->
+                                    <select *ngIf="!isEditMode"
+                                            formControlName="icm_cust_cq_to_cqname"
+                                            class="form-control field-ht colorful-select"
+                                            (change)="handleModeChange($event.target.value)">
+                                    <option value="">Select Cheque Name</option>
+                                    <option *ngFor="let cqList of GetCustCqList" 
+                                            [value]="(cqList.cheque_name && cqList.cheque_number) 
+                                                ? cqList.mode + ' , ' + cqList.amount + ' , ' + cqList.cheque_number + ' , ' + cqList.cheque_name 
+                                                : cqList.mode + ' , ' + cqList.amount">
+                                        {{ (cqList.cheque_name && cqList.cheque_number) 
+                                        ? cqList.mode + ' , ' + cqList.amount + ' , ' + cqList.cheque_number + ' , ' + cqList.cheque_name 
+                                        : cqList.mode + ' , ' + cqList.amount }}
+                                    </option>
+                                    </select>
+
+                                    <!-- Show plain text input in edit mode -->
+                                    <input *ngIf="isEditMode"
+                                        type="text"
+                                        class="form-control field-ht"
+                                        [formControlName]="'icm_cust_cq_to_cqname'"
+                                        readonly />
+
+                                    <label for="icm_cust_cq_to_cqname" class="active">To Cheque No./Name</label>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" #closebutton (click)="closeModal()" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button *ngIf="ishideSubmit" type="button" [disabled]="isSubmitDisabled" (click)="saveTransList()" class="btn btn-sm btn-outline-success waves-effect">{{ isEditMode ? 'Update' : 'Save' }}</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+
+            <!-- Add new Bank Modal-->
+            <div class="modal fade" id="add_bank_trans_modal" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog moda-lg modal-notify modal-info" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold"> Add New bank Details</p>
+                            <button (click)="closeBankModal()" type="button" #closeBankButton class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div  class="col-md-12 px-3 mt-2">
+                                <div class="border p-2 rounded bg-light"  [formGroup]="icmPartyForm">
+                                    <div class="form-row">                                    
+                                        <div class="form-group col-md-6 mb-1">  
+                                                <label class="active" class="mb-0">Account Head</label>                                      
+                                                <select class="form-control form-control-sm"
+                                                    formControlName="bank_acc_head"
+                                                    (click)="commononAccHeadChange($event)">
+                                                    <option value=""> Select </option>            
+                                                    <option *ngFor="let bankList of commonresplookupBank" [value]="bankList.bankCategory">
+                                                        {{ bankList.bankCategory }}
+                                                    </option>
+                                                </select>                                                                                       
+                                        </div>
+                                        <div class="form-group col-md-6 mb-1">   
+                                                <label class="active" class="mb-0">Account Sub Head</label>                                     
+                                                <select class="form-control form-control-sm"
+                                                    formControlName="bank_acc_sub_head"
+                                                    (click)="bankAccSubHeadChange($event)"
+                                                    id="bank_acc_sub_head">
+                                                    <option  value="">Select</option>
+                                                    <option *ngFor="let bankist of commonresplookupsubBank" [value]="bankist.subHead" >
+                                                        {{ bankist.subHead }}
+                                                    </option>
+                                                </select>                                                                                    
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6 mb-1">                                           
+                                            <label class="active" class="mb-0">Bank Name</label>    
+                                            <select formControlName="bank_bank_name" class="form-control form-control-sm" id="bank_bank_name">                                             
+                                                <option *ngFor="let bankList of commonSelectedBankData" [value]="bankList.bankName">
+                                                {{bankList.bankName}}
+                                                </option>      
+                                            </select>                                 
+                                        </div>
+                                        <div class="form-group col-md-6 mb-1">
+                                            <label for="bank_total_amount" class="mb-0"> Total Amount</label>
+                                            <input type="number" id="bank_total_amount" class="form-control form-control-sm" formControlName="bank_total_amount">
+                                        </div>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" #closebankbutton (click)="closeBankModal()" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button *ngIf="ishideBankSubmitbutton" type="button" (click)="saveBankTransList()" class="btn btn-sm btn-outline-success waves-effect">{{ isEditMode ? 'Update' : 'Save' }}</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>            
+            
+            <div class="tab-content panel-tab pb-1">
+                <!---IN (Through Customer,Civil work, Rental)--->
+                <div class="tab-pane fade in show active" id="docsTabsProfile" role="tabpanel" [formGroup]="searchIN">
+                    <div class="form-row px-1">
+
+
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline ">
+                                <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                    #reg="ngbDatepicker" (click)="reg.toggle()" readonly type="text" formControlName="fromsearchRecDate">
+                                   
+                                <label for="reg" class="active"> From Recieved date</label>
+                            </div>
+                        </div>
+ 
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline ">
+                                <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                    #toreg="ngbDatepicker" (click)="toreg.toggle()" readonly type="text" formControlName="tosearchRecDate"
+                                    >
+                                <label for="toreg" class="active"> To Recieved date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2  px-3">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="searchCommonTransType" id="searchCommonTransType" (change)="onInTransTypeChange($event)">
+                                        <option value="select" >Select Transaction Type</option>
+                                        <option value="1">Through Customer (IN)</option>
+                                        <option value="DBE013E4-8C9B-4A6E-C9IBV3I4L4WEO7KC">Civil Work (IN)</option>
+                                        <option value="C8E9D50C-53CF-46FD-R1E6N9T9A19L5334">Rental (IN)</option>                             
+                                        <option value="9710F402-33B1-455A-I8N6TAE6R8C9A1SF">ICM</option>                             
+                                </select>
+                                <label class=" active">Transaction Type</label>
+                            </div>
+                        </div>
+                        <div *ngIf="searchIN.get('searchCommonTransType')?.value == '1'" class="col-md-3 px-3">
+                            <div class="md-form md-outline">
+                                <ng-select
+                                    [items]="getAllPaidCustomersData"
+                                    bindLabel="combinedSearch"
+                                    bindValue="persons_id"
+                                    id="in_customer_id"
+                                    formControlName="customerId"
+                                    placeholder="Select Customer"
+                                    [searchable]="true"
+                                    [clearable]="true"
+                                    class="d-block w-100">
+                                </ng-select>
+                                <label for="in_customer_name" class="active" style="z-index: 1000;">Select Customer</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2  px-3 ">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" formControlName="searchPayMode" id="searchPayMode">
+                                    <option value="select" selected >Select Payment Mode</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="DD">DD</option>
+                                    </select>
+                                <label class="active">Payment Mode</label>
+                            </div>    
+                        </div>
+                        <div class="col-md-2 md-form md-outline px-3">                                                                          
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_head_in"
+                                        (click)="onPartyInAccHeadChange($event)">
+                                        <option value=""> Select </option>            
+                                        <option *ngFor="let bankList of partyInresplookupBank" [value]="bankList.bankCategory">
+                                            {{ bankList.bankCategory }}
+                                        </option>
+                                    </select>        
+                                    <label class="ml-3 active" >Account Head</label>                                                                                
+                            </div>
+                            <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_sub_head_in"
+                                        (click)="searchAccSubHeadChange($event)"
+                                        id="bd_acc_sub_head">
+                                        <option  value="">Select</option>
+                                        <option *ngFor="let bankist of partyInresplookupsubBank" [value]="bankist.subHead" >
+                                            {{ bankist.subHead }}
+                                        </option>
+                                    </select>           
+                                    <label class="ml-3 active" >Account Sub Head</label>                                                                         
+                            </div>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="transSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetINSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        
+
+                    </div>
+ 
+                    <div class="row px-0">
+
+                        <div class="col-md-12 p-2">
+                            <div class="table-responsive card-body">                                
+                                <table id="PaymentTable" datatable [dtOptions]="dtOptions6" [dtTrigger]="dtTrigger6" 
+                                    class="table table-striped" cellspacing="0" width="100%">
+                                    <thead class="winter-neva-gradient">
+                                        <tr>
+                                            <th>S.No.
+                                            </th>
+                                            <th>Recieved
+                                                Date
+                                            </th>
+                                            <!-- <th>Transaction
+                                                Type
+                                            </th> -->
+                                            <th>Income
+                                                Head
+                                            </th>
+                                            <th>Amount
+                                            </th>
+                                            <th>Payment
+                                                Mode
+                                            </th>
+                                            <th>Description
+                                            </th>
+                                            <th>Acc Head / SubHead
+                                            </th>
+                                            <th>Received
+                                                by
+                                            </th>
+                                            <th>Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of PaymentDetaildata; let i=index">
+
+                                            <td>{{i+1}}
+                                            </td>
+                                            <td>{{item.all_recieved_date
+                                                |
+                                                date:'dd/MM/yyyy'}}
+                                            </td>
+                                            <!-- <td>{{item.transTypeValue}}
+                                            </td> -->
+                                            <td>{{item.income_head}}
+                                            </td>
+                                            <td>{{indianCurrency(item.trans_amount)}}
+                                            </td>
+                                            <td>{{item.trans_mode}}
+                                            </td>
+                                            <td data-placement="top"> <a ngbTooltip="{{item.descriptions}}">  {{item.descriptions.slice(0,60) + (item.descriptions.length>40 ? "..." :"")}} </a>
+                                            </td>   
+                                            <td>{{item.acc_head}}/{{item.acc_subHead}}
+                                            </td>
+                                            <td>{{item.recievedBy}}
+                                            </td>
+                                            <td>
+                                                <a id="" class="black-text" ngbTooltip="View Transactions"
+                                                    
+                                                    (click)="ViewPaymentDetail('View',item.transaction_id)"
+                                                    
+                                                    data-toggle="modal" data-target="#add_trans_modal"
+                                                    placement="top"><i class="fa fa-eye "
+                                                        aria-hidden="true"></i></a>
+                                                <a  id="" class="blue-text" ngbTooltip="Edit Transactions"
+                                                    (click)="ViewPaymentDetail('Edit',item.transaction_id)"
+                                                    
+                                                    data-toggle="modal" data-target="#add_trans_modal"
+                                                    placement="top"><i class="fa-pencil-alt px-1 fas"
+                                                        aria-hidden="true"></i></a>
+
+                                                <a *ngIf="Admin || Accounts_Internal"  class="red-text" (click)="DeletePayment(item.transaction_id,item.acc_head,item.acc_subHead,item.trans_cheque_bank_name,item.trans_amount)" ngbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+
+                                                <!-- <a id="" class="text-success" id="{{i+1}}" ngbTooltip="Edit Witness" placement="top"  data-toggle="modal" data-target="#add_witness_modal" (click)="openModalButton('Edit Witness','item.id')"><i class="fa-pencil-alt px-1 fas"></i></a> -->
+                                                <!-- <a id="" class="text-primary pr-1" ngbTooltip="Download File" placement="top" ><i class="fas fa-file-download"></i></a> -->
+                                                <!-- <a id="" class="text-danger" ngbTooltip="Remove Customer" placement="top" ><i class="fa-times px-1 fas"></i></a> -->
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                    <tfoot *ngIf="PaymentDetaildata">
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>Total:</strong></td>
+                                            <td><strong>{{ calculateInCivil() }}</strong></td>
+                                            <td colspan="10"></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody *ngIf="PaymentDetaildata?.length == 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available">
+                                                No data!
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+ 
+                </div>
+
+                <!-- Out (Expenses)  -->
+                <div class="tab-pane pb-0" id="docsTabsPersonal" role="tabpanel" [ngClass]="{ 'active': activeTab === 'PaymentPlanTab' }" [formGroup]="searchOUT" >
+                   
+                        <div class="form-row px-1">
+
+                            <div class="col-md-2 px-3">
+                                <div class="md-form md-outline">
+                                    <input name="paylast" class="form-control datepicker" placeholder="Select date"
+                                        ngbDatepicker #paylast="ngbDatepicker" (click)="paylast.toggle()" formControlName="fromsearchRecDateExp"
+                                        type="text">
+                                    <label for="paylast" class="active">From Expense date</label>
+                                </div>
+                            </div>
+ 
+                            <div class="col-md-2 px-3">
+                                <div class="md-form md-outline">
+                                    <input name="paylast2" class="form-control datepicker" placeholder="Select date"
+                                        ngbDatepicker #paylast2="ngbDatepicker" (click)="paylast2.toggle()" formControlName="tosearchRecDateExp"
+                                        type="text">
+                                    <label for="paylast2" class="active">To Expense date</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 px-3">
+                                <div class="md-form md-outline">
+                                    <select  class="form-control field-ht colorful-select" formControlName="expense_head_valueExp" class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Head</option>
+                                        <option *ngFor="let expHeadList of resplookupExpHead" [value]="expHeadList.LookupValue">
+                                            {{ expHeadList.LookupValue }}
+                                        </option>
+                                    </select>
+                                    <label class=" active">Expense Head</label>
+                                </div>    
+                            </div>
+                            <div class="col-md-2 px-3 ">
+                                <div class="md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="searchPayModeExp" id="searchPayMode">
+                                        <option value="select" selected >Select Payment Mode</option>
+                                        <option value="Cheque">Cheque</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="DD">DD</option>
+                                        </select>
+                                    <label class=" active">Payment Mode</label>
+                                </div>    
+                            </div>
+                            <div class="col-md-2 md-form md-outline px-3">                                                                          
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_head_exp"
+                                        (click)="onPartyInAccHeadChange($event)">
+                                        <option value=""> Select </option>            
+                                        <option *ngFor="let bankList of partyInresplookupBank" [value]="bankList.bankCategory">
+                                            {{ bankList.bankCategory }}
+                                        </option>
+                                    </select>        
+                                    <label class="ml-3 active" >Account Head</label>                                                                                
+                            </div>
+                            <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_sub_head_exp"
+                                        (click)="searchAccSubHeadChange($event)"
+                                        id="bd_acc_sub_head">
+                                        <option  value="">Select</option>
+                                        <option *ngFor="let bankist of partyInresplookupsubBank" [value]="bankist.subHead" >
+                                            {{ bankist.subHead }}
+                                        </option>
+                                    </select>           
+                                    <label class="ml-3 active" >Account Sub Head</label>                                                                         
+                            </div>
+    
+                            <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="expenseSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                            <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetOUTSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                           
+    
+                        </div>
+
+                        <div class="col-md-12 p-2">
+                            <div class="table-responsive card-body">
+                                <table id="buyertable" datatable [dtOptions]="dtOptions5"
+                                    [dtTrigger]="dtTrigger5" class="table table-striped" cellspacing="0"
+                                    width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                            </th>
+                                            <th>S.No.
+                                            </th>
+                                            <th>Expense Date                                                
+                                            </th>
+                                            <th>Expense Head
+                                            </th>
+                                            <th>Transaction Type                                                
+                                            </th>
+                                            <th>Descriptions                                                
+                                            </th>
+                                            <th>Head/SubHead
+                                            </th>
+                                            <th>Payment Mode
+                                            </th>
+                                            <th>Amount
+                                            </th>
+                                          
+                                            <th>Action
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of ExpPaymentDetaildata;let i=index">
+                                            <td>
+                                            </td>
+                                            <td>{{i+1}}
+                                            </td>
+                                            <td>{{item.recieved_date | date:'dd/MM/yyyy'}} 
+                                            </td>
+                                            <td>{{item.expense_head}}
+                                            </td>
+                                            <td>{{expenseHeadMap[item.trans_type]}}
+                                            </td>
+                                            <td data-placement="top"> <a ngbTooltip="{{item.exp_descriptions}}">  {{item.exp_descriptions.slice(0,60) + (item.exp_descriptions.length>40 ? "..." :"")}} </a>
+                                            </td>                                            
+                                            <td>{{item.trans_acc_head}} / {{item.trans_acc_sub_head}}
+                                            </td>
+                                            <td>{{item.payment_mode}}
+                                            </td>
+                                            <td>{{indianCurrency(item.trans_amount)}}
+                                            </td>
+                                            <td>
+                                                <a class="black-text" id="{{i+1}}" ngbTooltip="View Expense"
+                                                    placement="top"
+                                                    (click)="ViewPaymentDetail('View Expense',item.expense_id)"
+                                                    data-toggle="modal" data-target="#add_trans_modal"><i
+                                                        class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <a class="blue-text" id="{{i+1}}" ngbTooltip="Edit Expense"
+                                                    placement="top"
+                                                    (click)="ViewPaymentDetail('Edit Expense',item.expense_id)"
+                                                    data-toggle="modal" data-target="#add_trans_modal"><i
+                                                        class="fa-pencil-alt px-1 fas" aria-hidden="true"></i></a>
+                                                <a *ngIf="Admin || Accounts_Internal" class="red-text" id="{{i+1}}" ngbTooltip="Delete Expense"
+                                                    placement="top"
+                                                    (click)="removeExpense(item.expense_id,item.trans_acc_head,item.trans_acc_sub_head,item.trans_acc_bank_name,item.trans_amount)"><i
+                                                        class="fa-times px-1 fas" aria-hidden="true"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot *ngIf="ExpPaymentDetaildata">
+                                        <tr>
+                                            <td colspan="7" class="text-right"><strong>Total:</strong></td>
+                                            <td><strong>{{ calculateOutExpenses()}}</strong></td>
+                                            <td colspan="10"></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody *ngIf="ExpPaymentDetaildata?.length == 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available">
+                                                No
+                                                data!
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                </div>                
+                
+                <!-- Inter Cash Management Lists  -->
+                <div class="tab-pane pb-0" id="docsTabsICM" role="tabpanel" >                    
+
+                    <nav class="nav nav-pills nav-justified">
+                        <a id="docs-tab-internal" class="nav-item nav-link link-nav"
+                        href="#docsTabsInternal" data-toggle="tab" role="tab" aria-selected="true"  [ngClass]="{ 'show active': activeICMTab === 'INTERNAL' }"  >
+                            <i class="bi bi-folder-symlink-fill mr-2" aria-hidden="true"></i>INTERNAL
+                        </a>
+
+                        <a id="docs-tab-customer" class="nav-item nav-link link-nav"
+                        href="#docsTabsCustomer" data-toggle="tab" role="tab" aria-selected="false">
+                            <i class="bi bi-person mr-2" aria-hidden="true"></i>Customer
+                        </a>
+
+                        <a id="docs-tab-party" class="nav-item nav-link link-nav"
+                        href="#docsTabsParty" data-toggle="tab" role="tab" aria-selected="false">
+                            <i class="bi bi-journal-richtext mr-2" aria-hidden="true"></i>Party
+                        </a>
+                    </nav>
+
+
+                    <!-- ICM Internal Lists-->
+                    <div class="tab-content mt-3" >
+                        <div class="tab-pane fade in show" id="docsTabsInternal" role="tabpanel" [formGroup]="icmInternalForm" [ngClass]="{ 'show active': activeICMTab === 'INTERNAL' }" >
+                            <!-- Content for INTERNAL tab -->
+
+                            <div class="form-row px-1">
+
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="fromintDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #fromintDate="ngbDatepicker" (click)="fromintDate.toggle()" 
+                                        readonly type="text" formControlName="fromDateInternal">
+                                        <label for="fromintDate" class="active">From date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="tointDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #tointDate="ngbDatepicker" (click)="tointDate.toggle()" 
+                                        readonly type="text" formControlName="toDateInternal">
+                                        <label for="tointDate" class="active">To date</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                        <select class="form-control field-ht colorful-select" (change)="onGetSelectedFromBankName($event)"
+                                            formControlName="internal_from_acc_subhead"                                    
+                                            id="internal_from_acc_subhead">
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of icmInternalresplookupsubBank" [value]="bankist.subHead" >
+                                                {{ bankist.subHead }}
+                                            </option>
+                                        </select>           
+                                        <label class="ml-3 active"> From Sub Head</label>                                                                         
+                                </div>
+                                <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                        <select class="form-control field-ht colorful-select" 
+                                            formControlName="internal_from_bank_name"                                    
+                                            id="internal_from_bank_name">
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of onGetSelectedFromBankNameLists" [value]="bankist.bankName" >
+                                                {{ bankist.bankName }}
+                                            </option>
+                                        </select>           
+                                        <label class="ml-3 active"> From Bank</label>                                                                         
+                                </div>
+
+                                <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                        <select class="form-control field-ht colorful-select" (change)="onGetSelectedToBankName($event)"
+                                            formControlName="internal_to_acc_subhead"                                    
+                                            id="internal_to_acc_subhead">
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of icmInternalresplookupsubBank" [value]="bankist.subHead" >
+                                                {{ bankist.subHead }}
+                                            </option>
+                                        </select>           
+                                        <label class="ml-3 active"> To Sub Head</label>                                                                         
+                                </div>  
+                                <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                        <select class="form-control field-ht colorful-select" 
+                                            formControlName="internal_to_bank_name"                                    
+                                            id="internal_to_bank_name">
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of onGetSelectedToBankNameLists" [value]="bankist.bankName" >
+                                                {{ bankist.bankName }}
+                                            </option>
+                                        </select>           
+                                        <label class="ml-3 active"> To Bank</label>                                                                         
+                                </div>                                  
+                                <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="internalSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                                <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="internalReset()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>                         
+                            </div>
+
+                            <div class="col-md-12 p-2">
+                                <div class="table-responsive card-body">
+                                <table datatable [dtOptions]="dtOptions10"
+                                    [dtTrigger]="dtTrigger10"
+                                    class="table table-striped w-100"
+                                    cellspacing="0"
+                                    >
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>S.No.</th>
+                                            <th>Date</th>
+                                            <th>Mode</th>
+                                            <th>Amount</th>
+                                            <th>From Head</th>
+                                            <th>From Subhead</th>
+                                            <th>From Bank</th>
+                                            <th>To Head</th>
+                                            <th>To Subhead</th>
+                                            <th>To Bank</th>
+                                            <th>Description</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of PaymentIcmInternalData; let i=index">
+                                            <td></td>
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{ item.recieved_date | date:'dd/MM/yyyy' }}</td>
+                                            <td>{{ icmPaymentModes[item.trans_mode] }}</td>
+                                            <td>{{ indianCurrency(item.trans_amount) }}</td>
+                                            <td>{{ item.from_acc_head }}</td>
+                                            <td>{{ item.from_acc_sub_head }}</td>
+                                            <td>{{ item.from_bank_name }}</td>
+                                            <td>{{ item.to_acc_head }}</td>
+                                            <td>{{ item.to_acc_sub_head }}</td>
+                                            <td>{{ item.to_bank_name }}</td>
+                                            <td data-placement="top">
+                                                <a ngbTooltip="{{item.description}}">
+                                                    {{ item.description.slice(0, 60) + (item.description.length > 40 ? "..." : "") }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="black-text" ngbTooltip="View ICM" placement="top"
+                                                (click)="ViewPaymentDetail('View_ICM_internal', item.icm_id)"
+                                                data-toggle="modal" data-target="#add_trans_modal">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                                </a>
+                                                <a class="teal-text" ngbTooltip="Edit ICM" placement="top"
+                                                (click)="ViewPaymentDetail('Edit_ICM_internal', item.icm_id)"
+                                                data-toggle="modal" data-target="#add_trans_modal">
+                                                    <i class="fa-pencil-alt px-1 fas"></i>
+                                                </a>
+                                                <a *ngIf="Admin || Accounts_Internal" class="red-text" (click)="removeICMValue(item)" mdbtooltip="Remove" placement="top">
+                                                    <i class="fa-times px-1 fas"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="PaymentIcmInternalData?.length == 0">
+                                        <tr>
+                                            <td colspan="13" class="no-data-available text-center">No data!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="tab-pane fade" id="docsTabsCustomer" role="tabpanel" [formGroup]="icmPartyCostForm" >
+                            <!-- Content for Customer tab -->
+
+                            <div class="form-row px-1">
+                                    <div class="col-md-2 px-3">
+                                            <div class="md-form md-outline ">
+                                            <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                            #fromcustreg="ngbDatepicker" (click)="fromcustreg.toggle()" readonly type="text" formControlName="fromCustsearchDate">
+                                        
+                                        <label for="fromcustreg" class="active"> From Clear date</label>
+                                    </div>
+                                </div>
+        
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline ">
+                                        <input class="form-control datepicker" placeholder="Select date" ngbDatepicker
+                                            #tocustreg="ngbDatepicker" (click)="tocustreg.toggle()" readonly type="text" formControlName="toCustsearchDate"
+                                            >
+                                        <label for="tocustreg" class="active"> To Clear date</label>
+                                    </div>
+                                </div>
+        
+        
+                                <div class="col-md-2 px-3">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="icmParty_custname">
+                                        <label for="icmParty_custname" class="active">Customer</label>
+                                    </div>
+                                </div>                          
+                            
+                            
+                                <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="custSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                                <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="custreset()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                            
+        
+                            </div>                    
+                            
+                            <div class="col-md-12 p-2">
+                                <div class="table-responsive card-body">
+                                    <table  datatable [dtOptions]="dtOptions11"
+                                        [dtTrigger]="dtTrigger11" class="table table-striped w-100" cellspacing="0"
+                                        >
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th>S.No.
+                                                </th>
+                                                <th> Clear Date
+                                                </th>
+                                                <th>Mode
+                                                </th>
+                                                <th>Amount
+                                                </th>
+                                                <th>Customer
+                                                </th>
+                                                <th>From Head
+                                                </th>
+                                                <th>From Subhead
+                                                </th>
+                                                <th>From Bank
+                                                </th>
+                                                <!-- <th width="10%">To Subhead
+                                                </th>
+                                                <th width="10%">To Bank
+                                                </th> -->
+                                                <th>To CQ No,Name
+                                                </th>
+                                                <th>Description
+                                                </th>
+                                                <th>Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of paymentIcmCustomerData;let i=index">
+                                                <td>
+                                                </td>
+                                                <td>{{i+1}}
+                                                </td>
+                                                <td>{{item.cq_clear_date | date:'dd/MM/yyyy'}}
+                                                </td>
+                                                <td>{{icmPaymentModes[item.trans_mode]}}
+                                                </td>
+                                                <td>{{indianCurrency(item.trans_amount)}}
+                                                </td>
+                                                <td>
+                                                   <a href="javascript:void(0)" class="buyer-link"
+                                                   (click)="RedirectToPaymentPlans(item.details_id,item.persons_id)">
+                                                   {{ item.select_customer }}
+                                                    </a>
+                                                </td>
+                                                <td>{{item.from_acc_head}}
+                                                </td>
+                                                <td>{{item.from_acc_sub_head}}
+                                                </td>
+                                                <td>{{item.from_bank_name}}
+                                                </td>
+                                                <!-- <td width="10%">{{item.to_acc_sub_head}}
+                                                </td>
+                                                <td width="10%">{{item.to_bank_name}}
+                                                </td> -->
+                                                <td>{{item.to_cheque_no_name}}
+                                                </td>
+                                                <td data-placement="top"> <a ngbTooltip="{{item.description}}">  {{item.description.slice(0,60) + (item.description.length>40 ? "..." :"")}} </a>
+                                                </td>
+                                                <td>
+                                                    <a class="black-text" id="{{i+1}}" ngbTooltip="View ICM"
+                                                        placement="top"
+                                                        (click)="ViewPaymentDetail('View_ICM_customer',item.icm_id)"
+                                                        data-toggle="modal" data-target="#add_trans_modal"><i
+                                                            class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="{{i+1}}" ngbTooltip="Edit ICM"
+                                                        placement="top" data-toggle="modal"
+                                                        data-target="#add_trans_modal"
+                                                        (click)="ViewPaymentDetail('Edit_ICM_customer',item.icm_id)"><i
+                                                            class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <a *ngIf="Admin || Accounts_Internal" class="red-text" (click)="removeICMValue(item)"
+                                                        mdbtooltip="Remove" placement="top"><i
+                                                            class="fa-times px-1 fas"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="paymentIcmCustomerData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
+                        </div>
+                        <div class="tab-pane fade" id="docsTabsParty" role="tabpanel" [formGroup]="icmPartysearchForm">
+                            <!-- Content for Party tab -->
+                            <div class="form-row px-1">
+
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="frominPartyDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #frominPartyDate="ngbDatepicker" (click)="frominPartyDate.toggle()" 
+                                        readonly type="text" formControlName="fromInDateParty">
+                                        <label for="frominPartyDate" class="active">From IN date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="toinPartyDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #toinPartyDate="ngbDatepicker" (click)="toinPartyDate.toggle()" 
+                                        readonly type="text" formControlName="toInDateParty">
+                                        <label for="toinPartyDate" class="active">To IN date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="fromoutPartyDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #fromoutPartyDate="ngbDatepicker" (click)="fromoutPartyDate.toggle()" 
+                                        readonly type="text" formControlName="fromOutDateParty">
+                                        <label for="fromoutPartyDate" class="active">From OUT date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input id="tooutPartyDate" class="form-control datepicker" placeholder="Select date" ngbDatepicker #tooutPartyDate="ngbDatepicker" (click)="tooutPartyDate.toggle()" 
+                                        readonly type="text" formControlName="toOutDateParty">
+                                        <label for="tooutPartyDate" class="active">To OUT date</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 px-3">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="icmParty_partyname" class="form-control" formControlName="icmParty_partyname">
+                                        <label for="icmParty_partyname" class="active">Party name</label>                                    
+                                    </div>
+                                </div>                    
+
+                                    
+                                <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="partyDataSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                                <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="partyDataReset()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>                         
+                            </div>
+
+                            <div class="col-md-12 p-2">
+                                <div class="table-responsive card-body">
+                                    <table  datatable [dtOptions]="dtOptions12"
+                                        [dtTrigger]="dtTrigger12" class="table table-striped" cellspacing="0"
+                                        width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                </th>
+                                                <th width="5%">S.No.
+                                                </th>
+                                                <th width="15%">Date
+                                                </th>
+                                                <th width="10%">Mode
+                                                </th>
+                                                <th width="10%">Amount
+                                                </th>
+                                                <th width="10%">Party 
+                                                </th>
+                                                <th width="10%">Head
+                                                </th>
+                                                <th width="10%">Subhead
+                                                </th>
+                                                <th width="10%">Bank
+                                                </th>
+                                                <th width="10%">Descriptions
+                                                </th>
+                                                <!-- <th width="10%">To Bank
+                                                </th>
+                                                <th width="10%">To Subhead
+                                                </th>
+                                                <th width="10%">To Bank
+                                                </th> -->
+    
+                                                <th width="10%">Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of paymentIcmPartyData;let i=index">
+                                                <td>
+                                                </td>
+                                                <td width="5%">{{i+1}}
+                                                </td>
+                                                <td width="15%">{{item.party_in_date | date:'dd-MM-yyyy'}}/{{item.party_out_date | date:'dd-MM-yyyy'}}
+                                                </td>
+                                                <td width="10%">{{icmPartPaymentModes[item.party_in_mode]}} / {{icmPartPaymentModes[item.party_out_mode]}}
+                                                </td>
+                                                <td width="10%">{{item.party_in_amount}} / {{item.party_out_amount}}
+                                                </td>
+                                                <td width="10%">{{item.party_name}}
+                                                </td>
+                                                <td width="10%">{{item.party_in_acc_head}} / {{item.party_out_acc_head}}
+                                                </td>
+                                                <td width="10%">{{item.party_in_acc_sub_head}} / {{item.party_out_acc_sub_head}}
+                                                </td>
+                                                <td width="10%">{{item.party_in_bank}} / {{item.party_out_bank}}
+                                                </td>
+                                                <td width="10%">{{item.party_in_description}} / {{item.party_out_description}}
+                                                </td>
+                                                <!-- <td width="10%">{{item.to_bank_name}}
+                                                </td>
+                                                <td width="10%">{{item.to_acc_sub_head}}
+                                                </td>
+                                                <td width="10%">{{item.to_bank_name}}
+                                                </td> -->
+                                                <td width="10%">
+                                                    <a class="black-text" id="{{i+1}}" ngbTooltip="View ICM"
+                                                        placement="top"
+                                                        (click)="ViewPaymentDetail('View_ICM_party',item.icm_id)"
+                                                        data-toggle="modal" data-target="#add_trans_modal"><i
+                                                            class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="{{i+1}}" ngbTooltip="Edit ICM"
+                                                        placement="top" data-toggle="modal"
+                                                        data-target="#add_trans_modal"
+                                                        (click)="ViewPaymentDetail('Edit_ICM_party',item.icm_id)"><i
+                                                            class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <a *ngIf="Admin || Accounts_Internal" class="red-text" (click)="removeICMValue(item)"
+                                                        mdbtooltip="Remove" placement="top"><i
+                                                            class="fa-times px-1 fas"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="paymentIcmPartyData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">
+                                                    No
+                                                    data!
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>                    
+                    
+                </div>
+
+                <!-- Bank Detail Lists  -->
+                <div  class="tab-pane pb-0" id="docsTabsBank" role="tabpanel"  >
+                    
+                        <!-- <button type="button" (click)="openModelBank()" class="btn btn-sm waves-light waves-effect" data-toggle="modal" #transactionBankModel data-target="#add_bank_trans_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Bank Details</button> -->
+                        <div class="form-row px-1"  [formGroup]="bankTransForm">
+
+                            <div class="col-md-2 md-form md-outline px-3">                                                                          
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_head"
+                                        (click)="onPartyInAccHeadChange($event)">
+                                        <option value=""> Select </option>            
+                                        <option *ngFor="let bankList of partyInresplookupBank" [value]="bankList.bankCategory">
+                                            {{ bankList.bankCategory }}
+                                        </option>
+                                    </select>        
+                                    <label class="ml-3 active" >Account Head</label>                                                                                
+                            </div>
+                            <div class="col-md-2 md-form md-outline px-3">                                                                           
+                                    <select class="form-control field-ht colorful-select"
+                                        formControlName="bd_acc_sub_head"
+                                        (click)="searchAccSubHeadChange($event)"
+                                        id="bd_acc_sub_head">
+                                        <option  value="">Select</option>
+                                        <option *ngFor="let bankist of partyInresplookupsubBank" [value]="bankist.subHead" >
+                                            {{ bankist.subHead }}
+                                        </option>
+                                    </select>           
+                                    <label class="ml-3 active" >Account Sub Head</label>                                                                         
+                            </div>
+                            <div class="col-md-2 md-form md-outline px-3">       
+                                <select formControlName="bd_bank_name" class="form-control field-ht colorful-select" id="bd_bank_name">     
+                                    <option  value="">Select</option>                                        
+                                    <option *ngFor="let bankList of partyInSelectedBankData" [value]="bankList.bankName">
+                                    {{bankList.bankName}}
+                                    </option>      
+                                </select>  
+                                <label class="ml-3 active" >Bank Name</label>                                 
+                            </div>
+    
+                            <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="BankSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                            <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetBankSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                           
+    
+                        </div>
+
+                        <div class="col-md-12 p-2">
+                            <div class="table-responsive card-body">
+                                <table id="buyertable" datatable [dtOptions]="dtOptions7"
+                                    [dtTrigger]="dtTrigger7" class="table table-striped" cellspacing="0"
+                                    width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                            </th>
+                                            <th>S.No.
+                                            </th>
+                                            <th> Account Head
+                                            </th>
+                                            <th> Account Sub Head
+                                            </th>
+                                            <th> Bank Name
+                                            </th>
+                                            <th> Total Amount
+                                            </th>
+                                            <!-- <th>Action
+                                            </th> -->
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of PaymentDetaildataBank;let i=index">
+                                            <td>
+                                            </td>
+                                            <td>{{i+1}}
+                                            </td>
+                                            <td>{{item.acc_head}}
+                                            </td>
+                                            <td>{{item.acc_sub_head}}
+                                            </td>
+                                            <td>{{item.bank_name}}
+                                            </td>
+                                            <td>{{indianCurrency(item.total_amount)}}
+                                            </td>
+                                            <!-- <td>
+                                                <a class="black-text" id="{{i+1}}" ngbTooltip="View ICM"
+                                                    placement="top"
+                                                    (click)="ViewBankDetail('View Bank',item.id)"
+                                                    data-toggle="modal" data-target="#add_bank_trans_modal"><i
+                                                        class="fa fa-eye" aria-hidden="true"></i></a>
+                                                <a class="teal-text" id="{{i+1}}" ngbTooltip="Edit ICM"
+                                                    placement="top" data-toggle="modal"
+                                                    data-target="#add_bank_trans_modal"
+                                                    (click)="ViewBankDetail('Edit Bank',item.id)"><i
+                                                        class="fa-pencil-alt px-1 fas"></i></a>
+                                                <a class="red-text" (click)="removeBankValue(item.id)"
+                                                    mdbtooltip="Remove" placement="top"><i
+                                                        class="fa-times px-1 fas"></i></a>
+                                            </td> -->
+                                           
+                                            
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="PaymentDetaildataBank?.length == 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available">
+                                                No
+                                                data!
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                </div>
+                
+                <!-- Report Logs Lists  -->
+                <div class="tab-pane pb-0" id="docsTabsLogs" role="tabpanel" [ngClass]="{ 'active': activeTab === 'PaymentPlanTab' }" [formGroup]="reportFormGroup" >
+                    <div class="row p-2">
+
+                        <!-- <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input name="paylast323" class="form-control datepicker" placeholder="Select date"
+                                    ngbDatepicker #paylast323="ngbDatepicker" (click)="paylast323.toggle()" formControlName="fromLogDate"
+                                    type="text">
+                                <label for="paylast323" class="active">From Log date</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 px-3">
+                            <div class="md-form md-outline">
+                                <input name="paylast542" class="form-control datepicker" placeholder="Select date"
+                                    ngbDatepicker #paylast542="ngbDatepicker" (click)="paylast542.toggle()" formControlName="toLogDate"
+                                    type="text">
+                                <label for="paylast542" class="active">To Log date</label>
+                            </div>
+                        </div> 
+                        <div class="col-md-2 md-form md-outline px-3">
+                            <select class="form-control field-ht colorful-select" formControlName="actionMode" id="actionMode" (change)="onSelectPaymentMode($event)">
+                                <option value="select" selected >Select Actions</option>
+                                <option value="Created">Created</option>
+                                <option value="Updated">Updated</option>
+                                <option value="Deleted">Deleted</option>
+                            </select>
+                            <label class="ml-3 active">Action</label>                           
+                        </div>      
+
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="LogSearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetLogSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" class="btn btn-danger btn-sm waves-effect" (click)="bulkDelete()" [disabled]="selectedLogIds.size === 0"><i class="fas fa-trash-alt mr-2"></i>Bulk Delete</button> -->
+
+
+                        <div class="col-md-12 p-2">
+                            <div class="table-responsive card-body">
+                                <table id="buyertable" datatable [dtOptions]="dtOptions9"
+                                    [dtTrigger]="dtTrigger9" class="table table-striped" cellspacing="0"
+                                    width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="3%">
+                                                <!-- <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" 
+                                                        id="selectAll"
+                                                        (change)="toggleSelectAll($event)">
+                                                    <label class="custom-control-label" for="selectAll"></label>
+                                                </div>  -->
+                                            </th>
+                                            <th width="5%">S.No.
+                                            </th>
+                                            <th width="5%">Date
+                                            </th>
+                                            <th width="5%">Time
+                                            </th>
+                                            <th width="5%">Username
+                                            </th>
+                                            <th width="10%">Actions
+                                            </th>
+                                            <th width="70%">Description
+                                            </th>
+                                            <th width="10%">Actions
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of PaymentDetaildataLog;let i=index">
+                                            <td>
+                                                <!-- <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input"
+                                                        id="check-{{item.id}}"
+                                                        [checked]="selectedLogIds.has(item.id)"
+                                                        (change)="toggleSelection(item.id, $event)">
+                                                    <label class="custom-control-label" for="check-{{item.id}}"></label>
+                                                </div> -->
+                                            </td>
+                                            <td width="5%">{{i+1}}
+                                            </td>
+                                            <td width="5%">{{item.updatedDt | date:'dd/MM/yyyy'}}
+                                            </td>
+                                            <td width="5%">{{item.updatedDt | date:'HH:mm'}}
+                                            </td>
+                                            <td width="5%">{{item.username}}
+                                            </td>
+                                            <td width="10%">{{item.action}}
+                                            </td>
+                                            <td width="70%" data-placement="top">
+                                                <a ngbTooltip="{{item.description_log}}" container="body" tooltipClass="wide-tooltip">
+                                                  {{item.description_log.slice(0, 160).split('||')[0] + (item.description_log.length > 40 ? "..." : "")}} 
+                                                  <br>
+                                                  <span *ngIf="item.description_log.split('||')[1]">
+                                                    {{item.description_log.split('||').slice(0, 10)[1] + (item.description_log.length > 40 ? "..." : "")}}
+                                                  </span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a *ngIf="Admin || Accounts_Internal" class="red-text" (click)="removeLogValue(item.id)"
+                                                    mdbtooltip="Remove" placement="top"><i
+                                                        class="fa-times px-1 fas"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody *ngIf="PaymentDetaildataLog?.length == 0">
+                                        <tr>
+                                            <td colspan="3" class="no-data-available">
+                                                No
+                                                data!
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </main>
+    <!-- Main layout -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- SCRIPTS -->
+
+</body>

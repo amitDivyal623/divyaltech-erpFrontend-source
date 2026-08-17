@@ -1,0 +1,477 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Task List
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        (click)="openmodal()"><i class="fa fa-plus" aria-hidden="true"></i> Add New Task</button>
+                    <button type="button" style="display: none;" #taskaddModel data-toggle="modal"
+                        data-target="#add_task_modal"></button>
+                    <!-- <button type="button" style="display: none;" #taskEditModel data-toggle="modal" data-target="#editTask"></button> -->
+                </h5>
+                <div [formGroup]="searchTask" class="card-body">
+                    <div class="form-row">
+                        <!-- <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="customerName" class="form-control field-ht colorful-select" id="form-customername">
+                                <option value="" selected="true">Select Assignee</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Assignee</label>
+                        </div> -->
+                        <!-- <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="userName" class="form-control field-ht colorful-select" id="form-username">
+                                <option value="" selected="true">Select Reporter</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Reporter</label>
+                        </div> -->
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input formControlName="user_task" name="user_task" type="text" id="user_task"
+                                    class="form-control">
+                                <label for="user_task" class="active">Customer name*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="from_date" placeholder="From date" [minDate]="minDate"
+                                    [maxDate]="maxDate" readonly ngbDatepicker #from="ngbDatepicker"
+                                    (click)="from.toggle()" type="text" class="form-control datepicker">
+                                <label class="ml-1 active">From Date</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="to_date" placeholder="To date" [minDate]="minDate"
+                                    [maxDate]="maxDate" readonly ngbDatepicker #to="ngbDatepicker" (click)="to.toggle()"
+                                    type="text" class="form-control datepicker">
+                                <label class="ml-1 active">To Date</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 md-form md-outline px-4">
+                            <ng-select formControlName="task_status" [items]="categories" bindLabel="name"
+                                placeholder="Select status" appendTo="body" [multiple]="true">
+                            </ng-select>
+                            <label class="top-lb active">Status</label>
+
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline input-group margin-mdform">
+                                <input type="hidden" formControlName="Tasktagid" value="{{CustTagID}}">
+                                <ng-select formControlName="filtertasktag" [items]="custtags" bindLabel="name"
+                                    placeholder="Select Tags" appendTo="body" [multiple]="true"
+                                    [(ngModel)]="taskselected" (change)="SelectedTagsValue($event)">
+                                </ng-select>
+                                <label class="top-lb active">Tags</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input formControlName="user_contact" name="user_contact" type="text" id="user_contact"
+                                    class="form-control">
+                                <label for="user_contact" class="active">Contact No.</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input formControlName="user_contact_person" name="user_contact_person" type="text"
+                                    id="user_contact_person" class="form-control">
+                                <label for="user_contact_person" class="active">Contact Person</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="taskSearchReset()"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i
+                                class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="taskSearch()"
+                            class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                                class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="CrmTaskTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="2%"></th>
+                                    <th width="5%">S.No.</th>
+                                    <th width="10%">Task Title</th>
+                                    <th width="10%">Contact Person</th>
+                                    <th width="15%">Customer Name</th>
+                                    <th width="10%">Contact Number</th>
+                                    <!-- <th width="40%">TaskDescription</th> -->
+                                    <th width="10%">Task Date</th>
+                                    <th width="10%">Status</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.taskTitle}}</td>
+                                    <td>{{item.contact_person}}</td>
+                                    <td>{{item.customerName}}</td>
+                                    <td>{{item.PhoneNumber}}</td>
+                                    <!-- <td class="overFlowData">{{item.taskDescription}}</td> -->
+                                    <td>{{item.taskDt ? item.taskDt : item.nextFollowUpDate}}</td>
+                                    <td>{{item.LookupValue}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View tasks" placement="top" ngbTooltip="View"
+                                            placement="top" (click)="editTaskdesp('view_task',item.taskId)"><i
+                                                class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit tasks" placement="top" ngbTooltip="Edit"
+                                            placement="top" (click)="editTaskdesp('edit_task',item.taskId)"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <ng-container *ngIf="item.customerId != '' && item.customerId !== null">
+                                            <a class="text-primary pr-1" id="{{i+1}}" ngbTooltip="Customer Profile"
+                                                placement="top" (click)="taskCustomerProfile(item.customerId)"><i
+                                                    class="fas fa-user"></i></a>
+                                        </ng-container>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text" ngbTooltip="Delete task"
+                                            placement="top" (click)="deletTask(item.taskId)"><i
+                                                class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                    <td colspan="6" class="no-data-available">No data available in table</td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New task modal -->
+            <div class="modal fade" id="add_task_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">{{taskHeading}}</p>
+                            <button type="button" class="close" data-dismiss="modal" (click)="taskModalClosed()"
+                                aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <form [formGroup]="addTask" class="modal-body">
+                            <input type="hidden" id="task_id" name="task_id" formControlName="task_id">
+                            <input type="hidden" id="customer_id" name="customer_id" formControlName="customer_id"
+                                value="">
+                            <input type="hidden" id="enquiry_id" name="enquiry_id" formControlName="enquiry_id">
+
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <ng-autocomplete [data]="customerdataList" formControlName="visitor_name"
+                                            [searchKeyword]="keyword" (selected)='selectCust($event)'
+                                            (inputChanged)='onCustomerSearch($event);' [itemTemplate]="itemTemplate"
+                                            [ngClass]="{ 'is-invalid': (submitted && addTask.controls['visitor_name'].invalid ) || (addTask.controls['visitor_name'].invalid && addTask.controls['visitor_name'].touched)}">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                            <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                            <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                        </ng-template>
+                                        <label for="visitor_name" class="active">Customer Name</label>
+                                        <div *ngIf="(submitted && addTask.controls['visitor_name'].invalid ) || (addTask.controls['visitor_name'].touched && addTask.controls['visitor_name'].invalid)"
+                                            class="invalid-feedback">Customer Name is required</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input formControlName="contact_no" name="contact_no" type="text"
+                                            id="contact_no" class="form-control">
+                                        <label for="contact_no" class="active">Contact No.*</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <input type="date" formControlName="last_followup_date" id="last_followup_date"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': (submitted && addTask.controls['last_followup_date'].invalid) || (addTask.controls['last_followup_date'].touched && addTask.controls['last_followup_date'].invalid)}">
+
+                                        <label for="last_followup_date" class="active mt-3">
+                                            Followup Date
+                                        </label>
+
+                                        <div *ngIf="(submitted && addTask.controls['last_followup_date'].invalid) || (addTask.controls['last_followup_date'].touched && addTask.controls['last_followup_date'].invalid)"
+                                            class="invalid-feedback">
+                                            Followup Date is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" style="height:42px"
+                                            formControlName="task_description" class="md-textarea form-control" rows="3"
+                                            [ngClass]="{ 'is-invalid': (submitted && addTask.controls['task_description'].invalid ) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)}"></textarea>
+                                        <label for="form10" class="active">Task Description*</label>
+                                        <div *ngIf=" (submitted && addTask.controls['task_description'].invalid) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTask.controls['task_description'].invalid) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)">
+                                                Description is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="visited_plot" formControlName="visited_plot"
+                                            class="form-control" readonly>
+                                        <label for="visited_plot" class="active">Visited Plot</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4 px-1">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="taskAction"
+                                            class="form-control field-ht colorful-select"
+                                            (change)='onOptionsSelected($event)'
+                                            [ngClass]="{ 'is-invalid': (submitted && addTask.controls['taskAction'].invalid ) || (addTask.controls['taskAction'].invalid && addTask.controls['taskAction'].touched)}">
+                                            <option value="" selected="true" disabled="disabled">Select Task Action*
+                                            </option>
+                                            <option *ngFor="let Status of taskAction" value={{Status.LookupDataId}}>
+                                                {{Status.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-0 active">Task Action</label>
+                                        <div *ngIf=" (submitted && addTask.controls['taskAction'].invalid) || (addTask.controls['taskAction'].invalid && addTask.controls['taskAction'].touched)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTask.controls['taskAction'].invalid) || (addTask.controls['taskAction'].invalid && addTask.controls['taskAction'].touched)">
+                                                Task Action is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="status" class="form-control field-ht colorful-select"
+                                            [ngClass]="{ 'is-invalid': (submitted && addTask.controls['status'].invalid ) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)}">
+                                            <option value="" selected="true" disabled="disabled">Select Status*</option>
+                                            <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                                {{Status.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-0 active">Status</label>
+                                        <div *ngIf=" (submitted && addTask.controls['status'].invalid) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)"
+                                            class="invalid-feedback">
+                                            <div
+                                                *ngIf=" (submitted && addTask.controls['status'].invalid) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)">
+                                                Status is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div [formGroup]="OnlyPLotShownBY" class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+
+                                        <ng-autocomplete [data]="employeedataList" [searchKeyword]="keyword"
+                                            (click)="employeelistData($event)"
+                                            (inputChanged)='onEmployeeSearch($event);'
+                                            (selected)="onPlotShownBySelected($event)" [itemTemplate]="itemTemplate"
+                                            formControlName="selectedPlotShownBy" id="plotShowBy" name="plotShowBy"
+                                            [ngClass]="{ 'is-invalid': (submitted && OnlyPLotShownBY.controls['selectedPlotShownBy'].invalid) || (OnlyPLotShownBY.controls['selectedPlotShownBy'].touched && OnlyPLotShownBY.controls['selectedPlotShownBy'].invalid)}">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                            <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                            <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                        </ng-template>
+                                        <label for="plotShownBy" class="active" style="z-index: 1000;">Plot Shown
+                                            By</label>
+
+                                        <div *ngIf="(submitted && OnlyPLotShownBY.controls['selectedPlotShownBy'].invalid) || (OnlyPLotShownBY.controls['selectedPlotShownBy'].touched && OnlyPLotShownBY.controls['selectedPlotShownBy'].invalid)"
+                                            class="invalid-feedback">
+                                            Plot Shown By is required
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row" *ngIf="!isAddingTask">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="task_action_response"
+                                            class="md-textarea form-control" rows="3" style="height:50px"></textarea>
+                                        <label for="task_action_response" class="active">Task Action Response</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div *ngIf="followupadd && !isAddingTask">
+                                <div style="border: 2px solid #ddd; margin-top: 10px; padding: 4px ">
+                                    <div class="col-lg-12">
+                                        <div class="md-form md-outline">
+                                            <input class="form-check-input filled-in CalendarForm" type="checkbox"
+                                                name="nextFollowCRM" value="1" id="nextFollowCRM"
+                                                [checked]="additionalFollow" (change)=showFollowup($event)>
+                                            <label for="nextFollowCRM">Next Follow Up</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" [formGroup]="nextFollowup" *ngIf="additionalFollow">
+                                        <div class="col-lg-6 col-md-12 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="date" formControlName="followup_date" id="followup_date"
+                                                    class="form-control"
+                                                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_date'].invalid ) || (nextFollowup.controls['followup_date'].invalid && nextFollowup.controls['followup_date'].touched)}">
+                                                <label for="followup_date" class="active mt-3">Date</label>
+                                                <div *ngIf="(submitted && nextFollowup.controls['followup_date'].invalid ) || (nextFollowup.controls['followup_date'].touched && nextFollowup.controls['followup_date'].invalid)"
+                                                    class="invalid-feedback">Date is required</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-12 px-2">
+                                            <div class="md-form md-outline">
+                                                <input type="time" placeholder="Select Time"
+                                                    formControlName="followup_Time" id="followup_Time"
+                                                    class="form-control datepicker CalendarForm"
+                                                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].invalid && nextFollowup.controls['followup_Time'].touched)}">
+                                                <label for="followup_Time" class="active">Time</label>
+                                                <div *ngIf="(submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].touched && nextFollowup.controls['followup_Time'].invalid)"
+                                                    class="invalid-feedback">Time is required</div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col-lg-12 col-md-12 px-2">
+                                            <div class=" md-form md-outline">
+                                                <textarea type="text" formControlName="followup_notes"
+                                                    class="md-textarea form-control" rows="2" [readonly]="Access"
+                                                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].invalid && nextFollowup.controls['followup_notes'].touched)}">
+                                            </textarea>
+                                                <label class="active" for="form10">Description*</label>
+                                                <div *ngIf="(submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].touched && nextFollowup.controls['followup_notes'].invalid)"
+                                                    class="invalid-feedback">Description is required</div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div [formGroup]="MoreFollowUps">
+                                <div class="md-form md-outline">
+                                    <div class="col-md-12 px-2 mt-2"
+                                        *ngFor="let addressGroup of MoreFollowUps.get('address')['controls'];let i = index"
+                                        [formGroup]="addressGroup">
+                                        <div *ngIf="isHideFollowUps" class="row"
+                                            style="border: 2px solid #ddd; margin-top: 14px; padding: 4px; width: 755px; position: relative; left: 6px; ">
+
+                                            <div class="col-lg-5 col-md-12 px-2">
+                                                <div class="md-form md-outline">
+                                                    <input type="date" formControlName="fuDate" id="fuDate_{{i}}"
+                                                        name="fuDate_{{i}}" class="form-control" style="height:33px;">
+                                                    <label for="fuDate_{{i}}" class="active mt-3">Date</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-12 px-2">
+                                                <div class="md-form md-outline">
+                                                    <input type="time" placeholder="Select Time"
+                                                        formControlName="fuTime" id="fuTime_{{i}}"
+                                                        [ngStyle]="{'background-color': isChangeDisableColor === false ? '#e9ecef' : '','width': '160px','border-radius': '0px','height': '33px','color': 'grey','padding-left': '12px','padding-top': '4px'}"
+                                                        name="fuTime_{{i}}" class="form-control-md"
+                                                        style="width: 350px;border-radius: 0px; height: 33px;color:grey; padding-left: 12px;padding-top: 4px;"
+                                                        [ngClass]="{ 'is-invalid': (submitted && MoreFollowUps.get('address')['controls'][i].get('fuTime').invalid ) || (MoreFollowUps.get('address')['controls'][i].get('fuTime').invalid && MoreFollowUps.get('address')['controls'][i].get('fuTime').touched)}">
+                                                    <label for="followup_Time" class="active">Time</label>
+                                                    <div *ngIf=" (submitted && MoreFollowUps.get('address')['controls'][i].get('fuTime').invalid && MoreFollowUps.get('address')['controls'][i].get('fuTime').errors.required) || (MoreFollowUps.get('address')['controls'][i].get('fuTime').invalid && MoreFollowUps.get('address')['controls'][i].get('fuTime').touched && MoreFollowUps.get('address')['controls'][i].get('fuTime').errors.required)"
+                                                        class="invalid-feedback">Time is required
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-8 px-2">
+                                                <div class="md-form md-outline">
+                                                    <textarea type="text" class="md-textarea form-control" rows="2"
+                                                        [readonly]="Access" id="fuDesp_{{i}}" name="fuDesp_{{i}}"
+                                                        formControlName="fuDesp"
+                                                        [ngClass]="{ 'is-invalid': (submitted && MoreFollowUps.get('address')['controls'][i].get('fuDesp').invalid ) || (MoreFollowUps.get('address')['controls'][i].get('fuDesp').invalid && MoreFollowUps.get('address')['controls'][i].get('fuDesp').touched)}"
+                                                        style="width: 650px;">
+                                                    </textarea>
+                                                    <label for="fuDesp" class="active">Description</label>
+                                                    <div *ngIf=" (submitted && MoreFollowUps.get('address')['controls'][i].get('fuDesp').invalid && MoreFollowUps.get('address')['controls'][i].get('fuDesp').errors.required) || (MoreFollowUps.get('address')['controls'][i].get('fuDesp').invalid && MoreFollowUps.get('address')['controls'][i].get('fuDesp').touched && MoreFollowUps.get('address')['controls'][i].get('fuDesp').errors.required)"
+                                                        class="invalid-feedback">Bank is required.
+                                                    </div>
+                                                </div>
+                                            </div> -->
+
+                                            <div class="col-lg-2 col-md-2 px-2 text-center mt-2 ">
+                                                <button mdbRipple type="button" *ngIf="isHideTaskSave && !CRMAdmin && !CrmUserRole"
+                                                    class="btn btn-danger btn-sm waves-effect waves-light mt-0"
+                                                    (click)="deleteAddressGroup(i)" style="position:relative;left:80px;top:2px">
+
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 px-0" *ngIf="hideAddMoreFollowUpButton && !isAddingTask"
+                                        style="margin-left: 10px;">
+                                        <button type="button" (click)="addNewFollowUpGroup()"
+                                            class="btn btn-secondary btn-sm blue-gradient waves-light waves-effect ml-0"><i
+                                                class="fa fa-plus mr-2" aria-hidden="true"></i>Add More Follow
+                                            Up</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="!isAddingTask" class="col-md-12 px-1" style="margin-top:20px;">
+                                <div class="md-form md-outline">
+                                    <textarea name="t_Pay" class="form-control" readonly style="height:150px"
+                                        formControlName="task_action_response_logs" rows="3
+                                    "></textarea>
+                                    <label for="t_Pay" class="active"> Response Logs:</label>
+                                </div>
+                            </div>
+                        </form>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal"
+                                (click)="taskModalClosed()">Cancel</button>
+                            <button type="button" *ngIf="isHideTaskSave" (click)="insertTask()"
+                                class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    <!-- Main layout -->
+
+</body>

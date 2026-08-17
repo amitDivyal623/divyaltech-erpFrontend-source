@@ -1,0 +1,484 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Property Info List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_property_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Entry</button>
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_property_type_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Property Type</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-Property" class="form-control">
+                                <label for="form-Property" class="">Property Type</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 mb-2">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Property type
+                                    </th>
+                                    <th>Description
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>Plot</td>
+                                    <td>Detail</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_property_info_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_property_info_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>Flat</td>
+                                    <td>Detail</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_property_info_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_property_info_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>3</td>
+                                    <td>Flat</td>
+                                    <td>Detail</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_property_info_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_property_info_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4</td>
+                                    <td>Plot</td>
+                                    <td>Detail</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_property_info_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_property_info_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New Property type modal -->
+            <div class="modal fade" id="add_property_type_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Property Type</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="property_type" class="form-control" required="">
+                                        <label for="property_type" class="">Property type</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Add New Property modal -->
+            <div class="modal fade" id="add_property_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Entry</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" id="prop_type">
+                                            <option value="" selected="true" disabled="disabled">Select Property Type</option>
+                                            <option value="plot">Plot</option>
+                                            <option value="flat">Flat</option>
+                                            <option value="land">Land House</option>
+                                            <option value="complex">Complex</option>
+                                        </select>
+                                    <label class="ml-2 active">Property type</label>
+                                </div>
+                                <div class="col-6 plot box" id="plot_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_number" class="form-control" required="">
+                                        <label for="f2" class="">Plot Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 land box" id="land_house" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="">
+                                        <label for="f2" class="">House Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 complex box" id="complex_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="complex_number" class="form-control" required="">
+                                        <label for="f2" class="">Complex Number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6 flat box" id="flat_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="">
+                                        <label for="f2" class="">Flat Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 plot box" id="plot_size" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_size" class="form-control" required="">
+                                        <label for="f2" class="">Plot Size</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 flat box" id="flat_block" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="block_number" class="form-control" required="">
+                                        <label for="f2" class="">Block Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 flat box" id="flat_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_name" class="form-control" required="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 land box" id="land_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_land" class="form-control" required="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 complex box" id="complex_name" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="place_name" class="form-control" required="">
+                                        <label for="f2" class="">Place Name</label>
+                                    </div>
+                                </div>
+                                <div class="col complex land plot flat box" id="flat_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="area_flat" class="form-control" required="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col complex land plot flat box" id="plot_desp" style="display: none;">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="2" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- View Property modal -->
+            <div class="modal fade" id="view_property_info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Entry</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                            <option value="" selected="true" disabled="disabled">Select Property Type</option>
+                                            <option value="plot" selected>Plot</option>
+                                            <option value="flat">Flat</option>
+                                            <option value="land">Land House</option>
+                                            <option value="complex">Complex</option>
+                                        </select>
+                                    <label class="ml-2 active">Property type</label>
+                                </div>
+                                <div class="col-6 plot box" id="plot_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_number" class="form-control" required="">
+                                        <label for="f2" class="">Plot Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 land box" id="land_house" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="">
+                                        <label for="f2" class="">House Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 complex box" id="complex_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="complex_number" class="form-control" required="">
+                                        <label for="f2" class="">Complex Number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-6 flat box" id="flat_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="">
+                                        <label for="f2" class="">Flat Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 plot box" id="plot_size" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_size" class="form-control" required="">
+                                        <label for="f2" class="">Plot Size</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 flat box" id="flat_block" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="block_number" class="form-control" required="">
+                                        <label for="f2" class="">Block Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 flat box" id="flat_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_name" class="form-control" required="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 land box" id="land_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_land" class="form-control" required="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-6 complex box" id="complex_name" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="place_name" class="form-control" required="">
+                                        <label for="f2" class="">Place Name</label>
+                                    </div>
+                                </div>
+                                <div class="col complex land plot flat box" id="flat_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="area_flat" class="form-control" required="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col complex land plot flat box" id="plot_desp" style="display: none;">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="2" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Edit Property modal -->
+            <div class="modal fade" id="edit_property_info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Edit Property Type</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Property Type</option>
+                                            <option value="plot" selected>Plot</option>
+                                            <option value="flat">Flat</option>
+                                            <option value="land">Land House</option>
+                                            <option value="complex">Complex</option>
+                                        </select>
+                                    <label class="ml-2 active">Property type</label>
+                                </div>
+                                <div class="col plot box" id="plot_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_number" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Plot Number</label>
+                                    </div>
+                                </div>
+                                <div class="col flat box" id="flat_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Flat Number</label>
+                                    </div>
+                                </div>
+                                <div class="col land box" id="land_house" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="flat_number" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">House Number</label>
+                                    </div>
+                                </div>
+                                <div class="col complex box" id="complex_no" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="complex_number" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Complex Number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col plot box" id="plot_size" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="plot_size" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Plot Size</label>
+                                    </div>
+                                </div>
+                                <div class="col plot box" id="plot_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="area" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                                <div class="col flat box" id="flat_block" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="block_number" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Block Number</label>
+                                    </div>
+                                </div>
+                                <div class="col flat box" id="flat_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_name" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col land box" id="land_society" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="society_land" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Society Name</label>
+                                    </div>
+                                </div>
+                                <div class="col land box" id="land_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="area_land" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                                <div class="col complex box" id="complex_name" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="place_name" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Place Name</label>
+                                    </div>
+                                </div>
+                                <div class="col complex box" id="complex_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="complex_area" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col plot complex land flat box" id="plot_desp" style="display: none;">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="2" required="" disabled=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                                <div class="col flat box" id="flat_area" style="display: none;">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="area_flat" class="form-control" required="" disabled="">
+                                        <label for="f2" class="">Area</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

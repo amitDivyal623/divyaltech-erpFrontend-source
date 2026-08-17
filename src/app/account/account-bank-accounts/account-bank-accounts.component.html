@@ -1,0 +1,433 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Bank Accounts Lists
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_bill_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add BAnk Accounts </button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row" [formGroup]="bankformGroup">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="bankCategory"  class="form-control field-ht colorful-select">
+                                <option value="" selected="true" disabled="disabled">Select Category</option>
+                                <option value="Firm">Firm</option>
+                                <option value="Firm Personal">Firm Personal</option>
+                                <option value="Kissan">Kissan</option>
+                                <option value="Kissan Personal">Kissan Personal</option>
+                                <option value="Vendor">Vendor</option>
+                                <option value="Broker">Broker</option>
+                            </select>
+                            <label class="ml-4 active">Category</label>
+                        </div>
+                
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="bankCatName"  id="form-customer" class="form-control">
+                                <label for="form-customer" class="active">Category Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="resetSearch()">
+                            <i class="fas fa-redo-alt mr-2" aria-hidden="true"></i> Reset
+                        </button>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm waves-light waves-effect" (click)="registrySearch()">
+                            <i class="fa fa-search mr-2" aria-hidden="true"></i>Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 mb-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="bankDetailsDatatable" datatable [dtOptions]="dtOptions"
+                        [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Category
+                                    </th>
+                                    <th>Category Name
+                                    </th>
+                                    <th>Bank Name
+                                    </th>
+                                    <th>Account No.
+                                    </th>
+                                    <th>IFSC Code
+                                    </th>
+                                    <th>Branch Address
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of paymentplan;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.bank_category}}</td>
+                                    <td>{{item.bank_cat_name}}</td>
+                                    <td>{{item.bank_name}}</td>
+                                    <td>{{item.bank_acc_no}}</td>
+                                    <td>{{item.bank_ifsc}}</td>
+                                    <td>{{item.bank_branch_add}}</td>
+                                    <td>
+                                        <a class="black-text" ngbTooltip="View" placement="top" data-toggle="modal" data-target="#view_bank_modal" (click)="openModalPayPlan('View',item.accounts_id)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" ngbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_bill_modal" (click)="openModalPayPlan('Edit',item.accounts_id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" ngbtooltip="Remove" placement="top" (click)="deleteAccounts(item.accounts_id)"><i class="fa-times px-1 fas" ></i></a>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tbody *ngIf="paymentplan?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">
+                                        No data!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New banl account modal -->
+            <div class="modal fade" id="add_bill_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Bank Account</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="resetformbutton()">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <!-- Body -->
+                        <form>
+                            <div class="modal-body" [formGroup]="bankformGroup">
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankCategory" class="form-control field-ht colorful-select"
+                                            [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankCategory'].invalid) }">
+                                            <option value="" selected="true" disabled="disabled">Select Category</option>
+                                            <option value="Firm">Firm</option>
+                                            <option value="Firm Personal">Firm Personal</option>
+                                            <option value="Kissan">Kissan</option>
+                                            <option value="Kissan Personal">Kissan Personal</option>
+                                            <option value="Vendor">Vendor</option>
+                                            <option value="Broker">Broker</option>
+                                        </select>
+                                        <label class="ml-2 active">Category</label>
+                                        <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankCategory'].invalid">
+                                            <p>Please select a category.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankCatName" type="text" class="form-control"
+                                                [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankCatName'].invalid) }">
+                                            <label class="ml-2 active">Category Name</label>
+                                            <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankCatName'].invalid">
+                                                <p>Please enter a category name.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankName" class="form-control field-ht colorful-select"
+                                            [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankName'].invalid) }">
+                                            <option value="" selected="true" disabled="disabled">Select Bank Name</option>
+                                            <option *ngFor="let bankList of resplookupBank" [value]="bankList.LookupValue">
+                                                {{ bankList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Bank Name</label>
+                                        <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankName'].invalid">
+                                            <p>Please enter bank name.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankAccNo" type="text" class="form-control"
+                                                [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankAccNo'].invalid) }">
+                                            <label class="ml-2 active">Bank Account No.</label>
+                                            <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankAccNo'].invalid">
+                                                <p>Please enter a bank account number.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankIfsc" type="text" class="form-control"
+                                                [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankIfsc'].invalid) }">
+                                            <label class="ml-2 active">IFSC Code</label>
+                                            <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankIfsc'].invalid">
+                                                <p>Please enter IFSC code.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankBranchAdd" type="text" class="form-control"
+                                                [ngClass]="{ 'is-invalid': (submit_btn && bankformGroup.controls['bankBranchAdd'].invalid) }">
+                                            <label class="ml-2 active">Branch Address</label>
+                                            <div class="invalid-feedback" *ngIf="submit_btn && bankformGroup.controls['bankBranchAdd'].invalid">
+                                                <p>Please enter branch address.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-sm btn-outline-success waves-effect" (click)="submitBankDetails()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- View bank modal -->
+            <div class="modal fade" id="view_bank_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Bank Account</p>
+                            <button type="button" (click)="resetformbutton()" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <!-- Body -->
+                        <form >
+                            <div class="modal-body" [formGroup]="bankformGroup">
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankCategory" class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Category</option>
+                                            <option value="Firm">Firm</option>
+                                            <option value="Firm Personal">Firm Personal</option>
+                                            <option value="Kissan">Kissan</option>
+                                            <option value="Kissan Personal">Kissan Personal</option>
+                                            <option value="Vendor">Vendor</option>
+                                            <option value="Broker">Broker</option>
+                                        </select>
+                                        <label class="ml-2 active">Category</label>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankCatName" type="text" class="form-control">
+                                            <label class="ml-2 active">Category Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankName" class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Bank Name</option>
+                                            <option *ngFor="let bankList of resplookupBank" [value]="bankList.LookupValue">
+                                                {{ bankList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Bank Name</label>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankAccNo" type="text" class="form-control">
+                                            <label class="ml-2 active">Bank Account No.</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+ 
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankIfsc"  type="text" class="form-control">
+                                            <label class="ml-2 active">IFSC Code</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankBranchAdd" type="text" class="form-control">
+                                            <label class="ml-2 active">Branch Address</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button"  (click)="resetformbutton()" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                                <!-- <button type="submit" class="btn btn-sm btn-outline-success waves-effect"  (click)="submitBankDetails()">Save</button> -->
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Edit bill modal -->
+            <div class="modal fade" id="edit_bill_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Bank Account</p>
+                            <button type="button" (click)="resetformbutton()" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                    
+                        <!-- Body -->
+                        <form >
+                            <div class="modal-body" [formGroup]="bankformGroup">
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankCategory" class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Category</option>
+                                            <option value="Firm">Firm</option>
+                                            <option value="Firm Personal">Firm Personal</option>
+                                            <option value="Kissan">Kissan</option>
+                                            <option value="Kissan Personal">Kissan Personal</option>
+                                            <option value="Vendor">Vendor</option>
+                                            <option value="Broker">Broker</option>
+                                        </select>
+                                        <label class="ml-2 active">Category</label>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankCatName" type="text" class="form-control">
+                                            <label class="ml-2 active">Category Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <select formControlName="bankName" class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Bank Name</option>
+                                            <option *ngFor="let bankList of resplookupBank" [value]="bankList.LookupValue">
+                                                {{ bankList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Bank Name</label>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankAccNo" type="text" class="form-control">
+                                            <label class="ml-2 active">Bank Account No.</label>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+ 
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankIfsc"  type="text" class="form-control">
+                                            <label class="ml-2 active">IFSC Code</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="bankBranchAdd" type="text" class="form-control">
+                                            <label class="ml-2 active">Branch Address</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button"  (click)="resetformbutton()" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-sm btn-outline-success waves-effect"  (click)="edit_submitBankDetails()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script>
+        // SideNav Initialization
+        $(".button-collapse ").sideNav();
+
+        var container = document.querySelector('.custom-scrollbar');
+        var ps = new PerfectScrollbar(container, {
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
+    <script>
+        $('#dt-material-checkbox, #dt-material-checkbox1').dataTable({
+
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 5
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            }
+        });
+        $('#dtMaterialDesignExample_wrapper, #dt-material-checkbox_wrapper').find('label').each(function() {
+            $(this).parent().append($(this).children());
+        });
+        $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').find(
+            'input')(function() {
+
+            $('input').removeClass('form-control-sm');
+        });
+        $('#dtMaterialDesignExample_wrapper .dataTables_length, #dt-material-checkbox_wrapper .dataTables_length').addClass(
+            'd-flex flex-row');
+        $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').addClass(
+            'md-form');
+        $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').removeClass(
+            'custom-select custom-select-sm form-control form-control-sm');
+        $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').addClass('mdb-select');
+        $('#dtMaterialDesignExample_wrapper .mdb-select, #dt-material-checkbox_wrapper .mdb-select').materialSelect();
+        $('#dtMaterialDesignExample_wrapper .dataTables_filte, #dt-material-checkbox_wrapper .dataTables_filterr').find(
+            'label').remove();
+    </script>
+</body>

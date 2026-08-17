@@ -1,0 +1,157 @@
+<div class="row">
+	<div class="col-lg-12 col-md-12">
+		<div class="row py-2 px-2" [formGroup]="searchGSTSetup">
+			<div class="col-md-3 px-2">
+				<div class=" md-form md-outline">
+					<input type="text" id="code" class="form-control" formControlName="searchGSTCODE">
+					<label for="code" class="">GST Code</label>
+				</div>
+			</div>
+			<div class="col-md-3 px-2">
+				<div class=" md-form md-outline">
+					<input type="text" id="ParentGST" class="form-control" formControlName="searchparentGSTCode">
+					<label for="ParentGST" class="">Parent GST Code</label>
+				</div>
+			</div>
+			<div class="col-md-2 px-2">
+				<button class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="SearchGST()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+			</div>
+			<div class="col-md-3 px-2">
+				<button type="button" (click)="AddGSTPopup()"
+					class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus"
+						aria-hidden="true"></i> Add New GST
+					Code</button>
+			</div>
+		</div>
+		<button type="button" style="display: none;" #modalbutton data-toggle="modal" data-target="#add_gst_code"></button>
+	</div>
+	<div class="col-lg-12 col-md-12 px-0">
+		<div class="container-fluid my-3">
+			<section>
+				<div class="card">
+					<div class="table-responsive card-body">
+						<table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>S.No.
+									</th>
+									<th>GST Code
+									</th>
+									<th>Parent GST Code
+									</th>
+									<th>IGST
+									</th>
+									<th>SGST
+									</th>
+									<th>CGST
+									</th>
+									<th>Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr  *ngFor="let item of data;let i=index">
+									<td></td>
+									<td>{{i+1}}</td>
+									<td>{{item.GST_code}}</td>
+									<td>{{item.ParentGST_Code}}</td>
+									<td>{{item.IGST}}</td>
+									<td>{{item.SGST}}</td>
+									<td>{{item.CGST}}</td>
+									<td>
+										<a class="black-text" mdbtooltip="View" (click)="viewGSTPopup(item.GST_setupID)" placement="top"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a class="teal-text" mdbtooltip="Edit" (click)="editGSTPopup(item.GST_setupID)" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+										<a class="red-text" mdbtooltip="Remove" (click)="deleteGST(item.GST_setupID)" placement="top"><i class="fa-times px-1 fas"></i></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+			<!-- Add New property sale modal -->
+			<div class="modal fade" id="add_gst_code" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+					<!-- Content -->
+					<div class="modal-content">
+						<!-- Header -->
+						<div class="modal-header mdb-color">
+							<p class="heading lead font-weight-bold" id="heading" >Add New GST Code</p>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true" class="white-text">&times;</span>
+							</button>
+						</div>
+						<!-- Body -->
+						<form [formGroup]="GSTSetup">
+							<div class="modal-body">
+								<div class="form-row">
+									<div class="col-lg-4 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="hidden" name="GSTsetuID" formControlName="GSTsetuID">
+											<input type="text" id="prod-id" class="form-control" formControlName="GSTCODE" name="GSTCODE"
+												[ngClass]="{ 'is-invalid': (submitted && GSTSetup.controls['GSTCODE'].invalid ) || (GSTSetup.controls['GSTCODE'].invalid && GSTSetup.controls['GSTCODE'].touched)}">
+											<label for="prod-id" class="{{activefiled}}">GST Code</label>
+											<div *ngIf=" (submitted && GSTSetup.controls['GSTCODE'].invalid) || (GSTSetup.controls['GSTCODE'].invalid && GSTSetup.controls['GSTCODE'].touched)"
+												class="invalid-feedback">Please Enter GST Code</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="prod-name" class="form-control"
+												formControlName="parentGSTCode" name="parentGSTCode"
+												[ngClass]="{ 'is-invalid': (submitted && GSTSetup.controls['parentGSTCode'].invalid ) || (GSTSetup.controls['parentGSTCode'].invalid && GSTSetup.controls['parentGSTCode'].touched)}">
+											<label for="prod-name" class="{{activefiled}}">Parent GST Code</label>
+											<div *ngIf=" (submitted && GSTSetup.controls['parentGSTCode'].invalid) || (GSTSetup.controls['parentGSTCode'].invalid && GSTSetup.controls['parentGSTCode'].touched)"
+												class="invalid-feedback">Please Enter Parent GST Code</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="pshort-name" class="form-control"
+												formControlName="IGST" name="IGST"
+												[ngClass]="{ 'is-invalid': (submitted && GSTSetup.controls['IGST'].invalid ) || (GSTSetup.controls['IGST'].invalid && GSTSetup.controls['IGST'].touched)}">
+											<label for="pshort-name" class="{{activefiled}}">IGST</label>
+											<div *ngIf=" (submitted && GSTSetup.controls['IGST'].invalid) || (GSTSetup.controls['IGST'].invalid && GSTSetup.controls['IGST'].touched)"
+												class="invalid-feedback">Please Enter IGST</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-12 px-2">
+										<div class="md-form md-outline">
+											<input type="text" id="prod-desp" class="form-control"
+												formControlName="SGST" name="SGST"
+												[ngClass]="{ 'is-invalid': (submitted && GSTSetup.controls['SGST'].invalid ) || (GSTSetup.controls['SGST'].invalid && GSTSetup.controls['SGST'].touched)}">
+											<label for="prod-desp" class="{{activefiled}}">SGST</label>
+											<div *ngIf=" (submitted && GSTSetup.controls['SGST'].invalid) || (GSTSetup.controls['SGST'].invalid && GSTSetup.controls['SGST'].touched)"
+												class="invalid-feedback">Please Enter SGST</div>
+										</div>
+									</div>
+									<div class="col-lg-4 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="location" class="form-control" formControlName="CGST"
+												name="CGST"
+												[ngClass]="{ 'is-invalid': (submitted && GSTSetup.controls['CGST'].invalid ) || (GSTSetup.controls['CGST'].invalid && GSTSetup.controls['CGST'].touched)}">
+											<label for="location" class="{{activefiled}}">CGST</label>
+											<div *ngIf=" (submitted && GSTSetup.controls['CGST'].invalid) || (GSTSetup.controls['CGST'].invalid && GSTSetup.controls['CGST'].touched)"
+												class="invalid-feedback">Please Enter CGST</div>
+										</div>
+									</div>
+
+								</div>
+							</div>
+						</form>
+						<!-- Footer -->
+						<div class="modal-footer mx-3">
+							<a type="button" class="btn btn-sm btn-danger" #closebutton data-dismiss="modal">Cancel</a>
+							<span *ngIf="save_btn">
+								<a *ngIf="GSTViewTAb" type="button" class="btn btn-sm btn-outline-success waves-effect" (click)="saveGstSetup()">Save</a>
+							</span>
+						</div>
+					</div>
+					<!-- Content -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

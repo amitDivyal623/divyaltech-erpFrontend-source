@@ -1,0 +1,1131 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+        <style>
+            .buyer-link {
+                color: #504f4f;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .buyer-link:hover {
+                color: #007bff; 
+            }
+        </style> 
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-3 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Payment Followup
+                    <!-- <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        (click)="openmodal()"><i class="fa fa-plus" aria-hidden="true"></i> Add New FollowUp</button>
+                    <button type="button" style="display: none;" #taskaddModel data-toggle="modal"
+                        data-target="#add_task_modal"></button> -->
+                    <!-- <button type="button" style="display: none;" #taskEditModel data-toggle="modal" data-target="#editTask"></button> -->
+                </h5>
+                <div [formGroup]="paymentfollowUp" class="card-body">
+                    <div class="form-row">
+
+                        <div class="col-md-2 px-2">
+                            <div class=" md-form md-outline pr-2">
+                          
+                                <input type="text" id="form_buyer" class="form-control" formControlName="buyername">
+                                <label for="Buyer_name" class="active">Buyer Name</label>
+                              
+                            </div>
+                            
+                        </div>
+                        <!-- <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="planDate" [minDate]="minDate"
+                                    [maxDate]="maxDate" readonly ngbDatepicker #pDate="ngbDatepicker"
+                                    (click)="pDate.toggle()" type="text" id="planDate" name="planDate"
+                                    class="form-control datepicker">
+                                <label for="planDate" class="active">Plan Date</label>
+                            </div>
+                        </div> -->
+                        
+                        <div class="col-md-1 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <select formControlName="planStatus" id="planStatus" class="form-control">
+                                    <option value="Select status" selected disabled>Select status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="On-Hold">On-Hold</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                                <label for="planStatus" class="active">Status</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <select formControlName="planMode" id="planMode" class="form-control">
+                                    <option value="Select status" selected disabled>Select status</option>
+                                    <option value="Cheque">Cheque</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="DD">DD</option>
+                                </select>
+                                <label for="planMode" class="active">Mode</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                
+                                <input type="text" id="form_buyer" class="form-control" formControlName="totalAmount" readonly
+                                [value]="paymentfollowUp.get('totalAmount').value | currency: 'INR'">
+                                <label for="form_buyer" class="active">Total Amount</label>                                                                
+                                
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-2 px-2">
+                            <div class="md-form md-outline ">
+                                <input class="form-control datepicker" id="fuPlanDate" placeholder="Select date" ngbDatepicker
+                                    #last="ngbDatepicker" (click)="last.toggle()" readonly type="text"
+                                    formControlName="fuPlanDate">
+                                <label for="last" class="active">Plan date</label>
+                            </div>
+                        </div> -->
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateFrom" [minDate]="minDate"
+                                    [maxDate]="maxDate" readonly ngbDatepicker #fromdate="ngbDatepicker"
+                                    (click)="fromdate.toggle()" type="text" id="dateFrom"
+                                    class="form-control datepicker">
+                                <label for="dateFrom" class="active">Date From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateTo" [minDate]="minDate"
+                                    [maxDate]="maxDate" readonly ngbDatepicker #todate="ngbDatepicker"
+                                    (click)="todate.toggle()" type="text" id="dateTo" class="form-control datepicker">
+                                <label for="dateTo" class="active">Date To</label>
+                            </div>
+                        </div> 
+                        <!-- <div class="col-md-3 md-form md-outline px-4">
+                            <ng-select formControlName="task_status" [items]="categories" bindLabel="name" placeholder="Select status" appendTo="body" [multiple]="true" [(ngModel)]="selected" >
+                            </ng-select>
+                            <label class="top-lb active">Status</label>
+                        </div> -->
+                        <!-- <div class="col-md-3 px-4">
+                            <div class="md-form md-outline input-group margin-mdform">
+                              <input type="hidden" formControlName="tagid" value="{{CustTagID}}">
+                              <ng-select formControlName="filtertasktag" [items]="custtags" bindLabel="name" placeholder="Select Tags" appendTo="body" [multiple]="true" [(ngModel)]="select"  (change)="SelectedTagsValue($event)">
+                              </ng-select>
+                              <label class="top-lb active">Tags</label> 
+                            </div>
+                          </div> -->
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="PlanSearch()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                            class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        <button type="button"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="taskSearchReset()"><i
+                                class="fas fa-redo-alt mr-2"  aria-hidden="true"></i>Reset</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Datatable code-->
+        <!-- Payment Plan Tab -->
+        <div class="container-fluid px-3 mb-2">
+            <div class="tab-pane pb-0" id="docsTabsPaymentPlan" role="tabpanel">
+                <div class="card">
+                    <div class="row px-2">
+                        <div class="col-md-12">
+                            <button type="button" #PaymentPlanModal *ngIf="hideAddbutton" (click)="openModalButton('')"
+                                id="openModalButton"
+                                class="btn btn-elegant btn-sm waves-light waves-effect float-right my-0"
+                                data-toggle="modal" data-target="#add_payPlan_modal"><i class="fa fa-plus"
+                                    aria-hidden="true"></i>
+                                Add New
+                                Entry</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive card-body">
+                        <table id="PaymentPlanTable" datatable [dtOptions]="dtOptions5"
+                            [dtTrigger]="dtTrigger5" class="table table-striped" cellspacing="0"
+                            width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Title
+                                    </th>
+                                    <th>Buyer Name , Block-Plot
+                                    </th>
+                                    <th>Contact
+                                    </th>
+                                    <th>Plan Date
+                                    </th>
+                                    <th>Amount
+                                    </th>
+                                    <!-- <th>Purpose/Reason
+                                    </th> -->
+                                    <th>Recieved by
+                                    </th>
+                                    <th>Mode
+                                    </th>
+                                    <th>Status
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of paymentplan; let i = index">
+                                    <td>{{i+1}}
+                                    </td>
+                                    <td>{{item.title}}
+                                    </td>
+                                    <td>
+                                        <a href="javascript:void(0)" class="buyer-link"
+                                           (click)="RedirectToPaymentPlan(item.details_id, item.persons_id)">
+                                           {{ item.name }}
+                                        </a>, {{ item.ProductCode }}
+                                    </td>
+                                    <td>{{item.mobile_number}}
+                                    </td>
+                                    <td>{{item.date | date:'dd/MM/yyyy'}}
+                                    </td>
+                                    <td>{{item.amount | currency:'INR'}}
+                                    </td>
+                                    <!-- <td>{{CheckReason(item.reason)}}
+                                    </td>                                     -->
+                                    <td>{{item.EmployeeName}}
+                                    </td>
+                                    <td>{{item.mode}}
+                                    </td>
+                                    <td>{{item.status}}
+                                    </td>
+                                    <td>
+                                        <a id="" class="black-text" ngbTooltip="View followUp"
+                                            (click)="openModalPayPlan('View', item.id,item.booking_id,item.buyer_id)"
+                                            data-toggle="modal" data-target="#add_payPlan_modal"
+                                            placement="top"><i class="fa fa-eye" aria-hidden="true"></i>
+                                        </a> 
+                                    
+                                        <a *ngIf="iconColors[i] !== 'grey'" id="" class="blue-text" id="{{i + 1}}"
+                                            ngbTooltip="Edit FollowUp" placement="top"
+                                            data-toggle="modal" data-target="#add_payPlan_modal"
+                                            (click)="openModalPayPlan('Edit', item.id,item.booking_id,item.buyer_id)"><i class="fa-pencil-alt px-1 fas"></i>
+                                        </a>
+                                        <!-- <a *ngIf="item.status === 'Completed' && hideRedirectButton" 
+                                            id="" class="text" id="{{i + 1}}"
+                                            ngbTooltip="Redirect to PaymentPlan" placement="top"
+                                            (click)="RedirectToPaymentPlan('Edit', item.id, item.booking_id, item.buyer_id)">
+                                            <i class="fas fa-arrow-circle-right" [ngStyle]="{ 'color': hoveredIcon === i ? 'blue' : '#a18606' }"
+                                            (mouseover)="hoveredIcon = i"
+                                            (mouseleave)="hoveredIcon = null"></i>
+                                        </a> -->
+                                        <a *ngIf="item.status === 'Completed'" style="margin-left: 5px;"
+                                            id="" class="text-success" id="{{i + 1}}"
+                                            ngbTooltip="Save FollowUp" placement="top"    
+                                            data-toggle="modal" data-target="#add_plan_done_modal"
+                                            (click)="planDone('Done',item.id,i,item.buyer_id)" >
+                                            <i class="fas fa-save" [ngStyle]="{'color': iconColors[i]}"></i>
+                                        </a>
+                                        <!-- <a *ngIf="item.status === 'Completed'" class="text-success" id="{{i + 1}}"
+                                            ngbTooltip="Edit PaymentPlan" placement="top"
+                                            data-toggle="modal" data-target="#add_plan_done_modal" 
+                                            (click)="planDone('Done',item.id,i)">
+                                            <i class="fa-save px-1 fas" [ngStyle]="{'color': iconColors[i]}"></i>
+                                        </a>
+                                         -->
+                                        <a *ngIf="Admin || Administrator || Accountant" class="red-text" (click)="DeletePaymentPlan(item.id)" 
+                                            ngbtooltip="Remove FollowUp" placement="top"><i class="fa-times px-1 fas"></i>
+                                        </a>               
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                            <tbody *ngIf="paymentplan?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">
+                                        No data!
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>    
+            </div>
+        </div>    
+
+
+        <!-- PaymentPlan Form Modal -->
+        <div class="modal fade" id="add_payPlan_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                <!-- Content -->
+                <div class="modal-content ">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color ">
+                        <p class="heading lead font-weight-bold" id="modaltextheader">
+                            {{modalTitle}}  Payment Plan FollowUp</p>
+                        <button type="button" class="close" data-dismiss="modal" (click)="modalClosed()" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span><br>
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div class="col-md-12 p-2">
+                        <div class="modal-body">
+                            <form class="row px-3" [formGroup]="paymentPlan_form">
+                                <input type="hidden" formControlName="paymentPlan_id">
+                                <input type="hidden" formControlName="paymentPlan_booking_id">
+                                <input type="hidden" formControlName="paymentPlan_buyer_id">
+
+
+                                <div class="col-md-6 px-1">
+                                    <div class=" md-form md-outline" readonlys>
+                                        <ng-autocomplete  [data]="customerdataList" formControlName="visitor_name" [searchKeyword]="keyword" (selected)='selectCust($event)' (inputChanged)='onCustomerSearch($event)'  [itemTemplate]="itemTemplate">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                          <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                          <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                        </ng-template>
+                                        <label for="visitor_name" class="active"style="z-index: 1000;">Customer Name</label>
+ 
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 px-1">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="t_Pay" class="form-control"
+                                            formControlName="paymentPlan_task_contact"
+                                            [ngClass]="{ 'is-invalid': (submitted && paymentPlan_form.controls['paymentPlan_task_contact'].invalid) || (paymentPlan_form.controls['paymentPlan_task_contact'].touched && paymentPlan_form.controls['paymentPlan_task_contact'].invalid) }">
+                                        <label for="t_Pay" class="active">Contact No.</label>
+                                        <div *ngIf="(submitted && paymentPlan_form.controls['paymentPlan_task_contact'].invalid) || (paymentPlan_form.controls['paymentPlan_task_contact'].touched && paymentPlan_form.controls['paymentPlan_task_contact'].invalid)"
+                                        class="invalid-feedback">Contact No. is required
+                                       </div>
+                                    </div>
+
+                                </div>
+                                <!-- <div class="col-md-6 px-1">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="t_Pay" class="form-control"
+                                            formControlName="paymentPlan_task_title"
+                                            [ngClass]="{ 'is-invalid': (submitted && paymentPlan_form.controls['paymentPlan_task_title'].invalid) || (paymentPlan_form.controls['paymentPlan_task_title'].touched && paymentPlan_form.controls['paymentPlan_task_title'].invalid) }">
+                                        <label for="t_Pay" class="active">Task Title*</label>
+                                        <div *ngIf="(submitted && paymentPlan_form.controls['paymentPlan_task_title'].invalid) || (paymentPlan_form.controls['paymentPlan_task_title'].touched && paymentPlan_form.controls['paymentPlan_task_title'].invalid)"
+                                            class="invalid-feedback">Task Title is required
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-12 px-1">
+                                    <div class="md-form md-outline">
+                                        <textarea name="t_Pay" class="form-control" style="height:42px" formControlName="paymentPlan_task_description" rows="3"></textarea>
+                                        <label for="t_Pay" class="active">Task Description</label>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-6 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="paymentPlan_task_Assignee"
+                                            [ngClass]="{ 'is-invalid': (submitted && paymentPlan_form.controls['paymentPlan_task_Assignee'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Assignee'].touched && paymentPlan_form.controls['paymentPlan_task_Assignee'].invalid) }">
+                                            <option value="" selected="true">Select Assignee*</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>                           
+                                        </select>
+                                        <label class="active">Assignee</label>
+                                        <div *ngIf="(submitted && paymentPlan_form.controls['paymentPlan_task_Assignee'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Assignee'].touched && paymentPlan_form.controls['paymentPlan_task_Assignee'].invalid)"
+                                         class="invalid-feedback">Assignee is required
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!--                                 
+                                <div class="col-md-6 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="paymentPlan_task_Reporter"
+                                            [ngClass]="{ 'is-invalid': (submitted && paymentPlan_form.controls['paymentPlan_task_Reporter'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Reporter'].touched && paymentPlan_form.controls['paymentPlan_task_Reporter'].invalid) }">
+                                            <option value="" selected="true">Select Reporter*</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>                           
+                                        </select>
+                                        <label class="active">Reporter</label>
+                                        <div *ngIf="(submitted && paymentPlan_form.controls['paymentPlan_task_Reporter'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Reporter'].touched && paymentPlan_form.controls['paymentPlan_task_Reporter'].invalid)"
+                                        class="invalid-feedback">Reporter is required
+                                       </div>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="paymentPlan_task_Action"
+                                            [ngClass]="{ 'is-invalid': (submitted && paymentPlan_form.controls['paymentPlan_task_Action'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Action'].touched && paymentPlan_form.controls['paymentPlan_task_Action'].invalid) }">
+                                            <option value="" selected="true">Select Action</option>
+                                            <option value="Meeting" >Meeting</option>
+                                            <option value="Call" >Call</option>
+                                            <option value="Email" >Email</option>                         
+                                        </select>
+                                        <label class="active">Task Action</label>
+                                        <div *ngIf="(submitted && paymentPlan_form.controls['paymentPlan_task_Action'].invalid) || (paymentPlan_form.controls['paymentPlan_task_Action'].touched && paymentPlan_form.controls['paymentPlan_task_Action'].invalid)"
+                                        class="invalid-feedback">Task Action is required
+                                       </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="paymentPlan_status"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && paymentPlan_form.controls['paymentPlan_status'].invalid ||paymentPlan_form.controls['paymentPlan_status'].invalid && paymentPlan_form.controls['paymentPlan_status'].touched)}">
+                                            <option value="" disabled>
+                                                Select
+                                            </option>
+                                            <option value="Active">Active</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="On-Hold">On-Hold</option>
+                                            <option value="Pending">Pending</option>
+                                            <!-- <option *ngFor="let status of respStatus" value="{{status.LookupDataId}}">
+                                                {{status.LookupValue}}
+                                            </option> -->
+                                        </select>
+                                        <label class="active">Status</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && paymentPlan_form.controls['paymentPlan_status'].invalid || paymentPlan_form.controls.paymentPlan_status.touched && paymentPlan_form.controls.paymentPlan_status.invalid">
+                                            <p> Please
+                                                Select
+                                                Status</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-1">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="t_Pay" class="form-control"
+                                            formControlName="paymentPlan_amount"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && paymentPlan_form.controls['paymentPlan_amount'].invalid || paymentPlan_form.controls['paymentPlan_amount'].invalid && paymentPlan_form.controls['paymentPlan_amount'].touched)}">
+                                        <label for="t_Pay" class="active">Amount</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && paymentPlan_form.controls['paymentPlan_amount'].invalid || paymentPlan_form.controls['paymentPlan_amount'].invalid && paymentPlan_form.controls['paymentPlan_amount'].touched">
+                                            <p> Please enter
+                                                Amount</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="hidden"  [minDate]="minDate" style="width: 350px; height: 33px; border-radius: unset; color:#545658; text-indent: 8px;"
+                                        [maxDate]="maxDate" placeholder="Select date" class="form-control-md" ngbDatepicker #atd="ngbDatepicker" value="" (click)="atd.toggle()">
+                                                                                
+                                    </div>
+                                </div>
+                                <div class="col-md-12 px-1">
+                                    <div class="md-form md-outline">
+                                        <textarea name="t_Pay" class="form-control" style="height:50px" formControlName="paymentPlan_task_action_response" rows="3
+                                        "></textarea>
+                                        <label for="t_Pay" class="active">Task Action Response</label>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="col-md-4 px-1">
+                                    <div class="md-form md-outline">
+                                        <input name="paymentDate" class="form-control"
+                                            placeholder="Select date" ngbDatepicker #paymentDate="ngbDatepicker"
+                                            (click)="paymentDate.toggle()" type="text"
+                                            formControlName="paymentPlan_date" 
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && paymentPlan_form.controls['paymentPlan_date'].invalid || paymentPlan_form.controls['paymentPlan_date'].invalid && paymentPlan_form.controls['paymentPlan_date'].touched)}">
+                                        <label for="paymentDate" class="active">Plan date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="submit_btn && paymentPlan_form.controls['paymentPlan_date'].invalid || paymentPlan_form.controls['paymentPlan_date'].invalid && paymentPlan_form.controls['paymentPlan_date'].touched">
+                                        <p> Please enter Date</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="paymentPlan_reason"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && paymentPlan_form.controls['paymentPlan_reason'].invalid ||paymentPlan_form.controls['paymentPlan_reason'].invalid && paymentPlan_form.controls['paymentPlan_reason'].touched)}">
+                                            <option value="" disabled>
+                                                Select
+                                            </option>
+                                            <option *ngFor=" let reason of reason" value="{{reason.LookupDataId}}">
+                                                {{reason.LookupValue}}
+                                            </option>
+                                            <!--    <option value="">Select Reason</option>
+                                            <option value="">Advance</option>
+                                            <option value="">Stamp</option>
+                                            <option value="">Govt Value</option>
+                                            <option value="">Other</option> -->
+
+                                        </select>
+                                        <label class="active">Reason</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && paymentPlan_form.controls['paymentPlan_reason'].invalid || paymentPlan_form.controls.paymentPlan_reason.touched && paymentPlan_form.controls.paymentPlan_reason.invalid">
+                                            <p> Please
+                                                Select
+                                                Reason</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-1">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            (change)="onSelectPaymentPlanMode($event.target.value)"
+                                            formControlName="paymentPlan_mode"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && paymentPlan_form.controls['paymentPlan_mode'].invalid ||paymentPlan_form.controls['paymentPlan_mode'].invalid && paymentPlan_form.controls['paymentPlan_mode'].touched)}">
+                                            <!-- <option value=""
+                                                disabled>
+                                                Select
+                                            </option> -->
+                                            <!-- <option
+                                                *ngFor="let status of respStatus"
+                                                value="{{status.LookupDataId}}">
+                                                {{status.LookupValue}} 
+                                            </option> -->
+                                            <option value="" disabled selected>Select Payment Mode</option>
+                                            <option value="Cheque">By Cheque</option>
+                                            <option value="Online">Online</option>
+                                            <option value="Cash">Cash</option>
+                                            <option value="DD">DD</option>
+                                        </select>
+                                        <label class="active">Mode</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && paymentPlan_form.controls['paymentPlan_mode'].invalid || paymentPlan_form.controls['paymentPlan_mode'].invalid && paymentPlan_form.controls['paymentPlan_mode'].touched">
+                                            <p> Please
+                                                Select
+                                                Mode
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1" *ngIf="transCond3">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="chequeName" class="form-control" formControlName="payment_plan_chequeName">
+                                        <label for="chequeName" class="active">Name on Cheque</label>
+                                    </div>
+                                </div> 
+                                <div class="col-md-4 px-1" *ngIf="transCond3">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="ChequeNo" class="form-control" formControlName="payment_plan_chequeNo">
+                                        <label for="bankAccNo" class="active">Cheque Number</label>
+                                    </div>
+                                </div>
+                            
+                                <!-- <div class="col-md-4 px-1" *ngIf="transCond5">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="plan_cash_submittedBy" class="form-control" formControlName="plan_cash_submittedBy">
+                                        <label for="plan_cash_submittedBy" class="active">Submitted By</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1" *ngIf="transCond5">
+                                    <div class="md-form md-outline">
+                                        <input placeholder="Select date" ngbDatepicker #paymentDate="ngbDatepicker" (click)="paymentDate.toggle()" type="text" name="plan_cash_date" class="form-control" formControlName="plan_cash_date">
+                                        <label for="plan_cash_date" class="active">Date</label>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-4 px-1" *ngIf="transCond6">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="planDD_bank_name" class="form-control" formControlName="planDD_bank_name">
+                                        <label for="planDD_bank_name" class="active">Bank Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1" *ngIf="transCond6">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="planDD_name_on_dd" class="form-control" formControlName="planDD_name_on_dd">
+                                        <label for="planDD_name_on_dd" class="active">Name on DD</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1" *ngIf="transCond6">
+                                    <div class="md-form md-outline">
+                                        <input type="text" name="planDD_dd_number" class="form-control" formControlName="planDD_dd_number">
+                                        <label for="planDD_dd_number" class="active">DD Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-1" *ngIf="transCond69">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" formControlName="payment_plan_paidTo">
+                                            <option value="" disabled>Select</option>
+                                            <option *ngFor="let items of employee" value="{{items.EmployeeId}}">{{items.EmployeeName}}</option>
+                                        </select>
+                                        <label class="active">Received By</label>
+                                    </div>
+                                </div>      
+                                <div *ngIf="followupadd" >
+                                    <div style="border: 2px solid #ddd; margin-top: 10px; padding: 4px ">
+                                        <div class="col-lg-12">
+                                            <div class="md-form md-outline">
+                                                <input class="form-check-input filled-in CalendarForm"  type="checkbox" name="nextFollowCRM" value="1" id="nextFollowCRM" (change)=showFollowup($event)>
+                                                <label for="nextFollowCRM" >Next Follow Up</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" [formGroup]="nextFollowup" *ngIf="additionalFollow">
+                                            <div class="col-lg-6 col-md-12 px-2">
+                                                <div class="md-form md-outline">
+                                                    <input type="text" formControlName="followup_date" id="followup_date" [minDate]="minDate"
+                                                    [maxDate]="maxDate" placeholder="Select date" class="form-control" ngbDatepicker #atd="ngbDatepicker" value="" (click)="atd.toggle()">
+                                                    <label for="followup_date" class="active">Date</label>                                           
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-12 px-2">
+                                                <div class="md-form md-outline">
+                                                <input type="time" placeholder="Select Time" formControlName="followup_Time" id="followup_Time" class="form-control-md" style="width: 360px;border-radius: 0px; height: 33px;color:grey; padding-left: 12px;padding-top: 4px;" [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].invalid && nextFollowup.controls['followup_Time'].touched)}">
+                                                <label for="followup_Time" class="active">Time</label>
+                                                <div
+                                                    *ngIf="(submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].touched && nextFollowup.controls['followup_Time'].invalid)"
+                                                    class="invalid-feedback">Time is required</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 px-2">
+                                                <div class=" md-form md-outline">
+                                                <textarea type="text" formControlName="followup_notes" class="md-textarea form-control" rows="2" [readonly]="Access"
+                                                [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].invalid && nextFollowup.controls['followup_notes'].touched)}">
+                                                </textarea>
+                                                <label class="active" for="form10">Description*</label>
+                                                <div
+                                                    *ngIf="(submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].touched && nextFollowup.controls['followup_notes'].invalid)"
+                                                    class="invalid-feedback">Description is required</div>
+                                                </div>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                </div>  
+
+                                <div  [formGroup]="paymentdetail"  >
+                                    <div class="md-form md-outline" >
+                                        <div  class="col-md-12 px-2" *ngFor="let addressGroup of paymentdetail.get('address')['controls'];let i = index" [formGroup]="addressGroup">
+                                            <div *ngIf="isHideFollowUps" class="row" style="border: 2px solid #ddd; margin-top: 10px; padding: 4px; width: 755px; position: relative; left: 6px; " >
+
+                                                <div class="col-lg-6 col-md-12 px-2">
+                                                    <div class="md-form md-outline">
+                                                        <input type="text" formControlName="fuDate" id="fuDate_{{i}}" name="fuDate_{{i}}" [minDate]="minDate" style="width: 350px; height: 33px; border-radius: unset; color:#545658; text-indent: 8px;"
+                                                        [maxDate]="maxDate" placeholder="Select date" class="form-control-md" ngbDatepicker #atd="ngbDatepicker" value="" (click)="atd.toggle()">
+                                                        <label for="followsup_date" class="active">Date</label>                                           
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-12 px-2">
+                                                    <div class="md-form md-outline">
+                                                    <input type="time" placeholder="Select Time" formControlName="fuTime" id="fuTime_{{i}}" name="fuTime_{{i}}" class="form-control-md" style="width: 360px;border-radius: 0px; height: 33px;color:grey; padding-left: 12px;padding-top: 4px;" [ngClass]="{ 'is-invalid': (submitted && paymentdetail.get('address')['controls'][i].get('fuTime').invalid ) || (paymentdetail.get('address')['controls'][i].get('fuTime').invalid && paymentdetail.get('address')['controls'][i].get('fuTime').touched)}">
+                                                    <label for="followup_Time" class="active">Time</label>
+                                                    <div
+                                                        *ngIf=" (submitted && paymentdetail.get('address')['controls'][i].get('fuTime').invalid && paymentdetail.get('address')['controls'][i].get('fuTime').errors.required) || (paymentdetail.get('address')['controls'][i].get('fuTime').invalid && paymentdetail.get('address')['controls'][i].get('fuTime').touched && paymentdetail.get('address')['controls'][i].get('fuTime').errors.required)"
+                                                        class="invalid-feedback">Time is required</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8 px-2" >
+                                                    <div class="md-form md-outline">
+                                                        <textarea type="text" class="md-textarea form-control" rows="2" [readonly]="Access" id="fuDesp_{{i}}" name="fuDesp_{{i}}" formControlName="fuDesp" [ngClass]="{ 'is-invalid': (submitted && paymentdetail.get('address')['controls'][i].get('fuDesp').invalid ) || (paymentdetail.get('address')['controls'][i].get('fuDesp').invalid && paymentdetail.get('address')['controls'][i].get('fuDesp').touched)}" style="width: 650px;">
+                                                        </textarea>
+                                                        <label for="fuDesp" class="active">Description</label>
+                                                        <div *ngIf=" (submitted && paymentdetail.get('address')['controls'][i].get('fuDesp').invalid && paymentdetail.get('address')['controls'][i].get('fuDesp').errors.required) || (paymentdetail.get('address')['controls'][i].get('fuDesp').invalid && paymentdetail.get('address')['controls'][i].get('fuDesp').touched && paymentdetail.get('address')['controls'][i].get('fuDesp').errors.required)" class="invalid-feedback">Bank is required.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <button mdbRipple type="button" class="btn btn-danger btn-sm ml-0 waves-effect waves-light" *ngIf="isView" (click)="deleteAddressGroup(i)" style="position: relative;right: -170px; top:4px;height:40px"><i class="fas fa-times"></i></button>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-md-12 px-0" *ngIf="hideAddMoreFollowUpButton" style="margin-left: 10px;">
+                                            <button type="button" (click)="addNewFollowUpGroup()"
+                                            class="btn btn-secondary btn-sm blue-gradient waves-light waves-effect ml-0"><i class="fa fa-plus mr-2"
+                                            aria-hidden="true" ></i>Add More Follow Up</button>
+                                        </div>
+                                    </div>    
+                                </div>
+                                     
+                                <div class="col-md-12 px-1" style="margin-top:8px;">
+                                    <div class="md-form md-outline">
+                                        <textarea name="t_Pay" class="form-control" [readonly]="responseLogReadonly"  style="height:150px" formControlName="paymentPlan_task_action_response_logs" rows="3
+                                        "></textarea>
+                                        <label for="t_Pay" class="active"> Response Logs:</label>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" #close_payment_paln_button (click)="modalClosed()" class="btn btn-sm btn-danger"
+                            data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect" *ngIf="isView"
+                            (click)="save_regPaymentPlanForm()">Save</button>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>         
+
+
+        <!--New transaction DONE modal(DONE payment Detail for paymentPlan) modal-->
+        <div class="modal fade" id="add_plan_done_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                <!-- Content -->
+                <div class="modal-content ">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color ">
+                        <p class="heading lead font-weight-bold" id="modaltextheader">
+                             Payment Detail for Payment Plan</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span><br>
+
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div class="col-md-12 p-2">
+                        <div class="modal-body">
+                            <form class="row px-3" [formGroup]="plan_done_transaction_form">
+                                <input type="hidden" formControlName="done_transaction_id">
+                                <input type="hidden" formControlName="done_booking_id">
+                                <div class="col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <input name="paylast2" class="form-control datepicker" placeholder="Select date"
+                                            ngbDatepicker #paylast2="ngbDatepicker" (click)="paylast2.toggle()"
+                                            type="text" formControlName="plan_done_transaction_date">
+                                        <label for="paylast2" class="active">Plan date</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_transaction_date'].invalid ||plan_done_transaction_form.controls['plan_done_transaction_date'].invalid && plan_done_transaction_form.controls['plan_done_transaction_date'].touched">
+                                            <p> Please
+                                                Select
+                                                Transaction
+                                                date</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="plan_done_transaction_mode"
+                                            (change)="onSelectPlanPaymentMode($event.target.value)"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_transaction_mode'].invalid ||plan_done_transaction_form.controls['plan_done_transaction_mode'].invalid && plan_done_transaction_form.controls['plan_done_transaction_mode'].touched)}">
+                                            <option value="" disabled>
+                                                Select
+                                            </option>
+                                            <option value="Cheque">
+                                                Cheque
+                                            </option>
+                                            <option value="Online">
+                                                Online
+                                            </option>
+                                            <option value="Cash">
+                                                Cash
+                                            </option>
+                                            <option value="DD">
+                                                DD
+                                            </option>
+      
+                                        </select>
+                                        <label class="active">Payment
+                                            Mode</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_transaction_mode'].invalid || plan_done_transaction_form.controls.plan_done_transaction_mode.touched && plan_done_transaction_form.controls.plan_done_transaction_mode.invalid">
+                                            <p> Please
+                                                Select Mode
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+    
+
+                                <div class="col-md-4 px-2" *ngIf="transCond33">
+                                    <div class=" md-form md-outline" >
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_chequeName"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_chequeName'].invalid || plan_done_transaction_form.controls['plan_done_chequeName'].invalid && plan_done_transaction_form.controls['plan_done_chequeName'].touched)}">
+                                        <label for="chequeName" class="active">Sender's Bank Name</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_chequeName'].invalid || plan_done_transaction_form.controls['plan_done_chequeName'].invalid && plan_done_transaction_form.controls['plan_done_chequeName'].touched">
+                                            <p> Please enter
+                                                Name</p>
+                                        </div>
+                                    </div>
+                                </div> 
+
+
+ 
+
+                                <div class="col-md-4 px-2" *ngIf="transCond33">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="chequeNumber" class="form-control"
+                                            formControlName="plan_done_chequeNumber"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_chequeNumber'].invalid || plan_done_transaction_form.controls['plan_done_chequeNumber'].invalid && plan_done_transaction_form.controls['plan_done_chequeNumber'].touched)}">
+                                        <label for="chequeAmount" class="active"> Cheque Number</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_chequeNumber'].invalid || plan_done_transaction_form.controls['plan_done_chequeNumber'].invalid && plan_done_transaction_form.controls['plan_done_chequeNumber'].touched">
+                                            <p> Please enter CQ Number</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="col-md-4 px-2" *ngIf="transCond444">
+                                    <div class="md-form md-outline">
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeSubDate="ngbDatepicker"
+                                            (click)="chequeSubDate.toggle()" type="text"
+                                            formControlName="plan_done_all_recieved_date"
+                                            [minDate]="minDate"
+                                            [maxDate]="maxDate"
+                                            [ngClass]="{ 'is-invalid': (submit_btn && plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid) || 
+                                                                        (plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid && plan_done_transaction_form.controls['plan_done_all_recieved_date'].touched) }">
+                                        <label for="chequeSubDate" class="active">{{ isDDSelected ? 'DD Received On' : (isCQSelected ? 'Cheque Received On' : 'Amount Received On') }}</label>
+
+                                    </div>
+                                    <div class="invalid-feedback" 
+                                        *ngIf="(submit_btn && plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid) || (plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid && plan_done_transaction_form.controls['plan_done_all_recieved_date'].touched)">
+                                        <div *ngIf="(submit_btn && plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid) || (plan_done_transaction_form.controls['plan_done_all_recieved_date'].invalid && plan_done_transaction_form.controls['plan_done_all_recieved_date'].touched)">
+                                          Please enter Recieved Date
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond33">
+                                    <div class="md-form md-outline" >
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeCqDate="ngbDatepicker"
+                                            (click)="chequeCqDate.toggle()" type="text"
+                                            formControlName="plan_done_chequeDate"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_chequeDate'].invalid || plan_done_transaction_form.controls['plan_done_chequeDate'].invalid && plan_done_transaction_form.controls['plan_done_chequeDate'].touched)}">
+                                        <label for="chequeCqDate" class="active">Cheque date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                    *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_chequeDate'].invalid || plan_done_transaction_form.controls['plan_done_chequeDate'].invalid && plan_done_transaction_form.controls['plan_done_chequeDate'].touched">
+                                    <p> Please enter Date</p>
+                                </div>
+                                </div>
+                                    <div class="col-md-4 px-2" *ngIf="transCond33">
+                                        <div class="md-form md-outline" >
+                                            <input name="chequeDate" class="form-control datepicker"
+                                                placeholder="Select date" ngbDatepicker #chequeSubDate="ngbDatepicker"
+                                                (click)="chequeSubDate.toggle()" type="text"
+                                                formControlName="plan_done_chequeSubmitDate"
+                                                [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].invalid || plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].invalid && plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].touched)}">
+                                            <label for="chequeSubDate" class="active">Submit date</label>
+                                        </div>
+                                        <div class="invalid-feedback"
+                                        *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].invalid || plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].invalid && plan_done_transaction_form.controls['plan_done_chequeSubmitDate'].touched">
+                                        <p> Please enter Date</p>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond33">
+                                    <div class="md-form md-outline" >
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeClearate="ngbDatepicker"
+                                            (click)="chequeClearate.toggle()" type="text"
+                                            formControlName="plan_done_chequeClearDate">
+                                        <label for="chequeClearate" class="active">Clear date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                    *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_chequeClearDate'].invalid || plan_done_transaction_form.controls['plan_done_chequeClearDate'].invalid && plan_done_transaction_form.controls['plan_done_chequeClearDate'].touched">
+                                    <p> Please enter Date</p>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div class="col-md-4 px-2" *ngIf="transCond44">
+                                    <div class=" md-form md-outline" >
+                                        <input type="text" name="chequeName" class="form-control"
+                                           
+                                            formControlName="plan_done_online_transferred_from"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_online_transferred_from'].invalid || plan_done_transaction_form.controls['plan_done_online_transferred_from'].invalid && plan_done_transaction_form.controls['plan_done_online_transferred_from'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Transferred From</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_online_transferred_from'].invalid || plan_done_transaction_form.controls['plan_done_online_transferred_from'].invalid && plan_done_transaction_form.controls['plan_done_online_transferred_from'].touched">
+                                            <p> Please enter Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond44">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_online_bank_name"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_online_bank_name'].invalid || plan_done_transaction_form.controls['plan_done_online_bank_name'].invalid && plan_done_transaction_form.controls['plan_done_online_bank_name'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Bank Name</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_online_bank_name'].invalid || plan_done_transaction_form.controls['plan_done_online_bank_name'].invalid && plan_done_transaction_form.controls['plan_done_online_bank_name'].touched">
+                                            <p> Please enter Bank Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2" *ngIf="transCond44">
+                                    <div class=" md-form md-outline" >
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_online_acc_holder_name"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].invalid || plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].invalid && plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Account Holder Name</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].invalid || plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].invalid && plan_done_transaction_form.controls['plan_done_online_acc_holder_name'].touched">
+                                            <p> Please enter Name</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+
+
+
+
+
+                                <div class="col-md-4 px-2" *ngIf="transCond55">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_cash_submitted_by"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_cash_submitted_by'].invalid || plan_done_transaction_form.controls['plan_done_cash_submitted_by'].invalid && plan_done_transaction_form.controls['plan_done_cash_submitted_by'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Submitted By</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="(submit_btn && plan_done_transaction_form.controls['plan_done_cash_submitted_by'].invalid) || (plan_done_transaction_form.controls['plan_done_cash_submitted_by'].invalid && plan_done_transaction_form.controls['plan_done_cash_submitted_by'].touched)">
+                                            <p> Please enter Submitted By</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div class="col-md-4 px-2" *ngIf="transCond55">
+                                    <div class="md-form md-outline" >
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeSubDate="ngbDatepicker"
+                                            (click)="chequeSubDate.toggle()" type="text"
+                                            formControlName="plan_done_cash_date">
+                                        <label for="chequeSubDate" class="active">Recieved date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                    *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_cash_date'].invalid || plan_done_transaction_form.controls['plan_done_cash_date'].invalid && plan_done_transaction_form.controls['plan_done_cash_date'].touched">
+                                    <p> Please enter Date</p>
+                                </div>
+                                </div> -->
+
+                                <div class="col-md-4 px-2" *ngIf="transCond66">
+                                    <div class=" md-form md-outline" >
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_dd_bank_name"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_dd_bank_name'].invalid || plan_done_transaction_form.controls['plan_done_dd_bank_name'].invalid && plan_done_transaction_form.controls['plan_done_dd_bank_name'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Sender's Bank Name</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_dd_bank_name'].invalid || plan_done_transaction_form.controls['plan_done_dd_bank_name'].invalid && plan_done_transaction_form.controls['plan_done_dd_bank_name'].touched">
+                                            <p> Please enter Bank Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-4 px-2" *ngIf="transCond66">
+                                    <div class=" md-form md-outline" >
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_dd_name"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_dd_name'].invalid || plan_done_transaction_form.controls['plan_done_dd_name'].invalid && plan_done_transaction_form.controls['plan_done_dd_name'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Name on DD</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_dd_name'].invalid || plan_done_transaction_form.controls['plan_done_dd_name'].invalid && plan_done_transaction_form.controls['plan_done_dd_name'].touched">
+                                            <p> Please enter DD Name</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond66">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_dd_number"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_dd_number'].invalid || plan_done_transaction_form.controls['plan_done_dd_number'].invalid && plan_done_transaction_form.controls['plan_done_dd_number'].touched)}">
+                                        <label for="onlineTranferred" class="active"> DD Number</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_dd_number'].invalid || plan_done_transaction_form.controls['plan_done_dd_number'].invalid && plan_done_transaction_form.controls['plan_done_dd_number'].touched">
+                                            <p> Please enter Number</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond66">
+                                    <div class="md-form md-outline" >
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeSubDate1="ngbDatepicker"
+                                            (click)="chequeSubDate1.toggle()" type="text"
+                                            formControlName="plan_done_dd_submit_date"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_dd_submit_date'].invalid || plan_done_transaction_form.controls['plan_done_dd_submit_date'].invalid && plan_done_transaction_form.controls['plan_done_dd_submit_date'].touched)}">
+                                        <label for="chequeSubDate1" class="active">Submit date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_dd_submit_date'].invalid || plan_done_transaction_form.controls['plan_done_dd_submit_date'].invalid && plan_done_transaction_form.controls['plan_done_dd_submit_date'].touched">
+                                        <p> Please enter Submit Date</p>
+                                    </div>
+                                </div>     
+
+                                <div class="col-md-4 px-2" *ngIf="transCond66">
+                                    <div class="md-form md-outline" >
+                                        <input name="chequeDate" class="form-control datepicker"
+                                            placeholder="Select date" ngbDatepicker #chequeSubDate1="ngbDatepicker"
+                                            (click)="chequeSubDate1.toggle()" type="text"
+                                            formControlName="plan_done_dd_clear_date"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_dd_clear_date'].invalid || plan_done_transaction_form.controls['plan_done_dd_clear_date'].invalid && plan_done_transaction_form.controls['plan_done_dd_clear_date'].touched)}">
+                                        <label for="chequeSubDate1" class="active">Clear date</label>
+                                    </div>
+                                    <div class="invalid-feedback"
+                                        *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_dd_clear_date'].invalid || plan_done_transaction_form.controls['plan_done_dd_clear_date'].invalid && plan_done_transaction_form.controls['plan_done_dd_clear_date'].touched">
+                                        <p> Please enter Clear Date</p>
+                                    </div>
+                                </div>                                
+
+                                <div class="col-md-4 px-2" *ngIf="transCond">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="plan_done_status"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_status'].invalid ||plan_done_transaction_form.controls['plan_done_status'].invalid && plan_done_transaction_form.controls['plan_done_status'].touched)}">
+                                            <option value="" disabled>
+                                                Select
+                                            </option>
+                                            <option value="Active">Active</option>
+                                            <option value="Completed">Completed</option>
+                                            <option value="On-Hold">On-Hold</option>
+                                            <option value="Pending">Pending</option>
+                                            <!-- <option *ngFor="let status of respStatus" value="{{status.LookupDataId}}">
+                                                {{status.LookupValue}}
+                                            </option> -->
+
+                                        </select>
+                                        <label class="active"> Payment Status</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_status'].invalid || plan_done_transaction_form.controls.plan_done_status.touched && plan_done_transaction_form.controls.plan_done_status.invalid">
+                                            <p> Please
+                                                Select
+                                                status</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCond">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" name="chequeName" class="form-control"
+                                            formControlName="plan_done_amount"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_amount'].invalid || plan_done_transaction_form.controls['plan_done_amount'].invalid && plan_done_transaction_form.controls['plan_done_amount'].touched)}">
+                                        <label for="onlineTranferred" class="active"> Amount</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_amount'].invalid || plan_done_transaction_form.controls['plan_done_amount'].invalid && plan_done_transaction_form.controls['plan_done_amount'].touched">
+                                            <p> Please enter Amount</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 px-2" *ngIf="transCondRby">
+                                    <div class=" md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="plan_done_recieved_by"
+                                            [ngClass]="{ 'is-invalid':  (submit_btn && plan_done_transaction_form.controls['plan_done_recieved_by'].invalid || plan_done_transaction_form.controls['plan_done_recieved_by'].invalid && plan_done_transaction_form.controls['plan_done_recieved_by'].touched)}">
+                                            
+                                            <option *ngFor="let items of employee " [value] ="items.EmployeeId">
+                                                {{items.EmployeeName}}
+                                            </option> 
+
+                                        </select>
+                                        <label class="active">
+                                            Received By
+                                        </label>
+                                        <div class="invalid-feedback" 
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_recieved_by'].invalid || plan_done_transaction_form.controls.plan_done_recieved_by.touched && plan_done_transaction_form.controls.plan_done_recieved_by.invalid">
+                                            <p> Please enter Recieved By</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                <div class="col-md-4 px-2" *ngIf="transCond">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="plan_done_transaction_accHead"
+                                            (change)="onAccHeadChange($event)"
+                                            [ngClass]="{ 'is-invalid': submit_btn && plan_done_transaction_form.controls['plan_done_transaction_accHead'].invalid }"
+                                            >
+                                            <option value="" disabled>
+                                                Select
+                                            </option>
+
+                                            <option *ngFor="let bankList of resplookupBank" [value]="bankList.bankCategory">
+                                                {{ bankList.bankCategory }}
+                                            </option>
+                                        </select>
+                                        <label class="active">Account
+                                            Head</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_transaction_accHead'].invalid || plan_done_transaction_form.controls.plan_done_transaction_accHead.touched && plan_done_transaction_form.controls.plan_done_transaction_accHead.invalid">
+                                            <p> Please
+                                                Select
+                                                Account head
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2" *ngIf="transCond">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="plan_done_transaction_accHSubHead"
+                                            (click)="onAccSubHeadChange($event)"
+                                            id="transaction_accHSubHead"
+                                            [ngClass]="{ 'is-invalid': submit_btn && plan_done_transaction_form.controls['plan_done_transaction_accHSubHead'].invalid }">
+                                           
+                                            <option  value="">Select</option>
+                                            <option *ngFor="let bankist of resplookupsubBank" [value]="bankist.subHead" >
+                                                {{ bankist.subHead }}
+                                            </option>
+                                        </select>
+                                        <label class="active">Account Sub Head</label>
+                                        <div class="invalid-feedback"
+                                            *ngIf="submit_btn && plan_done_transaction_form.controls['plan_done_transaction_accHSubHead'].invalid || plan_done_transaction_form.controls.plan_done_transaction_accHSubHead.touched && plan_done_transaction_form.controls.plan_done_transaction_accHSubHead.invalid">
+                                            <p> Please Select Account Subhead
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2" *ngIf="transCond33 || transCond66 || transCond44">   
+                                    <div class="md-form md-outline">
+                                     <select formControlName="plan_done_bank_name" class="form-control field-ht colorful-select">
+                                         
+                                         <option *ngFor="let bankList of SelectedBankData" [value]="bankList.bankName">
+                                           {{bankList.bankName}}
+                                         </option>  
+
+                                     </select>                                     
+                                     <label class="ml-2 active">Account Holder Bank Name</label>                         
+
+                                    </div>
+                               </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" #closebutton1 (click)="donePlanmodalClose()" class="btn btn-sm btn-danger"
+                            data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect" *ngIf="isSave"
+                            (click)="DonePayment()">Save</button>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div> 
+       
+
+    </main>
+    <!-- Main layout -->
+
+</body>

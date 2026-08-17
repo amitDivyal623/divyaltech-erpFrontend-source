@@ -1,0 +1,1247 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Item Master List
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openItemModal()" data-target="#add_property_book_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add New Item Master</button>
+                    <!-- <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" (click)="openStateModal()" data-target="#add_company_name_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add Company</button> -->
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openSubGroupModal()" data-target="#add_sub_group_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add Sub-Category</button>
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openGroupModal()" data-target="#add_group_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add Category</button>
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openUnitModal()" data-target="#add_unit_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add Units</button>
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" (click)="openStateModal()" data-target="#add_state_name_modal"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add States</button>
+                </h5>
+                <div class="card-body">
+                    <!-- <div class="row px-2">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline margin-mdform">
+                                <input type="text" id="payer_name" class="form-control" required="">
+                                <label for="payer_name" class="">Item Code</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-autocomplete" class="form-control">
+                                <label for="form-autocomplete" class="">Item Master</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                                class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <nav class="nav nav-pills nav-justified mb-3">
+                    <a id="tab-item-details" class="nav-item nav-link link-nav active" data-toggle="tab"
+                        href="#docsTabsItems" role="tab">
+                        <i class="bi bi-box-arrow-in-right mr-2" aria-hidden="true"></i>Item Details
+                    </a>
+                    <!-- <a id="tab-company" class="nav-item nav-link link-nav" data-toggle="tab" href="#docsTabsCompany" role="tab">
+                    <i class="bi bi-box-arrow-up-right mr-2" aria-hidden="true"></i>Company
+                    </a> -->
+                    <a id="tab-category" class="nav-item nav-link link-nav" data-toggle="tab" href="#docsTabsCategory"
+                        role="tab">
+                        <i class="bi bi-box-arrow-up-right mr-2" aria-hidden="true"></i>Category
+                    </a>
+                    <a id="tab-subcategory" class="nav-item nav-link link-nav" data-toggle="tab"
+                        href="#docsTabsSubCategory" role="tab">
+                        <i class="bi bi-arrow-left-right mr-2" aria-hidden="true"></i>Sub Category
+                    </a>
+                    <a id="tab-units" class="nav-item nav-link link-nav" data-toggle="tab" href="#docsTabsUnits"
+                        role="tab">
+                        <i class="bi bi-bank mr-2" aria-hidden="true"></i>Units
+                    </a>
+                    <a id="tab-states" class="nav-item nav-link link-nav" data-toggle="tab" href="#docsTabsStates"
+                        role="tab">
+                        <i class="fas fa-book-reader mr-2" aria-hidden="true"></i>States
+                    </a>
+                </nav>
+
+                <!-- ALL Separate Table-->
+                <div class="tab-content">
+                    <!-- Items Table-->
+                    <div class="tab-pane fade show active" id="docsTabsItems" role="tabpanel">
+                        <div class="table-responsive card-body" [formGroup]="filterItemForm">
+
+                            <div class="row px-2">
+
+                                <!-- Item Id -->
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="item_id">
+                                        <label class="active">Item Id</label>
+                                    </div>
+                                </div>
+
+                                <!-- Category -->
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3 md-form md-outline">
+                                    <label class="active ml-3">Category</label>
+                                    <select formControlName="category" class="form-control"
+                                        (change)="onCategoryChange($event)" [compareWith]="compareById">
+                                        <option value="">Select Category</option>
+                                        <option *ngFor="let c of categoryLists" [value]="c.group_id">
+                                            {{ c.group_name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Sub Category -->
+                                <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3 md-form md-outline">
+                                    <label class="active ml-3">Sub Category</label>
+                                    <select formControlName="subCategory" class="form-control"
+                                        (change)="onSubCategoryChange($event)" [compareWith]="compareById">
+                                        <option value="">Select Sub Category</option>
+                                        <option *ngFor="let s of filteredSubcategoryListsSearch"
+                                            [value]="s.sub_group_id">
+                                            {{ s.sub_group_name }}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Item (WIDER) -->
+                                <div class="col-xl-5 col-lg-7 col-md-9 col-sm-12 mb-3 md-form md-outline">
+                                    <ng-select class="w-100" [items]="filteredMaterialsListSearch" bindLabel="itemname"
+                                        bindValue="master_item_id" formControlName="item_name" placeholder="Select Item"
+                                        [searchable]="true" [clearable]="true">
+
+                                        <!-- Dropdown Options -->
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div [attr.title]="item.itemname">
+                                                {{ item.itemname }},
+                                                <span class="text-muted">{{ item.unit_name }}</span>
+                                            </div>
+                                        </ng-template>
+
+                                        <!-- Selected Label -->
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <div [attr.title]="item.itemname">
+                                                {{ item.itemname }},
+                                                <span class="text-muted">{{ item.unit_name }}</span>
+                                            </div>
+                                        </ng-template>
+
+                                    </ng-select>
+                                </div>
+
+                            </div>
+
+                            <!-- 🔽 BUTTON ROW -->
+                            <div class="row px-2 mt-2">
+                                <div class="col-12 text-right">
+                                    <button type="button" (click)="searchItem()"
+                                        class="btn dusty-grass-gradient btn-sm mr-2">
+                                        <i class="fa fa-search mr-1"></i>Search
+                                    </button>
+
+                                    <button type="button" class="btn warm-flame-gradient btn-sm" (click)="resetItem()">
+                                        <i class="fa fa-refresh mr-1"></i>Reset
+                                    </button>
+                                </div>
+                            </div>
+
+
+
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Item Id
+                                        </th>
+                                        <th>Item Name
+                                        </th>
+                                        <th>Category Name
+                                        </th>
+                                        <th>Sub Category Name
+                                        </th>
+                                        <th>Basic Unit
+                                        </th>
+                                        <th>Alt Unit
+                                        </th>
+                                        <th>HSN Code
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of itemDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.item_id}}</td>
+                                        <td>{{item.item_name}}</td>
+                                        <td>{{item.group_name}}</td>
+                                        <td>{{item.sub_group_name}}</td>
+                                        <td>{{item.basic_unit}}</td>
+                                        <td>{{item.alt_unit}}</td>
+                                        <td>{{item.hsn_code}}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                                (click)="editItemDetail('view_item',item.master_item_id)"
+                                                data-target="#add_property_book_modal"><i class="fa fa-eye"
+                                                    aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                                (click)="editItemDetail('edit_item', item.master_item_id)"
+                                                data-target="#add_property_book_modal"><i
+                                                    class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                (click)="removeItemDetail(item.master_item_id)"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="itemDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Company Content -->
+                    <!-- <div class="tab-pane fade" id="docsTabsCompany" role="tabpanel">
+                    <div class="table-responsive card-body">
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger2" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Company Name
+                                        </th>
+                                        <th>GST No.
+                                        </th>
+                                        <th>PAN No.
+                                        </th>
+                                        <th>Sate name
+                                        </th>
+                                        <th>Company Address
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of companyDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.company_name}}</td>
+                                        <td>{{item.gst_no}}</td>
+                                        <td>{{item.pan_no}}</td>
+                                        <td>{{item.state_name}}</td>
+                                        <td>{{item.company_address}}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" (click)="editCompanyDetail('view_company',item.master_company_id)" data-target="#add_company_name_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" (click)="editCompanyDetail('edit_company', item.master_company_id)" data-target="#add_company_name_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top" (click)="deleteCompanyDetail(item.master_company_id)"><i class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="companyDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>                            
+                            </table>                     
+                    </div>
+                    </div> -->
+
+                    <!-- Category Content -->
+                    <div class="tab-pane fade" id="docsTabsCategory" role="tabpanel">
+                        <div class="table-responsive card-body">
+
+                            <form [formGroup]="filterCategoryForm">
+
+                                <div class="card-body">
+
+                                    <div class="row px-2">
+
+                                        <div class="col-md-3 px-3">
+                                            <div class="md-form md-outline margin-mdform">
+
+                                                <ng-select [items]="showAllGroups" bindLabel="groupname"
+                                                    bindValue="groupid" placeholder="Select Group" [searchable]="true"
+                                                    [clearable]="true" formControlName="group_id">
+                                                </ng-select>
+
+                                                <label class="active">Group Name</label>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row float-right mr-3">
+                                            <button type="button"
+                                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                                                (click)="searchCategory()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+                                            <button type="button"
+                                                class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                                (click)="resetCategory()">
+                                                <i class="fa fa-refresh mr-2"></i>Reset
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3"
+                                class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Category Name
+                                        </th>
+                                        <th>Created By
+                                        </th>
+                                        <th>Created Date
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of categoryDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.groupname}}</td>
+                                        <td>{{item.createdby}}</td>
+                                        <td>{{ item.createddt | date:'d MMM, y h:mm a' }}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                                (click)="editCategoryDetail('view_category',item.groupid)"
+                                                data-target="#add_group_name_modal"><i class="fa fa-eye"
+                                                    aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                                (click)="editCategoryDetail('edit_category', item.groupid)"
+                                                data-target="#add_group_name_modal"><i
+                                                    class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                (click)="deleteCategoryDetail(item.groupid)"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="categoryDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Sub Category Content -->
+                    <div class="tab-pane fade" id="docsTabsSubCategory" role="tabpanel">
+                        <div class="table-responsive card-body">
+
+
+                            <form [formGroup]="filterSubCategoryForm">
+
+                                <div class="card-body">
+
+                                    <div class="row px-2">
+
+                                        <div class="col-md-3 px-3">
+                                            <div class="md-form md-outline margin-mdform">
+
+                                                <ng-select [items]="showAllGroups" bindLabel="groupname"
+                                                    bindValue="groupid" placeholder="Select Group" [searchable]="true"
+                                                    [clearable]="true" formControlName="group_id">
+                                                </ng-select>
+
+                                                <label class="active">Category</label>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 px-3">
+                                            <div class="md-form md-outline margin-mdform">
+
+                                                <ng-select [items]="filterSubGroupList" bindLabel="subgroupname"
+                                                    bindValue="subgroupid" placeholder="Select Group"
+                                                    [searchable]="true" [clearable]="true"
+                                                    formControlName="sub_group_id">
+                                                </ng-select>
+
+                                                <label class="active">Sub-Category</label>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row float-right mr-3">
+                                            <button type="button"
+                                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                                                (click)="searchSubCategory()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+                                            <button type="button"
+                                                class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                                (click)="resetSubCategory()">
+                                                <i class="fa fa-refresh mr-2"></i>Reset
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions4" [dtTrigger]="dtTrigger4"
+                                class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Category Name
+                                        </th>
+                                        <th>SubCategory Name
+                                        </th>
+                                        <th>Created By
+                                        </th>
+                                        <th>Created Date
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of subCategoryDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.groupname}}</td>
+                                        <td>{{item.subgroupName}}</td>
+                                        <td>{{item.createdby}}</td>
+                                        <td>{{ item.createddt | date:'d MMM, y h:mm a' }}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                                (click)="editsubCategoryDetail('view_subcategory',item.subgroupid)"
+                                                data-target="#add_sub_group_name_modal"><i class="fa fa-eye"
+                                                    aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                                (click)="editsubCategoryDetail('edit_subcategory', item.subgroupid)"
+                                                data-target="#add_sub_group_name_modal"><i
+                                                    class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                (click)="deletesubCategoryDetail(item.subgroupid)"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="subCategoryDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Units Content -->
+                    <div class="tab-pane fade" id="docsTabsUnits" role="tabpanel">
+                        <div class="table-responsive card-body">
+
+                            <form [formGroup]="filterUnitForm">
+
+                                <div class="card-body">
+
+                                    <div class="row px-2">
+
+                                        <div class="col-md-3 px-3">
+                                            <div class="md-form md-outline margin-mdform">
+
+                                                <ng-select [items]="showAllUnits" bindLabel="unit_name"
+                                                    bindValue="unit_id" placeholder="Select Unit" [searchable]="true"
+                                                    [clearable]="true" formControlName="unit_id">
+                                                </ng-select>
+
+                                                <label class="active">Unit Name</label>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row float-right mr-3">
+                                            <button type="button"
+                                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                                                (click)="searchUnit()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+                                            <button type="button"
+                                                class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                                (click)="resetUnit()">
+                                                <i class="fa fa-refresh mr-2"></i>Reset
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions5" [dtTrigger]="dtTrigger5"
+                                class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Unit name
+                                        </th>
+                                        <th>Created By
+                                        </th>
+                                        <th>Created Date
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of subUnitDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.unit_name}}</td>
+                                        <td>{{item.createdby}}</td>
+                                        <td>{{ item.createddt | date:'d MMM, y h:mm a' }}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                                (click)="editUnitDetail('view_unit',item.unit_id)"
+                                                data-target="#add_unit_name_modal"><i class="fa fa-eye"
+                                                    aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                                (click)="editUnitDetail('edit_unit', item.unit_id)"
+                                                data-target="#add_unit_name_modal"><i
+                                                    class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                (click)="deleteUnitDetail(item.unit_id)"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="subUnitDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- States Content -->
+                    <div class="tab-pane fade" id="docsTabsStates" role="tabpanel">
+                        <div class="table-responsive card-body">
+
+                            <form [formGroup]="filterStateForm">
+
+                                <div class="card-body">
+
+                                    <div class="row px-2">
+
+                                        <div class="col-md-3 px-3">
+                                            <div class="md-form md-outline margin-mdform">
+
+                                                <ng-select [items]="showAllStates" bindLabel="state_name"
+                                                    bindValue="state_id" placeholder="Select State" [searchable]="true"
+                                                    [clearable]="true" formControlName="state_id">
+                                                </ng-select>
+
+                                                <label class="active">State Name</label>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row float-right mr-3">
+                                            <button type="button"
+                                                class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                                                (click)="searchState()">
+                                                <i class="fa fa-search mr-2"></i>Search
+                                            </button>
+                                            <button type="button"
+                                                class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                                (click)="resetState()">
+                                                <i class="fa fa-refresh mr-2"></i>Reset
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions6" [dtTrigger]="dtTrigger6"
+                                class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Sr No.</th>
+                                        <th>State name
+                                        </th>
+                                        <th>Created By
+                                        </th>
+                                        <th>Created Date
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of StateDatalists;let i=index">
+                                        <td></td>
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.state_name}}</td>
+                                        <td>{{item.createdby}}</td>
+                                        <td>{{ item.createddt | date:'d MMM, y h:mm a' }}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal"
+                                                (click)="editStateDetail('view_state',item.state_id)"
+                                                data-target="#add_state_name_modal"><i class="fa fa-eye"
+                                                    aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal"
+                                                (click)="editStateDetail('edit_state', item.state_id)"
+                                                data-target="#add_state_name_modal"><i
+                                                    class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                (click)="deleteStateDetail(item.state_id)"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="StateDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+        <!-- Add Item master modal -->
+        <div class="modal fade" id="add_property_book_modal" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            role="dialog">
+
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+
+                <div class="modal-content">
+
+                    <!-- FORM STARTS HERE -->
+                    <form [formGroup]="itemMasterForm" (ngSubmit)="SaveItemMaster()">
+
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">
+                                {{ modalTitle === 'view_item'
+                                ? 'View Item Master'
+                                : modalTitle === 'edit_item'
+                                ? 'Edit Item Master'
+                                : 'Add New Item Master' }}
+                            </p>
+
+                            <button closeMasterItem type="button" class="close" data-dismiss="modal"
+                                (click)="closeItemModal()">
+                                <span class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+
+                            <div class="form-row">
+
+                                <input type="hidden" formControlName="master_item_id">
+
+                                <div class="col-lg-4 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="item_id">
+                                        <label class="active">Item Id</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="itemName">
+                                        <label class="active">Item Name</label>
+                                    </div>
+
+                                    <div *ngIf="submitted && itemMasterForm.get('itemName')?.invalid"
+                                        class="text-danger small">
+                                        itemName is required
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-4 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" formControlName="hsn_code">
+                                        <label class="active">HSN Code</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 px-2 md-form md-outline">
+                                    <select class="form-control" formControlName="groupName"
+                                        (change)="onChangeGroupName()">
+                                        <option value="">Select Category</option>
+                                        <option *ngFor="let type of showAllGroups" [value]="type.groupid">
+                                            {{ type.groupname }}
+                                        </option>
+                                    </select>
+                                    <label class="active ml-2">Category Name</label>
+
+                                    <div *ngIf="submitted && itemMasterForm.get('groupName')?.invalid"
+                                        class="text-danger small">
+                                        Category is required
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 px-2 md-form md-outline">
+                                    <select class="form-control" formControlName="subGroupName"
+                                        [disabled]="!itemMasterForm.get('groupName').value"
+                                        (change)="onChangeGrpAndSubGrp()">
+                                        <option value="">Select Sub Category</option>
+                                        <option *ngIf="isSubGroupLoading" disabled>
+                                            Loading subcategories...
+                                        </option>
+                                        <option *ngFor="let subType of showSubGrpsById" [value]="subType.subgroupid">
+                                            {{ subType.subgroupname }}
+                                        </option>
+                                        <option *ngIf="!isSubGroupLoading && (showSubGrpsById?.length === 0)" disabled>
+                                            No subcategories available
+                                        </option>
+                                    </select>
+                                    <label class="active ml-2">Sub Category Name</label>
+
+                                    <div *ngIf="submitted && itemMasterForm.get('subGroupName')?.invalid"
+                                        class="text-danger small">
+                                        Sub-Category is required
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 px-2 md-form md-outline">
+                                    <select class="form-control" formControlName="basic_unit">
+                                        <option value="">Select Unit</option>
+                                        <option *ngFor="let unit of showAllUnits" [value]="unit.unit_id">
+                                            {{ unit.unit_name }}
+                                        </option>
+                                    </select>
+                                    <label class="active ml-2">Basic Unit</label>
+
+                                    <div *ngIf="submitted && itemMasterForm.get('basic_unit')?.invalid"
+                                        class="text-danger small">
+                                        Basic Unit is required
+                                    </div>
+                                </div>
+
+
+                                <div class="col-lg-6 px-3">
+                                    <div class="md-form md-outline">
+                                        <input class="form-check-input filled-in" type="checkbox" id="rent"
+                                            formControlName="rent">
+                                        <label for="rent">Rent</label>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-lg-6 px-2 md-form md-outline">
+                                    <select class="form-control" formControlName="alt_unit">
+                                        <option value="">Select Unit</option>
+                                        <option *ngFor="let unit of showAllUnits" [value]="unit.unit_id">
+                                            {{ unit.unit_name }}
+                                        </option>
+                                    </select>
+                                    <label class="active ml-2">Alternate Unit</label>
+                                    
+                                </div> -->
+
+                                <div class="col-lg-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea class="md-textarea form-control" rows="2"
+                                            formControlName="item_description">
+                                        </textarea>
+                                        <label class="active">Item Description</label>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- ================= UNIT CONVERSION ================= -->
+
+                            <div class="col-lg-12 mt-3">
+                                <div class="card border-info">
+
+                                    <div class="card-header bg-info text-white py-2">
+                                        <strong>Unit Conversion Details</strong>
+                                    </div>
+
+                                    <div class="card-body p-2">
+
+                                        <div class="text-right mb-2">
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
+                                                (click)="addConversionRow()">
+                                                + Add Conversion
+                                            </button>
+                                        </div>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-sm text-center">
+
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>Basic Unit</th>
+                                                        <th>Basic Value</th>
+                                                        <th>=</th>
+                                                        <th>Alt Value</th>
+                                                        <th>Alternate Unit</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody formArrayName="unitConversions">
+
+                                                    <tr *ngFor="let row of unitConversions.controls; let i = index"
+                                                        [formGroupName]="i">
+
+                                                        <td class="align-middle text-center">
+                                                            {{ getBasicUnitName() }}
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number"
+                                                                class="form-control form-control-sm text-center"
+                                                                formControlName="basic_value">
+                                                        </td>
+
+                                                        <td class="align-middle text-center">
+                                                            =
+                                                        </td>
+
+                                                        <td>
+                                                            <input type="number"
+                                                                class="form-control form-control-sm text-center"
+                                                                formControlName="alt_value">
+                                                        </td>
+
+                                                        <td>
+                                                            <select class="form-control form-control-sm"
+                                                                formControlName="alt_unit_id">
+                                                                <option value="">Select Unit</option>
+                                                                <option *ngFor="let unit of showAllUnits"
+                                                                    [value]="unit.unit_id">
+                                                                    {{ unit.unit_name }}
+                                                                </option>
+                                                            </select>
+                                                        </td>
+
+                                                        <td>
+                                                            <i class="fa fa-trash text-danger" style="cursor:pointer;"
+                                                                (click)="removeConversionRow(i)">
+                                                            </i>
+                                                        </td>
+
+                                                    </tr>
+
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal" #closeMasterItem
+                                (click)="closeItemModal()">
+                                Cancel
+                            </button>
+
+                            <button type="submit" *ngIf="isHideSave" class="btn btn-sm btn-outline-success">
+                                {{ modalTitle?.includes('edit') ? 'Update' : 'Save' }}
+                            </button>
+                        </div>
+
+                    </form>
+                    <!-- FORM ENDS HERE -->
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Add Group Modal-->
+        <div class="modal fade" id="add_group_name_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddGroups">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <input type="hidden" formControlName="group_id">
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">
+                            {{ modalTitle === 'view_category'
+                            ? 'View Category Name'
+                            : modalTitle === 'edit_category'
+                            ? 'Edit Category Name'
+                            : 'Add New Category Name' }}
+                        </p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="clearGroupField()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="group_name"
+                                        [ngClass]="{'is-invalid': AddGroups.controls['group_name'].touched && AddGroups.controls['group_name'].invalid}">
+                                    <label for="item-id" class="active">Category Name</label>
+                                </div>
+                                <div *ngIf="AddGroups.controls['group_name'].touched && AddGroups.controls['group_name'].invalid"
+                                    class="invalid-feedback d-block">
+                                    Category name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <a type="button" #closeGroupbutton (click)="clearGroupField()" class="btn btn-sm btn-danger"
+                            data-dismiss="modal">Cancel</a>
+                        <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect"
+                            (click)="saveGroupName()">{{ modalTitle && modalTitle.includes('edit') ? 'Update' : 'Save'
+                            }}
+                        </a>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+
+        <!-- Add Sub-Group Modal-->
+        <div class="modal fade" id="add_sub_group_name_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddSubGroups">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <input type="hidden" formControlName="subgroupid">
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">
+                            {{ modalTitle === 'view_subcategory'
+                            ? 'View Sub Category Name'
+                            : modalTitle === 'edit_subcategory'
+                            ? 'Edit Sub Category Name'
+                            : 'Add New Sub Category Name' }}
+                        </p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="clearSubGroupField()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class="md-form md-outline">
+                                    <select formControlName="group_name"
+                                        [ngClass]="{'is-invalid': AddSubGroups.controls['group_name'].touched && AddSubGroups.controls['group_name'].invalid}"
+                                        id="group_name" class="form-control field-ht colorful-select">
+                                        <option value="">Select Category Name</option>
+                                        <option *ngFor="let type of showAllGroups" [value]="type.groupid">
+                                            {{type.groupname}}</option>
+                                    </select>
+                                    <label class="ml-1 active">Category Name</label>
+                                    <div *ngIf="AddSubGroups.controls['group_name'].touched && AddSubGroups.controls['group_name'].invalid"
+                                        class="invalid-feedback d-block">
+                                        Category Name is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control"
+                                        formControlName="sub_group_name"
+                                        [ngClass]="{'is-invalid': AddSubGroups.controls['sub_group_name'].touched && AddSubGroups.controls['sub_group_name'].invalid}">
+                                    <label class="ml-1" [ngClass]="{'active': AddSubGroups.get('group_name')?.value}">
+                                        Sub Category Name
+                                    </label>
+
+                                    <div *ngIf="AddSubGroups.controls['sub_group_name'].touched && AddSubGroups.controls['sub_group_name'].invalid"
+                                        class="invalid-feedback d-block">
+                                        Sub Category Name is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <a type="button" #closeSubGroupbutton class="btn btn-sm btn-danger"
+                            (click)="clearSubGroupField()" data-dismiss="modal">Cancel</a>
+                        <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect"
+                            (click)="saveSubGroupName()">{{ modalTitle && modalTitle.includes('edit') ? 'Update' :
+                            'Save' }}
+                        </a>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+
+        <!-- Add UNIT Modal-->
+        <div class="modal fade" id="add_unit_name_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddUnits">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <input type="hidden" formControlName="unit_id">
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">
+                            {{ modalTitle === 'view_unit'
+                            ? 'View Measurement Unit'
+                            : modalTitle === 'edit_unit'
+                            ? 'Edit Measurement Unit'
+                            : 'Add New Measurement Units' }}
+                        </p>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="resetUnitForm()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="unit_name"
+                                        [ngClass]="{'is-invalid': AddUnits.controls['unit_name'].touched && AddUnits.controls['unit_name'].invalid}">
+                                    <label for="item-id" class="active">Select Units</label>
+                                </div>
+                                <div *ngIf="AddUnits.controls['unit_name'].touched && AddUnits.controls['unit_name'].invalid"
+                                    class="invalid-feedback d-block">
+                                    Unit name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <a type="button" #closeUnitbutton class="btn btn-sm btn-danger" (click)="resetUnitForm()"
+                            data-dismiss="modal">Cancel</a>
+                        <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect"
+                            (click)="saveUnitName()">{{ modalTitle && modalTitle.includes('edit') ? 'Update' : 'Save' }}
+                        </a>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+
+        <!-- Add state Modal-->
+        <div class="modal fade" id="add_state_name_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup]="AddStates">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <input type="hidden" formControlName="state_id">
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">{{ modalTitle === 'view_state'
+                            ? 'View State Name'
+                            : modalTitle === 'edit_state'
+                            ? 'Edit State Name'
+                            : 'Add New State Name' }} </p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="resetStateForm()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="state_name"
+                                        [ngClass]="{'is-invalid': AddStates.controls['state_name'].touched && AddStates.controls['state_name'].invalid}">
+                                    <label for="item-id" class="active">Select States</label>
+                                </div>
+                                <div *ngIf="AddStates.controls['state_name'].touched && AddStates.controls['state_name'].invalid"
+                                    class="invalid-feedback d-block">
+                                    State name is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <a type="button" #closeStatebutton class="btn btn-sm btn-danger" (click)="resetStateForm()"
+                            data-dismiss="modal">Cancel</a>
+                        <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect"
+                            (click)="saveStateName()">{{ modalTitle && modalTitle.includes('edit') ? 'Update' : 'Save'
+                            }}
+                        </a>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+
+        <!-- Add Company Modal
+        <div class="modal fade" id="add_company_name_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md modal-notify modal-info" role="document" [formGroup] = "AddCompany">
+                 Content 
+                <div class="modal-content">
+                    Header 
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Company Name</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                     Body 
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <input type="hidden" formControlName="master_company_id">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="company_name" [ngClass]="{'is-invalid': AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid}">
+                                    <label for="item-id" class="active">Company Name*</label>
+                                </div>
+                                 <div *ngIf="AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid" class="invalid-feedback">
+                                    Company name is required 
+                                </div> 
+                            </div>
+
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="gst_no" [ngClass]="{'is-invalid': AddCompany.controls['gst_no'].touched && AddCompany.controls['gst_no'].invalid}">
+                                    <label for="item-id" class="active"> GST No.*</label>
+                                </div>
+                                 <div *ngIf="AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid" class="invalid-feedback d-block">
+                                   Company name is required 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-lg-6 col-md-3 px-2">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="item-id" class="form-control" formControlName="pan_no" [ngClass]="{'is-invalid': AddCompany.controls['pan_no'].touched && AddCompany.controls['pan_no'].invalid}">
+                                    <label for="item-id" class="active">PAN No.*</label>
+                                </div>
+                                 <div *ngIf="AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid" class="invalid-feedback d-block">
+                                    Company name is required 
+                                </div> 
+                            </div>
+                            <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                <select 
+                                    [ngClass]="{'is-invalid': AddCompany.controls['state'].touched && AddCompany.controls['state'].invalid}"
+                                    formControlName="state"                                        
+                                    id="state" 
+                                    class="form-control field-ht colorful-select">
+                                    <option value="" >Select States</option>
+                                    <option *ngFor="let type of showAllStates" [value]="type.state_id">{{type.state_name}}</option>
+                                </select>
+                                <label class="ml-2 active">State Name*</label>                                   
+                            </div>   
+                        </div>
+                        <div class="col-lg-14 px-2">
+                            <div class="md-form md-outline">
+                            <textarea id="company-address" rows="3" class="form-control"
+                                formControlName="company_address"
+                                [ngClass]="{'is-invalid': AddCompany.controls['company_address'].touched && AddCompany.controls['company_address'].invalid}"></textarea>
+                            <label for="company-address" class="active">Company Address*</label>
+                            </div>
+                             <div *ngIf="AddCompany.controls['company_name'].touched && AddCompany.controls['company_name'].invalid"
+                                class="invalid-feedback d-block">
+                                Company name is required
+                            </div> 
+                        </div>
+
+
+                    </div>
+                     Footer 
+                    <div class="modal-footer">
+                        <a type="button" #closeCompanybutton class="btn btn-sm btn-danger" (click)="resetCompanyForm()" data-dismiss="modal">Cancel</a>
+                        <a type="button" *ngIf="isHideSave" class="btn btn-sm btn-outline-success waves-effect" (click)="saveCompanyName()">Save</a>
+                    </div>
+                </div>
+               
+            </div>
+        </div>     -->
+
+    </main>
+    <!-- Main layout -->
+</body>

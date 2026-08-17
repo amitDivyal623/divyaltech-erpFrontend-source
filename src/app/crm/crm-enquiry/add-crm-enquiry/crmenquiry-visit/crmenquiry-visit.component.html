@@ -1,0 +1,495 @@
+<div class="col-md-12">
+  <div class="row" *ngIf="enquiryvisitorTAb">
+    <div class="px-2 float-right">
+      <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect enquryButton"
+        (click)="openVisitormodal();onchangeTitle()"><i class="fa fa-plus" aria-hidden="true"></i> Add New
+        Visits</button>
+      <button type="button" data-toggle="modal" data-target="#add_vis_modal" style="display: none;"
+        #addNewVisits></button>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid px-4 mb-2" *ngIf="visitorTAb">
+  <div class="card">
+    <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Visitor List
+      <button type="button" #addNewVisits (click)="openVisitormodal()" id="openVisitormodal"
+        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal"
+        data-target="#add_vis_modal" style="display: none;"><i class="fa fa-plus" aria-hidden="true"></i>Add New
+        Visitor</button>
+    </h5>
+    <div [formGroup]="searchCrmVisitor" class="card-body">
+      <div class="form-row">
+        <div class="col-md-3 px-4">
+          <div class=" md-form md-outline">
+            <input type="text" formControlName="filtervisitor_name" id="form-visitor" class="form-control"
+              name="filtervisitor_name" value="">
+            <label for="form-visitor" class="">Visitor
+              Name</label>
+          </div>
+        </div>
+        <!-- Date Picker of Visiting Date -->
+        <div class="col-md-3 px-4">
+          <div class="md-form md-outline pr-4">
+            <input class="form-control" formControlName="filtervisiting_date" id="filtervisiting_date" type="text"
+              ngbDatepicker #td="ngbDatepicker" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate"
+              name="filtervisiting_date" (click)="td.toggle()">
+            <label for="filtervisiting_date" class="active">Visiting Date</label>
+          </div>
+        </div>
+
+
+        <div class="col-md-3 px-4">
+          <div class="md-form md-outline pr-2">
+            <input placeholder="Select date" formControlName="dateFrom" id="attendanceDateFrom" [minDate]="minDate"
+              [maxDate]="maxDate" readonly ngbDatepicker #fdate="ngbDatepicker" (click)="fdate.toggle()" type="text"
+              class="form-control datepicker">
+            <label for="attendanceDateFrom" class="active">Date From</label>
+          </div>
+        </div>
+        <div class="col-md-3 px-4">
+          <div class="md-form md-outline pr-2">
+            <input placeholder="Select date" formControlName="dateTo" [minDate]="minDate" [maxDate]="maxDate" readonly
+              ngbDatepicker #tdate="ngbDatepicker" (click)="tdate.toggle()" type="text" id="attendanceDateTo"
+              class="form-control datepicker">
+            <label for="attendanceDateTo" class="active">Date To</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-3 md-form md-outline px-4">
+          <select formControlName="enquiry_mode" id="enquiry_mode" (change)="onEnquiryModeChange($event)"
+            class="form-control field-ht colorful-select">
+            <option value="" disabled selected>Select Enquiry Mode</option>
+            <option *ngFor="let mode of enquiryModeData" [value]="mode.lookupdataid">
+              {{ mode.lookupvalue }}
+            </option>
+          </select>
+          <label class="ml-4 active">Enquiry Mode</label>
+        </div>
+        <div class="col-md-3 md-form md-outline px-4" *ngIf="showIntroducedBy">
+          <select formControlName="introduced_by" class="form-control field-ht colorful-select">
+            <option value="" disabled>Select Marketing Team</option>
+            <option *ngFor="let emp of marketingTeamMembersData" [value]="emp.lookupdataid">
+              {{ emp.lookupvalue }}
+            </option>
+          </select>
+          <label class="ml-4 active">Introduce By</label>
+        </div>
+        <div class="col-md-3 md-form md-outline px-4">
+          <select formControlName="shown_by" class="form-control field-ht colorful-select">
+            <option value="" disabled>Select Shown By</option>
+            <option *ngFor="let emp of employeedataList" [value]="emp.name">
+              {{ emp.name }}
+            </option>
+          </select>
+          <label class="ml-4 active">Plot Shown By</label>
+        </div>
+      </div>
+      <div class="form-row float-right mr-3">
+        <button type="button" (click)="VisitorSearch()"
+          class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2"
+            aria-hidden="true"></i>Search</button>
+        <button type="button" (click)="resetVisitor()"
+          class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i
+            class="fas fa-redo-alt mr-2"></i>Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Visitors management datatable -->
+<div class="container-fluid px-4 my-4">
+  <section>
+    <div class="card">
+      <div class="table-responsive">
+        <button *ngIf="canExportVisitorExcel" (click)="ExportTOExcel()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+          style="float: right;">Export to Excel
+        </button>
+        <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple">Please
+          Wait...</ngx-spinner>
+        <table id="CrmVisitorTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+          class="table table-striped" cellspacing="0" width="100%" #TABLE>
+          <thead>
+            <tr>
+
+              <th>S.No.</th>
+              <th>Visitor Name</th>
+              <th #vheaderclick>Visiting Date</th>
+              <th width="30%">Notes</th>
+              <th>Visitor Mobile</th>
+              <th>Visited plots</th>
+              <th>Shown By</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of data;let i=index">
+
+              <td>{{i+1}}</td>
+              <td> {{item.visitor_name}}</td>
+              <td>{{item.visitor_datetime | date:'dd-MM-yyyy'}}</td>
+              <td width="30%" data-placement="top"> <a ngbTooltip="{{item.Details}}"> {{item.Details.slice(0,50) +
+                  (item.Details.length>30 ? "..." :"")}} </a>
+
+              </td>
+              <td>{{item.visitor_Mobile}}</td>
+              <td>{{item.Plot}}</td>
+              <td>{{item.plotshownby}}</td>
+              <td>
+                <a class="black-text" id="{{i+1}}" ngbTooltip="View"
+                  (click)="view(item.visitor_id,item.visitproductId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a *ngIf="hideEditVisitIcon" class="teal-text" id="{{i+1}}" ngbTooltip="Edit"
+                  (click)="edit(item.visitor_id,item.visitproductId)"><i class="fa-pencil-alt px-1 fas"></i>
+                </a>
+
+
+                <a *ngIf="!CrmUserRole && !CRMAdmin">
+                  <a *ngIf="hideDeleteVisitIcon" class="red-text" id="{{i+1}}" ngbTooltip="Remove" #Visitordata
+                    (click)="delete(item.visitor_id,item.visitproductId)">
+                    <i class="fa-times px-1 fas">
+                    </i>
+
+                  </a>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Add New visitor modal -->
+  <div class="modal fade" id="add_vis_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+      <!-- Content -->
+      <div class="modal-content">
+        <!-- Header -->
+        <div class="modal-header mdb-color">
+          <p class="heading lead font-weight-bold" id="modaltextheader">{{Mdlttl}}</p>
+          <!-- <h5 #mdlttl></h5>  -->
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+          </button>
+        </div>
+        <!-- Body -->
+        <form>
+          <div class="modal-body">
+            <form id="visitor-detail" [formGroup]="addCrmVisitor">
+              <div class="row px-2">
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class=" md-form md-outline">
+                    <input type="hidden" formControlName="visitor_id" id="visitor_id">
+                    <input type="hidden" formControlName="taskId" id="taskId">
+                    <ng-autocomplete [data]="customerdataList" formControlName="visitor_name" id="visitor_namee"
+                      [searchKeyword]="keyword" (selected)='selectCust($event)'
+                      (inputChanged)='onCustomerSearch($event);onVisitorName();' (inputFocused)='onFocused($event)'
+                      [itemTemplate]="itemTemplate"
+                      [ngClass]="{ 'is-invalid': (submitted && addCrmVisitor.controls['visitor_name'].invalid ) || (addCrmVisitor.controls['visitor_name'].invalid && addCrmVisitor.controls['visitor_name'].touched)}">
+                    </ng-autocomplete>
+                    <ng-template #itemTemplate let-item>
+                      <a [innerHTML]="item.name" [readonly]="Access"></a>
+                    </ng-template>
+                    <ng-template #notFoundTemplate let-notFound>
+                      <div [innerHTML]="notFound" [readonly]="Access"></div>
+                    </ng-template>
+                    <label for="visitor_name" style="z-index: 1000;" class="active">Visitor Name</label>
+                    <div
+                      *ngIf="(submitted && addCrmVisitor.controls['visitor_name'].invalid ) || (addCrmVisitor.controls['visitor_name'].touched && addCrmVisitor.controls['visitor_name'].invalid)"
+                      class="invalid-feedback">Visitor Name
+                      is required</div>
+                    <!-- <input type="text" formControlName="visitor_name" id="visitor_name" class="form-control"
+                      [readonly]="Access"
+                      [ngClass]="{ 'is-invalid': (submitted && addCrmVisitor.controls['visitor_name'].invalid ) || (addCrmVisitor.controls['visitor_name'].invalid && addCrmVisitor.controls['visitor_name'].touched)}">
+                    <label for="visitor_name" class="active">Visitors Name*</label>
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitor_name'].invalid) || (addCrmVisitor.controls['visitor_name'].invalid && addCrmVisitor.controls['visitor_name'].touched)"
+                      class="invalid-feedback">
+                      <div
+                        *ngIf=" (submitted && addCrmVisitor.controls['visitor_name'].invalid) || (addCrmVisitor.controls['visitor_name'].invalid && addCrmVisitor.controls['visitor_name'].touched)">
+                        Visitor Name is required</div> -->
+                    <!-- </div> -->
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class="md-form md-outline input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">+91</span>
+                    </div>
+                    <input type="text" formControlName="visitors_no" #visitorNUmber class="form-control"
+                      placeholder="Contact Number" aria-label="Username" aria-describedby="basic-addon1"
+                      [readonly]="autocompleteTab"
+                      [ngClass]="{ 'is-invalid': (submitted && addCrmVisitor.controls['visitors_no'].invalid ) || (addCrmVisitor.controls['visitors_no'].invalid && addCrmVisitor.controls['visitors_no'].touched)}">
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].errors.required) || (addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].touched && addCrmVisitor.controls['visitors_no'].errors.required)"
+                      class="invalid-feedback">Please Enter
+                      Contact Number</div>
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].errors.pattern) || (addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].touched && addCrmVisitor.controls['visitors_no'].errors.pattern)"
+                      class="invalid-feedback">Please Enter
+                      Only Numeric Number. </div>
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].errors.maxlength && !addCrmVisitor.controls['visitors_no'].errors.pattern && !addCrmVisitor.controls['visitors_no'].errors.required) || (addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].touched && addCrmVisitor.controls['visitors_no'].errors.maxlength && !addCrmVisitor.controls['visitors_no'].errors.pattern)"
+                      class="invalid-feedback">Please Enter
+                      Maximum 10 Digit Number. </div>
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].errors.minlength && !addCrmVisitor.controls['visitors_no'].errors.pattern && !addCrmVisitor.controls['visitors_no'].errors.required) || (addCrmVisitor.controls['visitors_no'].errors && addCrmVisitor.controls['visitors_no'].touched && addCrmVisitor.controls['visitors_no'].errors.minlength && !addCrmVisitor.controls['visitors_no'].errors.pattern)"
+                      class="invalid-feedback">Please Enter
+                      Minimum 10 Digit Number</div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text" id="alter-name" class="form-control " formControlName="alter_Name"
+                      [readonly]="Access">
+                    <label for="alter-name" class="{{activefield}}">Alternate
+                      Visitor Name</label>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text" id="alter-number" class="form-control " formControlName="alter_Number"
+                      [readonly]="Access">
+                    <label for="alter-number" class="{{activefield}}">Alternate
+                      Mobile Number</label>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text" [disabled]="isButtonDisabled" formControlName="visitor_date" id="visitor_date"
+                      [minDate]="minDate" [maxDate]="maxDate" placeholder="Select date" class="form-control"
+                      ngbDatepicker #atd="ngbDatepicker" value="{{visitor_date}}" (click)="atd.toggle()"
+                      [readonly]="Access"
+                      [ngClass]="{ 'is-invalid': (submitted && addCrmVisitor.controls['visitor_date'].invalid ) || (addCrmVisitor.controls['visitor_date'].invalid && addCrmVisitor.controls['visitor_date'].touched)}">
+                    <label for="visitor_date" class="active" style="z-index: 1000;">Visiting Date*</label>
+                    <div
+                      *ngIf="(submitted && addCrmVisitor.controls['visitor_date'].invalid ) || (addCrmVisitor.controls['visitor_date'].touched && addCrmVisitor.controls['visitor_date'].invalid)"
+                      class="invalid-feedback">Date is
+                      required</div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-12 px-2">
+                  <div class=" md-form md-outline">
+                    <input type="time"
+                      style="width: 374px;border-radius: 0px; height: 33px;color:grey; padding-left: 12px;"
+                      placeholder="Select Time" formControlName="visitors_Time" id="visitors_Time"
+                      class="form-control-md" [readonly]="Access"
+                      [ngClass]="{ 'is-invalid': (submitted && addCrmVisitor.controls['visitors_Time'].invalid ) || (addCrmVisitor.controls['visitors_Time'].invalid && addCrmVisitor.controls['visitors_Time'].touched)}">
+                    <label for="visitors_Time" class="active">Visiting Time*</label>
+                    <div
+                      *ngIf=" (submitted && addCrmVisitor.controls['visitors_Time'].invalid) || (addCrmVisitor.controls['visitors_Time'].invalid && addCrmVisitor.controls['visitors_Time'].touched)"
+                      class="invalid-feedback">
+                      <div
+                        *ngIf=" (submitted && addCrmVisitor.controls['visitors_Time'].invalid) || (addCrmVisitor.controls['visitors_Time'].invalid && addCrmVisitor.controls['visitors_Time'].touched)">
+                        Visiting Time is required</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+            <div class="form-row" [formGroup]="plotField">
+              <div class="" formArrayName="plotFieldArrayForm"
+                style="border: 1px solid #ddd; width:98%;padding: 15px; margin: 0px 6px 4px; border-radius: 5px; background-color: white;">
+                <div class="row px-2" *ngFor="let quantity of plotFieldForm.controls; let i=index" [formGroupName]="i">
+                  <div class="col-lg-4 col-md-12 px-1">
+                    <div class="md-form md-outline">
+                      <input type="hidden" id="productId_{{i}}" formControlName="productId" name="productId"
+                        [readonly]="Access">
+                      <ng-autocomplete [readonly]="Access" ng-readonly [data]="productdataList" id="plotShown_{{i}}"
+                        [disabled]="isButtonDisabled" formControlName="plotShown" [searchKeyword]="keyword"
+                        (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)'
+                        (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+                        [notFoundTemplate]="notFoundTemplate"
+                        [ngClass]="{ 'is-invalid': (submitted && plotFieldForm.controls[i].get('plotShown').errors ) || (plotFieldForm.controls[i].get('plotShown').errors && plotFieldForm.controls[i].get('plotShown').touched)}">
+
+                      </ng-autocomplete>
+                      <ng-template #itemTemplate let-item>
+                        <a [innerHTML]="item.name" [readonly]="Access"></a>
+                      </ng-template>
+                      <ng-template #notFoundTemplate let-notFound>
+                        <div [innerHTML]="notFound" [readonly]="Access"></div>
+                      </ng-template>
+                      <label for="plotShown" (click)="onPlotNameClick()" class="active" style="z-index:999;">Plot
+                        Name*</label>
+                      <div
+                        *ngIf=" (submitted && plotFieldForm.controls[i].get('plotShown').errors) || (plotFieldForm.controls[i].get('plotShown').errors && plotFieldForm.controls[i].get('plotShown' ).touched)"
+                        class="invalid-feedback">
+                        Please Enter Plot Name
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-12 px-2">
+                    <div class=" md-form md-outline">
+                      <input type="text" id="plot-prize" class="form-control" value="" id="plotPrize_{{i}}"
+                        formControlName="plotPrize" name="plotPrize" [readonly]="Access" (focus)="onPlotPrizeFocus(i)"
+                        (input)="onPlotPrizeChange($event, i)">
+                      <label for="plot-prize" class="active">Plot Prize</label>
+                    </div>
+                  </div>
+
+
+                  <div class="col-lg-3 col-md-12 px-2">
+                    <div class=" md-form md-outline">
+                      <input type="text" id="plot-area" class="form-control" value="" id="plotArea_{{i}}"
+                        formControlName="plotArea" name="plotArea" [readonly]="Access">
+                      <label for="plot-area" class="active">Plot Area</label>
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-lg-4 col-md-12 px-2">
+                    <div class="md-form md-outline">
+                      <input type="text"
+                        class="form-control "
+                        id="plotShownBy_{{i}}"
+                        formControlName="plotShownBy"
+                        name="plotShownBy"
+                        [readonly]="Access"
+                        [ngClass]="{ 'is-invalid': (submitted && plotFieldForm.controls[i].get('plotShownBy').errors ) || (plotFieldForm.controls[i].get('plotShownBy').errors && plotFieldForm.controls[i].get('plotShownBy').touched)}">
+                      <label for="plotShownBy" class="active">Plot Area</label>
+                      <div
+                        *ngIf=" (submitted && plotFieldForm.controls[i].get('plotShownBy').errors) || (plotFieldForm.controls[i].get('plotShownBy').errors && plotFieldForm.controls[i].get('plotShownBy').touched)"
+                        class="invalid-feedback">Please Enter Plot Shown By
+                      </div>
+                    </div>
+                  </div>    -->
+                  <div *ngIf="saveButton && !CRMAdmin && !CrmUserRole" class="col-md-1 pl-0 pt-1">
+                    <button type="button" (click)="removeCurrentRow(i)"
+                      class="btn warm-flame-gradient btn-sm waves-light waves-effect ">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="col-lg-12 col-md-12 px-2">
+                    <label for="" id='plot-number'>{{plot_details[i]}}
+                    </label>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 px-0" style="margin: 0px 0px -50px 0px">
+                  <button type="button" *ngIf="more_detail_btn" [disabled]="isButtonDisabled" (click)="addPlot()"
+                    class="btn btn-secondary btn-sm blue-gradient waves-light waves-effect ml-0"><i
+                      class="fa fa-plus mr-2" aria-hidden="true"></i> More Detail
+
+                  </button>
+                  <div [formGroup]="OnlyPLotShownBY" class="col-lg-4 col-md-12 px-2"
+                    style="position:relative;left:450px;top:-48px">
+                    <div class="md-form md-outline">
+
+                      <ng-autocomplete [data]="employeedataList" [searchKeyword]="keyword"
+                        (click)="employeelistData($event)" (inputChanged)='onEmployeeSearch($event);'
+                        [itemTemplate]="itemTemplate" formControlName="selectedPlotShownBy" id="plotShowBy"
+                        name="plotShowBy">
+                      </ng-autocomplete>
+                      <ng-template #itemTemplate let-item>
+                        <a [innerHTML]="item.name" [readonly]="Access"></a>
+                      </ng-template>
+                      <ng-template #notFoundTemplate let-notFound>
+                        <div [innerHTML]="notFound" [readonly]="Access"></div>
+                      </ng-template>
+                      <label for="plotShownBy" class="active" style="z-index: 1000;">Plot Shown By</label>
+
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <!-- <div class="col-lg-4 col-md-12 px-2">
+                  <div class="md-form md-outline">
+                    <input type="text"
+                      class="form-control "
+                      id="plotShownBy_{{i}}"
+                      formControlName="plotShownBy"
+                      name="plotShownBy"
+                      [readonly]="Access"
+                      [ngClass]="{ 'is-invalid': (submitted && plotFieldForm.controls[i].get('plotShownBy').errors ) || (plotFieldForm.controls[i].get('plotShownBy').errors && plotFieldForm.controls[i].get('plotShownBy').touched)}">
+                    <label for="plotShownBy"
+                      class="active">Plot Shown By</label>
+                    <div
+                      *ngIf=" (submitted && plotFieldForm.controls[i].get('plotShownBy').errors) || (plotFieldForm.controls[i].get('plotShownBy').errors && plotFieldForm.controls[i].get('plotShownBy').touched)"
+                      class="invalid-feedback">Please
+                      Enter Plot Shown By
+                    </div>
+                  </div> -->
+
+
+
+
+              </div>
+            </div>
+            <div class="col-lg-12 col-md-12 px-1" style="margin: 25px 0px 0px 0px">
+              <div class="md-form md-outline">
+                <textarea type="text" #notes id="notes_id" class="md-textarea form-control" rows="2"
+                  [readonly]="Access">
+                </textarea>
+                <label class="active" for="form10">Notes*</label>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="md-form md-outline">
+                <input class="form-check-input filled-in CalendarForm" type="checkbox" name="nextFollow" value="1"
+                  id="nextFollow" (change)=showFollowup($event)>
+                <label class="nextFollow" for="nextFollow">Next Follow Up</label>
+              </div>
+            </div>
+            <div class="form-row" [formGroup]="nextFollowup" *ngIf="additionalFollow">
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class="md-form md-outline">
+                  <input type="text" formControlName="followup_date" id="followup_date" [minDate]="minDate1"
+                    [maxDate]="maxDate1" placeholder="Select date" class="form-control" ngbDatepicker
+                    #atd="ngbDatepicker" value="" (click)="atd.toggle()"
+                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_date'].invalid ) || (nextFollowup.controls['followup_date'].invalid && nextFollowup.controls['followup_date'].touched)}">
+                  <label for="followup_date" class="active">Date</label>
+                  <div
+                    *ngIf="(submitted && nextFollowup.controls['followup_date'].invalid ) || (nextFollowup.controls['followup_date'].touched && nextFollowup.controls['followup_date'].invalid)"
+                    class="invalid-feedback">Date is
+                    required</div>
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-12 px-2">
+                <div class=" md-form md-outline">
+                  <input type="time" placeholder="Select Time" formControlName="followup_Time" id="followup_Time"
+                    class="form-control datepicker CalendarForm"
+                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].invalid && nextFollowup.controls['followup_Time'].touched)}">
+                  <label for="followup_Time" class="active">Time</label>
+                  <div
+                    *ngIf="(submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].touched && nextFollowup.controls['followup_Time'].invalid)"
+                    class="invalid-feedback">Time is
+                    required</div>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 px-2">
+                <div class=" md-form md-outline">
+                  <textarea type="text" formControlName="followup_notes" class="md-textarea form-control" rows="2"
+                    [readonly]="Access"
+                    [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].invalid && nextFollowup.controls['followup_notes'].touched)}">
+                  </textarea>
+                  <label class="active" for="form10">Description*</label>
+                  <div
+                    *ngIf="(submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].touched && nextFollowup.controls['followup_notes'].invalid)"
+                    class="invalid-feedback">Description is
+                    required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- Footer -->
+        <div class="modal-footer">
+          <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+          <span *ngIf="save_btn">
+            <button *ngIf="saveButton" type="button" [disabled]="isSaveButtonDisabled" (click)="insertvisitorDetail()"
+              class="btn btn-sm btn-outline-success waves-effect">Save</button>
+          </span>
+        </div>
+      </div>
+      <!-- Content -->
+    </div>
+  </div>
+</div>

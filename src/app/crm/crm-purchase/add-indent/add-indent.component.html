@@ -1,0 +1,222 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    Add Requisition
+                </h5>
+                <div class="card-body mx-3 mt-3">
+                    <div class="border-box py-3 mb-4">
+                        <span class="border-label">Requisition Info</span>
+                        <div class="row px-3">
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="md-form md-outline">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="indent-number" class="form-control ">
+                                        <label for="indent-number" class=" ">Requisition Number</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="md-form md-outline">
+                                    <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control">
+                                    <label for="jtd" class="active ">Requisition Date</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value=" " selected disabled>Select Requisition Type</option>
+                                        <option value="1 ">1</option>
+                                        <option value="2 ">2</option>
+                                        <option value="3 ">3</option>
+                                        <option value="2 ">4</option>
+                                    </select>
+                                    <label class="active">Requisition Type</label>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6">
+                                <div class="md-form md-outline">
+                                    <div class="md-form md-outline">
+                                        <select id="requirement-area" class="form-control field-ht colorful-select">
+                                            <option value=" " selected disabled>Select Requirement area</option>
+                                            <option value="1 ">Area 1</option>
+                                            <option value="2 ">Area 2</option>
+                                            <option value="3 ">Area 3</option>
+                                            <option value="2 ">Area 4</option>
+                                        </select>
+                                        <label for="requirement-area" class="active">Requirement Area</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-2 px-3">
+                            <div class="col">
+                                <div class="md-form md-outline">
+                                    <textarea type="text" id="company-address" class="md-textarea form-control overflow-auto" rows="1" value=""></textarea>
+                                    <label for="company-address">Purpose</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="md-form md-outline ml-1">
+                                    <textarea type="text" id="company-address" class="md-textarea form-control overflow-auto" rows="1" value=""></textarea>
+                                    <label for="company-address">Remarks</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-box py-3 px-3" [formGroup]="productList">
+                        <span class="border-label">Product list</span>
+                        <div class="card card-body shadow-none">
+                            <table class="table table-responsive ml-1 maxHeight" formArrayName="products">
+                                <thead>
+                                    <tr class="bg-dark text-white">
+                                        <th class="sno">
+                                            <h6>#</h6>
+                                        </th>
+                                        <th class="itemId">
+                                            <h6>Item Id</h6>
+                                        </th>
+                                        <th class="itemName">
+                                            <h6>Item Name</h6>
+                                        </th>
+                                        <th class="unit">
+                                            <h6>Unit</h6>
+                                        </th>
+                                        <th class="quantity">
+                                            <h6>Quantity</h6>
+                                        </th>
+                                        <th class="datePicker">
+                                            <h6>Required Date</h6>
+                                        </th>
+                                        <th class="action">
+                                            <h6>Action</h6>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody *ngFor="let product of products.controls; let i=index" [formGroupName]="i">
+                                    <tr>
+                                        <td scope="row" class="sno">{{i+1}}</td>
+                                        <td class="itemId">
+                                            <input type="text" formControlName="itemId" id="item-id" class="form-control" value="12345678" readonly>
+                                        </td>
+                                        <td class="itemName">
+                                            <select id="unit" id="item-name" (change)="setProductValue(i)" formControlName="itemName" class="form-control">
+                                                <option value="" selected disabled>Select Item Name</option>
+                                                <option value="12345678">Item 12345</option>
+                                                <option value="23456789">Item 234567</option>
+                                                <option value="34567890">Item 345678</option>
+                                            </select>
+                                        </td>
+                                        <td class="unit">
+                                            <input type="text" id="unit" formControlName="unit" class="form-control" disabled>
+                                        </td>
+                                        <td class="quantity">
+                                            <input type="text" id="Quantity" formControlName="quantity" class="form-control ">
+                                        </td>
+                                        <td class="datePicker">
+                                            <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #reqDate="ngbDatepicker" formControlName="reqDate" (click)="reqDate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                        </td>
+                                        <td class="action">
+                                            <input type="button" (click)="removeProduct(i)" class="btn btn-danger btn-sm" style="margin-top: 0px!important;" value="Remove">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <td colspan="7">
+                                            <button type="button" (click)="addProduct()" class="float-right btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i class="fa fa-plus" aria-hidden="true"></i> More Products</button>
+                                        </td>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row px-2 mb-3">
+                        <div class="col">
+                            <button type="button" class=" float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fas fa-save mr-2" aria-hidden="true"></i>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<!-- <div class="border-box  py-3 px-4" [formGroup]="productList">
+    <span class="border-label">Product List</span>
+    <div formArrayName="products">
+        <div class="row px-3 mt-1 flex-fill" *ngFor="let product of products.controls; let i=index" [formGroupName]="i">
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="md-form md-outline">
+                    <div class="md-form md-outline">
+                        <input type="text" formControlName="itemId" id="item-id" class="form-control ">
+                        <label for="item-id" class="active">Item Id</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="md-form md-outline">
+                    <div class="md-form md-outline">
+                        <select id="unit" id="item-name" (change)="setProductValue(i)" formControlName="itemName" class="form-control field-ht colorful-select">
+                            <option value="" selected disabled>Select Item Name</option>
+                            <option value="1">Item 1</option>
+                            <option value="2">Item 2</option>
+                            <option value="3">Item 3</option>
+                        </select>
+                        <label for="item-name" class="active">Item Name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="md-form md-outline">
+                    <div class="md-form md-outline">
+                        <select id="unit" formControlName="unit" class="form-control field-ht colorful-select">
+                            <option value="" selected disabled>Select Unit</option>
+                            <option value="1">K.G.</option>
+                            <option value="2">Tone</option>
+                            <option value="3">Dazon</option>
+                        </select>
+                        <label for="unit" class="active">Unit</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6">
+                <div class="md-form md-outline">
+                    <div class="md-form md-outline">
+                        <input type="text" id="Quantity" formControlName="quantity" class="form-control ">
+                        <label for="Quantity" class="active">Quantity</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12">
+                <div class="md-form md-outline">
+                    <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #reqDate="ngbDatepicker" formControlName="reqDate" (click)="reqDate.toggle()" type="text" id="date-picker-example" class="form-control">
+                    <label for="jtd" class="active ">Required Date</label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row px-2 mt-2">
+        <div class="col">
+            <button type="button" (click)="addProduct()" class="btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i class="fa fa-plus" aria-hidden="true"></i> More Products</button>
+        </div>
+    </div>
+</div>
+ -->v> -->

@@ -1,0 +1,65 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Report</h5>
+                <div class="col-lg-12 col-md-12" [formGroup]="hrReport">
+                    <div class="row py-2 px-2">
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateFrom" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #fromdate="ngbDatepicker" (click)="fromdate.toggle()" type="text" id="dateFrom" class="form-control datepicker">
+                                <label for="dateFrom" class="active">Date From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateTo" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #todate="ngbDatepicker" (click)="todate.toggle()" type="text" id="dateTo" class="form-control datepicker">
+                                <label for="dateTo" class="active">Date To</label>
+                            </div>
+                        </div>
+                       
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" id="ResourceType" formControlName="vendorname">
+                                <option value=""  selected>Select Vendor Name</option>
+                                <option *ngFor="let vendorlist of vendorDataList" value={{vendorlist.VendorId}}>
+                                    {{vendorlist.VendorName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Vendor Name</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" id="ResourceType" formControlName="projectNames">
+                                <option value=""  selected>Select Project Name</option>
+                                <option>
+                                    
+                                </option>
+                            </select>
+                            <label class="top-lb active">Project Name</label>
+                        </div>
+
+                        <div class="form-row float-right mr-3">
+                            <button type="button" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect" ><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+      
+    </main> 
+</body>

@@ -1,0 +1,64 @@
+    .nav-pills {
+    color: #fff !important;
+    font-weight: bold !important;
+    background-color: #7e858d !important;
+}
+
+
+.stock-summary-row {
+  gap: 8px;
+  width: 100%;
+  flex-wrap: nowrap;      /* ✅ prevents wrapping & overlap */
+}
+
+.stock-summary-row .field {
+  min-width: 150px;       /* ✅ prevents crushing */
+  flex-shrink: 0;
+}
+
+.stock-summary-row .date-range {
+  min-width: 230px;
+}
+
+.stock-summary-row .flex-item {
+  flex: 1 1 auto;         /* ✅ only Item will shrink if needed */
+  min-width: 200px;
+}
+
+.btn-group-fixed {
+  min-width: 90px;        /* ✅ buttons NEVER overlap */
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  margin-bottom: 8px;
+}
+
+ng-select {
+  width: 100% !important;
+}
+
+
+/* ===============================
+   ITEM NG-SELECT TOOLTIP (ID ONLY)
+   =============================== */
+
+.item-hover {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Make sure dropdown panel shows full content on hover */
+.ng-dropdown-panel .ng-option {
+  .item-hover {
+    &:hover {
+      white-space: normal !important;
+      overflow: visible !important;
+      background: white;
+      position: relative;
+      z-index: 1;
+    }
+  }
+}

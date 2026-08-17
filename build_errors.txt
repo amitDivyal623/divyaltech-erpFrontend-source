@@ -1,0 +1,54 @@
+﻿npx : - Generating browser application 
+bundles...
+At line:1 char:1
++ npx ng build 2>&1 | Out-File -FilePath 
+"build_errors.txt" -Encoding u ...
++ ~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (- 
+Gen    erating br...tion bundles...:String) [], 
+Remot    eException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Γ£ö Browser application bundle generation 
+complete.
+- Copying assets...
+Γ£ö Copying assets complete.
+- Generating index html...
+Γ£ö Index html generation complete.
+
+Initial Chunk Files | Names         |      Size
+vendor.js           | vendor        |  14.64 MB
+main.js             | main          |   9.90 MB
+scripts.js          | scripts       |   1.93 MB
+styles.css          | styles        |   1.10 MB
+polyfills.js        | polyfills     | 149.72 kB
+runtime.js          | runtime       |   6.15 kB
+
+| Initial Total |  27.71 MB
+
+Build at: 2026-04-21T07:27:24.176Z - Hash: dd3a93d46f9d37897409 - Time: 74125ms
+
+Warning: D:\erp-antigravity\src\app\shared\servi
+ces\encrypt-decrypt.ts depends on 'crypto-js'. 
+CommonJS or AMD dependencies can cause 
+optimization bailouts.
+For more info see: https://angular.io/guide/buil
+d#configuring-commonjs-dependencies
+
+Warning: D:\erp-antigravity\src\app\crm\crm-enqu
+iry\add-crm-enquiry\crmenquiry-visit\crmenquiry-
+visit.component.ts depends on 'file-saver'. 
+CommonJS or AMD dependencies can cause 
+optimization bailouts.
+For more info see: https://angular.io/guide/buil
+d#configuring-commonjs-dependencies
+
+Warning: D:\erp-antigravity\src\app\crm\crm-enqu
+iry\add-crm-enquiry\crmenquiry-visit\crmenquiry-
+visit.component.ts depends on 'jquery'. 
+CommonJS or AMD dependencies can cause 
+optimization bailouts.
+For more info see: https://angular.io/guide/buil
+d#configuring-commonjs-dependencies
+
+

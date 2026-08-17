@@ -1,0 +1,68 @@
+.border-box {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    /* min-width: 0; */
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgb(0 0 0 / 25%);
+    border-radius: .25rem;
+    padding: 1.25rem .25rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.border-label {
+    position: absolute;
+    line-height: 25px;
+    top: 0px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 0.25rem 1rem;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.6);
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    left: 2.5rem;
+}
+
+.sno {
+    min-width: 2rem!important;
+}
+
+.itemId {
+    max-width: 8rem !important;
+    min-width: 8rem!important;
+}
+
+.itemName {
+    max-width: 24rem !important;
+    min-width: 24rem!important;
+}
+
+.unit {
+    max-width: 10rem!important;
+    min-width: 10rem!important;
+}
+
+.quantity {
+    max-width: 8rem !important;
+    min-width: 8rem!important;
+}
+
+.datePicker {
+    max-width: 10rem !important;
+    min-width: 10rem!important;
+}
+
+.action {
+    max-width: 9rem !important;
+    min-width: 9rem!important;
+}
+
+.maxHeight {
+    overflow-y: hidden!important;
+}

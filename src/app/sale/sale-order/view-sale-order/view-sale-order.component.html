@@ -1,0 +1,243 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    View Sale Order
+                </h5>
+                <div class="card-body">
+                    <div class="row px-4">
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="indent-number" class="form-control ">
+                                    <label for="indent-number" class=" ">Sale Order Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #odate="ngbDatepicker" (click)="odate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Sale Order Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="cust-number" class="form-control ">
+                                    <label for="cust-number" class=" ">Customer Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select">
+                                    <option value="" selected disabled>Select Person name</option>
+                                    <option value="1">Person1</option>
+                                    <option value="2">Person2</option>
+                                    <option value="3">Person3</option>
+                                </select>
+                                <label class="active">Sales person</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="quot-number" class="form-control ">
+                                    <label for="quot-number" class=" ">Agent Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select">
+                                    <option value="" selected disabled>Select Payment Mode</option>
+                                    <option value="1">Cash</option>
+                                    <option value="2">Online</option>
+                                </select>
+                                <label class="active">Payment Mode</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="quot-number" class="form-control ">
+                                    <label for="quot-number" class=" ">Quotation Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #qdate="ngbDatepicker" (click)="qdate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Quotation Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 px-2">
+                            <div class="md-form md-outline ml-1">
+                                <textarea type="text" id="company-address" class="md-textarea form-control overflow-auto" rows="1" value=""></textarea>
+                                <label for="company-address">Remarks</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 px-3 mt-3">
+                        <div class="border-box mb-4">
+                            <span class="border-label">Product Listing</span>
+                            <div class="row">
+                                <div class="col-12 float-right mr-3">
+                                    <table class="table table-striped table-responsive maxHeight text-center" formArrayName="products">
+                                        <thead>
+                                            <tr class="bg-dark text-white">
+                                                <th class="sno">
+                                                    #
+                                                </th>
+                                                <th class="itemName">
+                                                    Product Name
+                                                </th>
+                                                <th class="unit">
+                                                    Unit
+                                                </th>
+                                                <th class="quantity">
+                                                    Qty
+                                                </th>
+                                                <th class="itemId">
+                                                    Rate per Unit
+                                                </th>
+                                                <th class="itemId">
+                                                    Amount
+                                                </th>
+                                                <th class="quantity">
+                                                    Disc.
+                                                </th>
+                                                <th class="itemId">
+                                                    GST
+                                                </th>
+                                                <th class="itemId">
+                                                    SGST
+                                                </th>
+                                                <th class="itemId">
+                                                    IGST
+                                                </th>
+                                                <th class="itemId">
+                                                    Total Amount
+                                                </th>
+                                                <th class="action">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngFor="let product of products.controls; let i=index" [formGroupName]="i">
+                                            <tr>
+                                                <td scope="row" class="sno">{{i+1}}</td>
+                                                <td class="itemName">
+                                                    <select id="unit" id="item-name" formControlName="itemName" class="form-control">
+                                                    <option value="" selected disabled>Select Item Name</option>
+                                                    <option value="12345678">Item 12345</option>
+                                                    <option value="23456789">Item 234567</option>
+                                                    <option value="34567890">Item 345678</option>
+                                                </select>
+                                                </td>
+                                                <td class="unit">
+                                                    <input type="text" id="unit" formControlName="unit" class="form-control" value="Dozan" disabled>
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="Quantity" formControlName="quantity" class="form-control ">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="Rate" formControlName="rate" class="form-control text-right">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="amount" formControlName="rate" class="form-control text-right">
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="Discount" formControlName="discount" class="form-control ">
+                                                </td>
+                                                <td class="unit">
+                                                    <select id="gst" formControlName="unit" class="form-control">
+                                                        <option value="" selected disabled>Select GST</option>
+                                                        <option value="1">None</option>
+                                                        <option value="2">GST 5%</option>
+                                                        <option value="3">GST 12%</option>
+                                                        <option value="4">GST 18%</option>
+                                                        <option value="5">GST 28%</option>
+                                                    </select>
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="SGST" formControlName="sgst" class="form-control ">
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="IGST" formControlName="igst" class="form-control ">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="TAmount" formControlName="tamount" class="form-control text-right">
+                                                </td>
+                                                <td class="action">
+                                                    <input type="button" (click)="removeProduct(i)" class="btn btn-danger btn-sm" style="margin-top: 0px!important;" value="Remove">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemName"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity">
+                                                    <h6>GST Total</h6>
+                                                </td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId">
+                                                    <h6>Grand Total</h6>
+                                                </td>
+                                                <td class="action"></td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemName"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity"><input type="text" id="SGST" class="form-control "></td>
+                                                <td class="quantity"></td>
+                                                <td class="itemId"><input type="text" id="TAmount" class="form-control text-right"></td>
+                                                <td class="action"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    <button type="button" (click)="addProduct()" class="btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i class="fa fa-plus" aria-hidden="true"></i> More Products</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row px-2 mb-3">
+                        <div class="col">
+                            <button type="button" class=" float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fas fa-save mr-2" aria-hidden="true"></i>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

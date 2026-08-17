@@ -1,0 +1,304 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="main-tabs-docs">
+                <nav class="nav nav-pills nav-justified">
+                    <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active" [ngClass]="{ 'active':activeTab==='Vendor'}" href="#docsTabsVendor" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-user mr-2" aria-hidden="true"></i>Vendor Details</a>
+                    <a id="docs-tab-attach" class="nav-item nav-link link-nav" href="#docsTabsMachinery" [ngClass]="{ 'active':activeTab==='Machinery'}" (click)="result('Machinery')" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-cog mr-2" aria-hidden="true"></i>Machinery Details</a>
+                </nav>
+                <div class="tab-content panel-tab pb-1 p-1">
+                    <div class="tab-pane pb-0" [ngClass]="{ 'active':activeTab==='Vendor'}" id="docsTabsVendor">
+                        <div class="row p-2">
+                            <div class="col-lg-12 col-md-12" [formGroup]="searchvendor">
+                                <div class="row py-2 px-2">
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="companyName" formControlName="companyName" name="companyName" class="form-control field-ht colorful-select" required="">
+                                            <label for="companyName" class="active">Company Name</label>   
+                                        </div>                                     
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="vendorname" formControlName="vendorname" name="vendorname" class="form-control field-ht colorful-select" required="">
+                                            <label for="vendorname" class="active">Vendor Name</label>                                        
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 px-2">
+                                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="vendorSearch()"><i class="fa fa-search mr-2" aria-hidden="true" ></i>Search</button>
+                                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="vendorReset()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"  (click)="AddvendorPopu()"><i class="fa fa-plus " aria-hidden="true" ></i>Add Vendor</button>
+                                        <button type="button" #VendorPopup data-toggle="modal" data-target="#add_vendor_modal" style="display: none;"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 mb-2">
+                                <section>
+                                    <div class="card px-2 my-2">
+                                        <div class="table-responsive">
+                                            <table id="vendor" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                                                <thead class="winter-neva-gradient">
+                                                    <tr>
+                                                        <th>S.No.</th>
+                                                        <th>Company name</th>
+                                                        <th>Vendor Name</th>
+                                                        <th>Vendor Mobile</th>
+                                                        <th>Status Type</th>
+                                                        <th>Contact Person</th>
+                                                        <th>State</th>
+                                                        <th>Bank Name</th>
+                                                        <th>Account No.</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tr *ngFor="let vendors of vendor;let i=index">
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{vendors.company_name}}</td>
+                                                    <td>{{vendors.vendorName}}</td>
+                                                    <td>{{vendors.vendorMobile}}</td>
+                                                    <td>{{getStatusLabel(vendors.status_value)}}</td>
+                                                    <td>{{vendors.contactPerson}}</td>
+                                                    <td>{{vendors.vendorState}}</td>
+                                                    <td>{{vendors.bankName}}</td>
+                                                    <td>{{vendors.accountNo}}</td>
+                                                    <td>
+                                                        <a class="teal-text" style="display: none;" #EditViewPopup id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_vendor_modal" ></a>
+                                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="getViewVendors('viewVendor',vendors.vendorId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <a class="teal-text" id="" mdbtooltip="Edit" placement="top"  (click)="getViewVendors('editVendor',vendors.vendorId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                        <a class="red-text" id="" mdbtooltip="Remove" placement="top" (click)="deletevendor(vendors.vendorId)"><i class="fa-times px-1 fas"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tbody *ngIf="vendor?.length == 0">
+                                                    <tr>
+                                                        <td colspan="7" class="no-data-available">No data!</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button" class="float-right btn blue-gradient btn-sm waves-light waves-effect" (click)="result('Machinery')"><i class="fas fa-forward mr-2" aria-hidden="true"></i>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" [ngClass]="{ 'active':activeTab==='Machinery'}" id="docsTabsMachinery">
+                        <app-machinery-details></app-machinery-details>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add New Vendor modal -->
+        <div class="modal fade" id="add_vendor_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">{{PopupTitle}}</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div [formGroup]="addvendor" class="modal-body">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="row">
+                                <input type="hidden" formControlName="vendorId">
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="companyName" formControlName="companyName" name="companyName" class="form-control field-ht colorful-select" required="" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['companyName'].errors) || (addvendor.controls['companyName'].touched && addvendor.controls['companyName'].invalid)}">
+                                        <label for="companyName" class="active">Company Name*</label>                                        
+                                        <div *ngIf=" (submitted && addvendor.controls['companyName'].errors) || (addvendor.controls['companyName'].touched && addvendor.controls['companyName'].invalid)" class="invalid-feedback">Please Enter Company Name.
+                                        </div>
+                                    </div>                                     
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="vendorname" formControlName="vendorname" name="vendorname" class="form-control field-ht colorful-select" required="" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendorname'].errors) || (addvendor.controls['vendorname'].touched && addvendor.controls['vendorname'].invalid)}">
+                                        <label for="vendorname" class="active">Vendor Name*</label>                                        
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorname'].errors) || (addvendor.controls['vendorname'].touched && addvendor.controls['vendorname'].invalid)" class="invalid-feedback">Please Enter Vendor Name.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="vendorMobile" formControlName="vendorMobile" name="vendorMobile" class="form-control field-ht colorful-select" required="" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendorMobile'].errors) || (addvendor.controls['vendorMobile'].touched && addvendor.controls['vendorMobile'].invalid)}">
+                                        <label for="vendorMobile" class="active">Vendor Mobile</label>                                        
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorMobile'].errors) || (addvendor.controls['vendorMobile'].touched && addvendor.controls['vendorMobile'].invalid)" class="invalid-feedback">Please Enter Mobile Name.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="vendorCategory" formControlName="vendorCategory" name="vendorCategory" (change)="onChangeGroupName()" >
+                                            <option value="" selected="true">Select Category</option>
+                                            <option *ngFor="let RatedTypeList of showAllGroups" value={{RatedTypeList.groupid}}>
+                                                {{RatedTypeList.groupname}}
+                                            </option> 
+                                        </select>
+                                        <label for="vendorCategory" class="active">Vendor Category</label>                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="vendorSubCategory" formControlName="vendorSubCategory" name="vendorSubCategory" >
+                                            <option value="" selected="true">Select Subcategory</option>
+                                            <option *ngFor="let RatedTypeList of showSubGrpsById" value={{RatedTypeList.subgroupid}}>
+                                                {{RatedTypeList.subgroupname}}
+                                            </option> 
+                                        </select>
+                                        <label for="vendorSubCategory" class="active">Vendor SubCategory</label>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="contactPerson" formControlName="contactPerson" name="contactPerson" class="form-control" >
+                                        <label for="contactPerson" class="active">Contact Person</label>                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-10 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="contactPersonNo" formControlName="contactPersonNo" name="contactPersonNo" class="form-control" >
+                                        <label for="contactPersonNo" class="active">Contact Person No.</label>                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 px-2">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon2">&#64;</span>
+                                        </div>
+                                        <input
+                                        type="email"
+                                        class="form-control"
+                                        formControlName="vendorEmail"
+                                        name="vendorEmail"
+                                        placeholder="Enter Email"
+                                        aria-describedby="basic-addon2"
+                                        
+                                        />
+
+                                    </div>
+                                </div>                                
+                                <div class="col-lg-3 col-md-10 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="pan_no" formControlName="pan_no" name="pan_no" class="form-control" >
+                                        <label for="pan_no" class="active">PAN No.</label>                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="gst_no" class="form-control" formControlName="gst_no"/>
+                                        <label for="gst_no" class="active">GST No.</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="tax_id" class="form-control" formControlName="tax_id"/>
+                                        <label for="tax_id" class="active">CST/Tax id</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="vendorState" class="form-control" formControlName="vendorState" name="status" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['vendorState'].errors) || (addvendor.controls['vendorState'].touched && addvendor.controls['vendorState'].invalid)}">
+                                            <option value="">Select Status</option>
+                                            <option *ngFor="let Statuslist of showAllStates" value={{Statuslist.state_id}}>
+                                                {{Statuslist.state_name}}
+                                            </option>
+                                        </select>
+                                        <label for="vendorState" class="active">State*</label>
+                                        <div *ngIf=" (submitted && addvendor.controls['vendorState'].errors) || (addvendor.controls['vendorState'].touched && addvendor.controls['vendorState'].invalid)" class="invalid-feedback">Please Enter State Name.
+                                        </div>                                        
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="vendorAddress" name="vendorAddress" class="md-textarea form-control" rows="2"></textarea>
+                                        <label for="form10" class="active">Address</label>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 px-2">                                  
+                                    <div class="md-form md-outline">
+                                        <select formControlName="bankName" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['bankName'].errors) || (addvendor.controls['bankName'].touched && addvendor.controls['bankName'].invalid)}">
+                                            <option value="" selected="true" disabled="disabled">Select Bank Name</option>
+                                            <option *ngFor="let bankList of resplookupBank" [value]="bankList.LookupValue">
+                                                {{ bankList.LookupValue }}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Bank Name</label>
+                                        <div *ngIf="(submitted && addvendor.controls['bankName'].errors) || (addvendor.controls['bankName'].touched && addvendor.controls['bankName'].invalid)"
+                                        class="invalid-feedback">
+                                        Please Enter Bank Name.
+                                        </div>                                        
+                                    </div>                                 
+                                </div>
+                                <div class="col-lg-4 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="accountNo" formControlName="accountNo" name="accountNo" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['accountNo'].errors) || (addvendor.controls['accountNo'].touched && addvendor.controls['accountNo'].invalid)}"/>
+                                        <label for="accountNo" class="active">Account No.*</label>
+                                        <div *ngIf=" (submitted && addvendor.controls['accountNo'].errors) || (addvendor.controls['accountNo'].touched && addvendor.controls['accountNo'].invalid)" class="invalid-feedback">Please Enter account No.
+                                        </div>                                     
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="ifscCode" formControlName="ifscCode" name="ifscCode" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['ifscCode'].errors) || (addvendor.controls['ifscCode'].touched && addvendor.controls['ifscCode'].invalid)}"/>
+                                        <label for="ifscCode" class="active">IFSC Code*</label>
+                                        <div *ngIf=" (submitted && addvendor.controls['ifscCode'].errors) || (addvendor.controls['ifscCode'].touched && addvendor.controls['ifscCode'].invalid)" class="invalid-feedback">Please Enter account No.
+                                        </div>                                     
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="branchAddress" formControlName="branchAddress" name="branchAddress" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addvendor.controls['branchAddress'].errors) || (addvendor.controls['branchAddress'].touched && addvendor.controls['branchAddress'].invalid)}"/>
+                                        <label for="branchAddress" class="active">Branch Address*</label>
+                                        <div *ngIf=" (submitted && addvendor.controls['branchAddress'].errors) || (addvendor.controls['branchAddress'].touched && addvendor.controls['branchAddress'].invalid)" class="invalid-feedback">Please Enter Branch Address
+                                        </div>                                     
+                                    </div>
+                                </div>
+                               
+                                <div class="col-lg-4 col-md-6 px-2">
+                                     <div class="md-form md-outline">
+                                        <div class="form-check mb-2">
+                                            <input type="checkbox" class="form-check-input" id="statusToggle" formControlName="status_value" [(ngModel)]="statusEnabled">
+                                            <label class="form-check-label" for="statusToggle">Enable Status</label>
+                                        </div>
+                                     </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="vendorDescription" name="vendorDescription" class="md-textarea form-control" rows="2"></textarea>
+                                        <label for="form10" class="active">Description</label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" #addvendorCancelButton data-dismiss="modal">Cancel</button>
+                        <button *ngIf="saveButton" type="button" [disabled]="isButtonDisabled" (click)="insertvendor()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </main>
+</body>

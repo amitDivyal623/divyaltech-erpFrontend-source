@@ -1,0 +1,251 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Project List
+                    <ng-container *ngIf="role != 'Project Coordinator'">
+                        <button type="button"
+                            class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                            (click)="addproject('')"><i class="fa fa-plus" aria-hidden="true"></i> Add New
+                            Project</button>
+                    </ng-container>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row" [formGroup]="projectSearchForm">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" id="customerName" class="form-control" value=""
+                                    formControlName="customerName">
+                                <label for="customerName" class="">Customer Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" id="projectName" class="form-control" value=""
+                                    formControlName="project_name">
+                                <label for="projectName" class="">Project Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                
+                                <ng-select [items]="projectCoordinatorUsers" bindLabel="EmployeeName"
+                                formControlName="project_coordinator" bindValue="EmployeeId"
+                                placeholder="Select Project Co-ordinator" [searchable]="true" [clearable]="true">
+                            </ng-select>
+                            <label class="active" >Project Co-ordinator</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <ng-select [items]="projectManagerUsers" bindLabel="EmployeeName" bindValue="EmployeeId"
+                                formControlName="project_manager" placeholder="Select Project Manager"
+                                [searchable]="true" [clearable]="true">
+                            </ng-select>
+                            <label class="active" >Project Manager</label>
+                            
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            
+                            <ng-select [items]="respType" bindLabel="LookupValue" bindValue="LookupDataId"
+                            formControlName="project_type" placeholder="Select Project type" [searchable]="true"
+                            [clearable]="true">
+                        </ng-select>
+                        <label class="top-lb active" >Project type</label>
+
+                        </div>
+                        <div class="col-md-3 select-outline px-4">
+                            <div class="md-form md-outline input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Rs</span>
+                                </div>
+                                <input type="text" class="form-control" id="ExpectedCost" placeholder="Expected Cost"
+                                    formControlName="expected_cost" aria-label="Expected Cost"
+                                    aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            
+                            <ng-select [items]="respStatus" bindLabel="LookupValue" bindValue="LookupDataId"
+                            formControlName="status" placeholder="Select Status" [searchable]="true"
+                            [clearable]="true">
+                        </ng-select>
+                        <label class="top-lb active" >Status</label>
+
+                        </div>
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"
+                            (click)="searchProject()"><i class="fa fa-search mr-2"
+                                aria-hidden="true"></i>Search</button>
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                            (click)="resetProject()"><i class="fas fa-redo-alt mr-2"
+                                aria-hidden="true"></i>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.</th>
+                                    <th>Project Name</th>
+                                    <th>Customer Name</th>
+                                    <th>Project Type</th>
+                                    <th>Status</th>
+                                    <th>Start Date</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.project_name}}</td>
+                                    <td>{{item.customerName}}</td>
+                                    <td>{{item.project_type}}</td>
+                                    <td>{{item.status}}</td>
+                                    <td>{{item.project_start_date}}</td>
+                                    <td>{{item.project_dscription}}</td>
+                                    <td>
+                                        <a class="black-text" (click)="viewProject(item.project_id)"><i
+                                                class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="green-text" (click)="editproject(item.project_id)"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <ng-container
+                                            *ngIf="role.includes('Admin') || role.includes('Project Manager')">
+                                            <a class="red-text" mdbtooltip="Remove"
+                                                (click)="Deleteproject(item.project_id)" placement="top"><i
+                                                    class="fa-times px-1 fas"></i></a>
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New project modal -->
+            <div class="modal fade" id="add_pj_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Project</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Project Type
+                                        </option>
+                                        <option value="default">Long term</option>
+                                        <option value="2">Short term</option>
+                                    </select>
+                                    <label class="ml-2 active">Project type</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="pj_name" class="form-control" required="">
+                                        <label for="pj_name" class="">Project Name</label>
+                                    </div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" disabled selected>Select Status</option>
+                                        <option value="1">Active</option>
+                                        <option value="2">In Active</option>
+                                        <option value="3">Pending</option>
+                                    </select>
+                                    <label class="ml-2 active">Status</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="Select date" name="atd" ngbDatepicker
+                                            #atd="ngbDatepicker" (click)="atd.toggle()" readonly>
+                                        <label for="date-picker-example" class="active">Approval Date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="Select date" name="std" ngbDatepicker
+                                            #std="ngbDatepicker" (click)="std.toggle()" readonly>
+                                        <label for="date-picker-example" class="active">Start Date</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="Select date" name="td" ngbDatepicker
+                                            #td="ngbDatepicker" (click)="td.toggle()" readonly>
+                                        <label for="date-picker-example" class="active">Completion Target Date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="Select date" name="ctd" ngbDatepicker
+                                            #ctd="ngbDatepicker" (click)="ctd.toggle()" readonly>
+                                        <label for="date-picker-example" class="active">Completion Date</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="desp_project" class="md-textarea form-control"
+                                            rows="3" required=""></textarea>
+                                        <label for="desp_project">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

@@ -1,0 +1,27 @@
+body{
+    background-color: white;
+    font-weight: bold;
+}
+.container
+{
+  position:absolute;
+  /* top:0;
+  bottom:0; */
+  right:0;
+  left:0;
+  border:solid 2px black;
+  /* overflow:auto; */
+  max-width: 65%;
+  height:auto;
+}
+input{
+    border-bottom: 1px solid #000;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    background-color: #eeeeee;
+    height: 17px;
+}
+label{
+    font-weight: 400;
+}

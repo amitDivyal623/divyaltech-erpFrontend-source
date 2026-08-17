@@ -1,0 +1,114 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Godown List
+                    <button type="button" #godownmodal (click)="add_mdl()" id="openModalButton" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" ><i class="fa fa-plus" aria-hidden="true"></i> Add New Godown</button>
+                </h5>
+                <div [formGroup]="searchCrmGodown" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="search_godown_name" class="form-control" required="" >
+                                <label for="search_godown_name" class="active">Godown Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="search_godown_code" class="form-control" required="" >
+                                <label for="search_godown_code" class="active">Godown Code</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="search_address" class="form-control" required="" >
+                                <label for="search_address" class="active">Address</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="search_dist" class="form-control" required="" >
+                                <label for="search_dist" class="active">District</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="resetSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="GodownSearch()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect float-left"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                      <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                          <thead>
+                              <tr>
+                                  <th width="2%">S.No.
+                                  </th>
+                                  <th width="15%">Date
+                                  </th>
+                                  <th  width="">Godown Code
+                                  </th>
+                                  <th  width="">Godown Name
+                                  </th>
+                                  <th  width="">Address
+                                  </th>
+                                  <th  width="">District
+                                  </th>
+                                  <th  width="">State
+                                  </th>
+                                  <th  width="">Pincode
+                                  </th>
+                                  <th  width="">Action
+                                  </th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                  <td>{{i+1}}</td>
+                                  <td>{{item.CreatedDt}}</td>
+                                  <td>{{item.godownCode}}</td>
+                                  <td>{{item.godownname}}</td>
+                                  <td>{{item.Address}}</td>
+                                  <td>{{item.District}}</td>
+                                  <td>{{item.State}}</td>
+                                  <td>{{item.pinCode}} </td>
+                                  <td>
+                                      <a class="black-text" id="{{i+1}}" ngbTooltip="View Godown" placement="top" (click)="viewGodown(item.GodownId)"><i class="fa fa-eye " aria-hidden="true"></i></a>
+                                      <a class="text-success" id="{{i+1}}" ngbTooltip="Edit Godown" placement="top" (click)="editGodown(item.GodownId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                      <a *ngIf="!CrmUserRole" class="text-danger" id="{{i+1}}" ngbTooltip="Remove Godown" placement="top" #Godowndata (click)="delete(item.godownId)"><i class="fa-times px-1 fas"></i></a>
+
+                                  </td>
+                              </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    <!-- Main layout -->
+    </body>

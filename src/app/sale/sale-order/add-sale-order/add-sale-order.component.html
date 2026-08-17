@@ -1,0 +1,629 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    Add Sale Order
+                </h5>
+                <div class="card-body">
+                    <div class="row px-4 pt-2">
+                        <div class="col-md-7 px-2">
+                            <div class="row px-1">
+                                <!-- <div class="col-md-6">
+                                    <div class="md-form md-outline margin-mdform">
+                                        <ng-select [items]="cities" bindLabel="name" [(ngModel)]="selectedCity" 
+                                        addTagText="Create New Customer" [addTag]="CreateNew" id="searchCustName" placeholder="Select Tags" appendTo="body">
+                                        </ng-select>
+                                        <ng-select [items]="cities" bindLabel="name" placeholder="Select city">
+                                            <ng-template ng-footer-tmp>
+                                                <div class="create-new" (click)="CreateNew()"><a><i class="fa fa-plus" aria-hidden="true"></i>Create New</a> </div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <label  class="active">Customer Name</label>
+                                    </div>
+                                </div> -->
+                                <div class="col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <ng-autocomplete  [data]="customerdataList" [searchKeyword]="keyword" (selected)='selectCust($event)' (inputChanged)='onCustomerSearch($event)'  [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                          <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                          <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                          <div class="create-new" (click)="CreateNewCustomer()"><a><i class="fa fa-plus mr-2" aria-hidden="true"></i> Create New</a> </div>
+                                        </ng-template>
+                                        <label for="visitor_name" class="active">Customer Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control ">
+                                        <label for="searchMobNumber" class=" ">Mobile Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea class="form-control md-textarea" rows="3" id="textareaorder"></textarea>
+                                        <label for="textareaorder" class="">Address*</label>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-5 ">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control ">
+                                        <label for="searchMobNumber" class=" ">Country</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 ">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control ">
+                                        <label for="searchMobNumber" class=" ">State</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 ">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control ">
+                                        <label for="searchMobNumber" class=" ">District</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 ">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control ">
+                                        <label for="searchMobNumber" class=" ">Pincode</label>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="col-md-5 px-1 float-right">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control ">
+                                    <label for="searchMobNumber" class=" ">Invoice Number</label>
+                                </div>
+                            </div>
+                            <div class="col-md-5 px-1 float-right">
+                                <div class="md-form md-outline">
+                                    <select id="unit" class="form-control field-ht colorful-select" (change)="OnSelectValue($event)">
+                                        <option value="" selected disabled>Select GST</option>
+                                        <option value="0">Non GST</option>
+                                        <option value="1">IGST</option>
+                                        <option value="2">CGST</option>
+                                        <option value="3">SGST</option>
+                                    </select>
+                                    <label class="active">GST</label>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-5 px-1 float-right">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control ">
+                                    <label for="searchMobNumber" class=" ">Balance Due</label>
+                                </div>
+                            </div> -->
+                            <div class="col-md-5 px-1 float-right">
+                                <div class="md-form md-outline">
+                                    <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #qdate="ngbDatepicker" (click)="qdate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                    <label for="jtd" class="active ">Invoice Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-5 px-1 float-right">
+                                <div class="md-form md-outline">
+                                    <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #ddate="ngbDatepicker" (click)="ddate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                    <label for="jtd" class="active ">Due Date</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="indent-number" class="form-control ">
+                                    <label for="indent-number" class=" ">Sale Order Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #odate="ngbDatepicker" (click)="odate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Sale Order Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="cust-number" class="form-control ">
+                                    <label for="cust-number" class=" ">Customer Name</label>
+                                </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select">
+                                    <option value="" selected disabled>Select Person name</option>
+                                    <option value="1">Person1</option>
+                                    <option value="2">Person2</option>
+                                    <option value="3">Person3</option>
+                                </select>
+                                <label class="active">Sales person</label>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" id="form-customername">
+                                        <option value="" selected="true">Select Agent Name</option>
+                                        <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                            {{Employeelist.EmployeeName}}
+                                        </option>
+                                    </select>
+                                    <label class="active">Agent Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select">
+                                    <option value="" selected disabled>Select Payment Mode</option>
+                                    <option value="1">By Cash</option>
+                                    <option value="2">By Cheque</option>
+                                    <option value="2">By Bank</option>
+                                </select>
+                                <label class="active">Payment Mode</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select" (change)="OnSelectValue($event)">
+                                    <option value="" selected disabled>Select GST</option>
+                                    <option value="0">Non GST</option>
+                                    <option value="1">IGST</option>
+                                    <option value="2">CGST</option>
+                                    <option value="3">SGST</option>
+                                </select>
+                                <label class="active">GST</label>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="quot-number" class="form-control ">
+                                    <label for="quot-number" class=" ">Quotation Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #qdate="ngbDatepicker" (click)="qdate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Quotation Date</label>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-lg-6 col-md-6 px-2">
+                            <div class="md-form md-outline ">
+                                <textarea type="text" id="company-address" class="md-textarea form-control overflow-auto" rows="1" value=""></textarea>
+                                <label for="company-address">Remarks</label>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="col-lg-12 col-md-12 px-3 mt-3">
+                        <div class="border-box mb-2 pb-0">
+                            <span class="border-label">Product Listing</span>
+                            <div class="row">
+                                <div class="col-12 float-right mr-3">
+                                    <!-- <button type="button" (click)="addProduct()" class="btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i class="fa fa-plus" aria-hidden="true"></i> More Products</button> -->
+                                    <table class="table table-striped table-responsive maxHeight text-center" [formGroup]="productList">
+                                        <thead>
+                                            <tr class="bg-dark text-white">
+                                                <th class="sno">
+                                                    <a class="btn-white btn-sm waves-light waves-effect bg-white black-text" (click)="addProduct()" mdbtooltip="Delete" placement="top"><i class="fa fa-plus fas" aria-hidden="true"></i></a>
+                                                </th>
+                                                <th class="itemName">
+                                                    Product Name
+                                                </th>
+                                                <th class="unit">
+                                                    Unit
+                                                </th>
+                                                <th class="quantity">
+                                                    Qty
+                                                </th>
+                                                <th class="itemId">
+                                                    Rate per Unit
+                                                </th>
+                                                <th class="itemId">
+                                                    Amount
+                                                </th>
+                                                <th class="quantity">
+                                                    Disc.
+                                                </th>
+                                                <th class="quantity" *ngIf="typeCGST">
+                                                    CGST
+                                                </th>
+                                                <th class="itemId" *ngIf="typeSGST">
+                                                    SGST
+                                                </th>
+                                                <th class="itemId" *ngIf="typeIGST">
+                                                    IGST
+                                                </th>
+                                                <th class="itemId">
+                                                    Total Amount
+                                                </th>
+                                                <th class="action">
+                                                    Action
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody formArrayName="products">
+                                            <tr *ngFor="let product of products.controls; let i=index" [formGroupName]="i">
+                                                <td scope="row" class="sno">{{i+1}}</td>
+                                                <td class="itemName float-left">
+                                                    <!-- <select id="itemsName_{{i}}" formControlName="itemsName" class="form-control">
+                                                        <option value="" selected disabled>Select Item Name</option>
+                                                        <option value="12345678">Item 12345</option>
+                                                        <option value="23456789">Item 234567</option>
+                                                        <option value="34567890">Item 345678</option>
+                                                    </select> -->
+                                                    <ng-autocomplete class="dozan " [readonly]="Access" ng-readonly [data]="productdataList" id="itemsName_{{i}}" [disabled]="isButtonDisabled" formControlName="itemsName" [searchKeyword]="keyword" (selected)='selectEvent($event)'
+                                                    (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)'
+                                                    [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+                                                    </ng-autocomplete>
+                                                    <ng-template #itemTemplate let-item>
+                                                    <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                                    </ng-template>
+                                                    <ng-template #notFoundTemplate let-notFound>
+                                                    <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                                    </ng-template>
+                                                </td>
+                                                <td class="unit">
+                                                    <!-- <input type="text"  class="form-control"  > -->
+                                                    <select class="form-control field-ht colorful-select dozan" id="dozan_{{i}}" formControlName="dozan">
+                                                        <option value="" selected >Select Unit</option>
+                                                        <option value="1">Sqrt ft</option>
+                                                    </select>
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="quantity_{{i}}" formControlName="quantity" class="form-control dozan ">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="rate_{{i}}" formControlName="rate" class="form-control dozan text-right">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="amount_{{i}}" formControlName="amount" class="form-control dozan text-right">
+                                                </td>
+                                                <td class="quantity">
+                                                    <input type="text" id="discount_{{i}}" formControlName="discount" class="form-control dozan ">
+                                                </td>
+                                                <td class="quantity" *ngIf="typeCGST">
+                                                    <input type="text" id="cgst_{{i}}" formControlName="cgst" class="form-control dozan ">
+                                                </td>
+                                                <td class="quantity" *ngIf="typeSGST">
+                                                    <input type="text" id="sgst_{{i}}" formControlName="sgst" class="form-control dozan ">
+                                                </td>
+                                                <td class="quantity" *ngIf="typeIGST">
+                                                    <input type="text" id="igst_{{i}}" formControlName="igst" class="form-control dozan ">
+                                                </td>
+                                                <td class="itemId">
+                                                    <input type="text" id="tamount_{{i}}" formControlName="tamount" class="form-control dozan text-right">
+                                                </td>
+                                                <td class="action">
+                                                    <!-- <button type="button"  class="btn warm-flame-gradient btn-sm waves-light waves-effect mt-0"><i class="fas fa-times"></i></button> -->
+                                                    <a class="green-text" data-toggle="modal" data-target="#add_bill_modal" mdbtooltip="update" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <a class="red-text" (click)="removeProduct(i)" mdbtooltip="Delete" placement="top"><i class="fas fa-times px-1 fas"></i></a>
+                                                    <!-- <a class="reblued-text" (click)="addProduct()" mdbtooltip="Delete" placement="top"><i class="fa fa-plus fas" aria-hidden="true"></i></a> -->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemName" *ngIf="onerow"></td>
+                                                <td class="unit" *ngIf="tworow"></td>
+                                                <td class="quantity" *ngIf="thridrow"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity" ><h6 *ngIf="tworow" class="dozan mb-0">GST Total</h6></td>
+                                                <td class="itemId "><h6 class="dozan mb-0">Grand Total</h6></td>
+                                                <td class="action"></td>
+                                            </tr>
+                                            <tr>
+                                                <td scope="row" class="sno"></td>
+                                                <td class="itemName" *ngIf="onerow"></td>
+                                                <td class="unit" *ngIf="tworow"></td>
+                                                <td class="quantity" *ngIf="thridrow"></td>
+                                                <td class="itemId"></td>
+                                                <td class="itemId"></td>
+                                                <td class="quantity"></td>
+                                                <td class="unit"></td>
+                                                <td class="quantity"></td>
+                                                <td class="quantity" ><input type="text" id="SGST" class="form-control dozan" *ngIf="tworow"></td>
+                                                <td class="itemId"><input type="text" id="TAmount" class="form-control text-right dozan"></td>
+                                                <td class="action"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row px-2 mb-3">
+                        <div class="col">
+                            <button type="button" class=" float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fas fa-save mr-2" aria-hidden="true"></i>Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add New bill modal -->
+            <div class="modal fade" id="add_bill_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-side modal-dialog modal-top-right modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Bill</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="2015-05-16"  readonly>
+                                        <label for="ntd" class="active">Bill date</label>
+                                    </div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="cust1">Customer1</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                            </div>
+                            <div class=" form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Total Billing Amount " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true " disabled="disabled ">Select Payment Mode</option>
+                                        <option value="default ">Cheque</option>
+                                        <option value="2 ">Cash</option>
+                                    </select>
+                                    <label class="ml-2 active">Payment Mode</label>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Paid " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Due " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Paid " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Due " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Paid " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Due " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row ">
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Paid " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                                <div class="col ">
+                                    <div class="md-form md-outline input-group ">
+                                        <div class="input-group-prepend ">
+                                            <span class="input-group-text " id="basic-addon1 ">Rs</span>
+                                        </div>
+                                        <input type="text " class="form-control " placeholder="Amount Due " aria-label="Username " aria-describedby="basic-addon1 ">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer ">
+                            <button type="button " class="btn btn-sm btn-danger " data-dismiss="modal">Cancel</button>
+                            <button type="button " class="btn btn-sm btn-outline-success waves-effect ">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+        <ng-template #content let-modal>
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="modal-header mdb-color ">
+                    <p class="heading lead font-weight-bold text-white" id="modaltextheader">{{PopupTitle}}</p>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+                <!-- Body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" id="form-cust_title">
+                                <option value="" selected="true">Select Title</option>
+                                <option *ngFor="let titlelist of respcustomerTitle" value={{titlelist.LookupValue}}>
+                                    {{titlelist.LookupValue}}
+                                </option>
+                                </select>
+                                <label class="active">Title</label>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="md-form md-outline">
+                                <input type="hidden" id="CustomerId">
+                                <input type="text" id="cust_firstname"  class="form-control " required=" ">
+                                <label for="cust_firstname " class="">First Name*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="md-form md-outline">
+                            <input type="text" id="cust_lastname" class="form-control">
+                            <label for="cust_lastname" class="">Last Name*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="md-form md-outline">
+                            <input type="text" id="cust_email" class="form-control ">
+                            <label for="cust_email" class="">Email*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="md-form md-outline">
+                            <select class="form-control field-ht colorful-select">
+                                <option value="1">Enabled</option>
+                                <option value="0Zx">Disabled</option>
+                            </select>
+                            <label class="active">Status*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="cust_contprn " class="form-control" required=" ">
+                                <label for="cust_contprn" class="">Contact person*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 md-form md-outline ">
+                            <select id ="cust_customertype" class="form-control field-ht colorful-select">
+                                <option value="">Select Customer Type</option>
+                                <option value="1">New Customer</option>
+                                <option value="2">Existing Customer</option>
+                            </select>
+                            <label class="ml-3 active">Customer Type*</label>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="md-form md-outline input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">+91</span>
+                                </div>
+                                <input type="text" class="form-control"  placeholder="Mobile Number"  aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="md-form md-outline input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">+91</span>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Alternate Number" aria-label="Username" aria-describedby="basic-addon1" >
+                            </div>
+                        </div>
+                        <div class="col-md-4 md-form md-outline ">
+                            <select class="form-control field-ht colorful-select" id="form-cust_category">
+                                <option value="" selected="true">Select Category</option>
+                                <option *ngFor="let categorieslist of respcustomerCategory" value={{categorieslist.LookupValue}}>
+                                    {{categorieslist.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="ml-3 active">Category</label>
+                        </div>
+                        <div class="col-md-8 ">
+                            <div class="md-form md-outline ">
+                                <textarea type="text" id="form10" class="md-textarea form-control" rows="1 "></textarea>
+                                <label for="form10" class="">Address*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class=" md-form md-outline ">
+                                <input type="text" id="form-country" class="form-control">
+                                <label for="form-country" class="active">Country*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class=" md-form md-outline ">
+                                <input type="text" id="form-state " class="form-control">
+                                <label for="form-state" class="active">State*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4" >
+                            <div class=" md-form md-outline ">
+                                <input type="text" id="form-city " class="form-control ">
+                                <label for="form-city " class="active">City*</label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal" (click)="modal.dismiss()"  >Cancel</button>
+                    <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                  
+                </div>
+                <!-- Content -->
+            </div>
+        </ng-template>   
+    </main>
+</body>

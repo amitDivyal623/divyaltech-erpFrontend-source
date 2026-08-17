@@ -1,0 +1,239 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Project List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_mapping_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Mapping</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-project" class="form-control">
+                                <label for="form-project" class="">Project Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select">
+                                <option value="" selected="true" disabled="disabled">Select Building Material</option>
+                                <option value="default">BM1</option>
+                                <option value="2">BM2</option>
+                            </select>
+                            <label class="top-lb active">Building Material</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Project Name
+                                    </th>
+                                    <th>Building Material
+                                    </th>
+                                    <th>Quantity Used
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>P1</td>
+                                    <td>Material</td>
+                                    <td>200</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_mapping_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_mapping_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>P1</td>
+                                    <td>Material</td>
+                                    <td>200</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_mapping_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_mapping_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>3</td>
+                                    <td>P1</td>
+                                    <td>Material</td>
+                                    <td>200</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_mapping_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_mapping_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4</td>
+                                    <td>P1</td>
+                                    <td>Material</td>
+                                    <td>200</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_mapping_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_mapping_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New mapping modal -->
+            <div class="modal fade" id="add_mapping_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Mapping</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body" [formGroup]="addProjectMapping" >
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" formControlName="project_id">
+                                        <option value="" selected="true" disabled="disabled">Select Project</option>
+                                        <option value="default">P1</option>
+                                        <option value="2">P2</option>
+                                    </select>
+                                    <label class="ml-2 active">Project</label>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" id="build_material_id" formControlName="build_material_id">
+                                        <option value="" selected="true" id="build_material_id" disabled="disabled">Select Building Material</option>
+                                        <option value="default">BM1</option>
+                                        <option value="2">BM2</option>
+                                    </select>
+                                    <label class="ml-2 active">Building Material</label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="quantity_need" formControlName="quantity_need" class="form-control" required="">
+                                        <label for="quantity_need" class="">Quantity</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="extra_quantity_added" formControlName="extra_quantity_added"  class="form-control" required="">
+                                        <label for="extra_quantity_added" class="">Extra Quantity</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect" (click)="saveProjectMapping()">Save</button>
+                        </div>
+
+                        <!-- Content -->
+                    </div>
+                </div>
+            </div>
+            <!-- View mapping modal -->
+            <div class="modal fade" id="view_mapping_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">View Mapping</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                        <option value="" selected="true" disabled="disabled">Select Project</option>
+                                        <option value="default" selected="true">P1</option>
+                                        <option value="2">P2</option>
+                                    </select>
+                                    <label class="ml-2 active">Project</label>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                        <option value="" selected="true" disabled="disabled">Select Building Material</option>
+                                        <option value="default" selected="true">BM1</option>
+                                        <option value="2">BM2</option>
+                                        <label class="ml-2 active">Building Material</label>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="qty" class="form-control" required="" disabled>
+                                        <label for="qty" class="">Quantity</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="extra_qty" class="form-control" required="" disabled>
+                                        <label for="extra_qty" class="">Extra Quantity</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+
+                        <!-- Content -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

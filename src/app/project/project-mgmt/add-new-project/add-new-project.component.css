@@ -1,0 +1,29 @@
+.back-btn{
+    margin-left:-7px;
+}
+.remove-btn{
+    margin-top:32px;
+}
+.alternet-unit{
+    margin-top:30px;
+}
+
+#removeButton{
+    margin-top: 5px;
+}
+.material-use{    
+    margin-top: 33px;
+    margin-left: 7px;
+}
+
+
+
+#add_material_consumed_modal .material-consumed-modal {
+    max-width: 95%;
+}
+
+@media (min-width: 1400px) {
+    #add_material_consumed_modal .material-consumed-modal {
+        max-width: 1200px;
+    }
+}

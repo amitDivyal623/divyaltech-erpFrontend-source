@@ -1,0 +1,53 @@
+/* Full value display shown below the From Warehouse, Category,
+   Sub Category and Materials fields, so long names are never
+   clipped by the field width. */
+.gatepass-full-name {
+  display: block;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Loader shown while the Materials table is being built for the selected items */
+.gatepass-loading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Same ng-select tooltip pattern used in stock-inventory.component.scss - the
+   span needs to fill the field's full width (not just the ellipsis-clipped
+   text) or the browser's native title tooltip has almost no area to hover. */
+.item-hover {
+  display: inline-block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* src/assets/scss/core/_global.scss sets `pointer-events: none !important` on
+   every `:disabled` element. In view mode the whole form is disabled, which
+   blocks hover entirely - so the native title tooltips above never get a
+   chance to trigger. Restore just enough pointer-events for hover to work;
+   ng-select's own JS still ignores clicks while its control is disabled, so
+   this doesn't make the fields editable again. */
+:host ::ng-deep {
+  input:disabled[title],
+  .ng-select-disabled,
+  .ng-select-disabled .ng-select-container,
+  .ng-select-disabled .ng-value-label,
+  .ng-select-disabled .item-hover {
+    pointer-events: auto !important;
+  }
+
+  /* ng-select renders its (disabled) search input inside a `.ng-input` div that
+     sits directly over the value/tooltip span - confirmed via elementFromPoint()
+     during debugging, which returned .ng-input instead of the span underneath.
+     The div itself isn't `:disabled` (only the <input> inside it is), so it
+     keeps intercepting hover even after the rules above. It's not usable for
+     searching while disabled anyway, so let hover pass straight through it. */
+  .ng-select-disabled .ng-input {
+    pointer-events: none !important;
+  }
+}

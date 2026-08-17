@@ -1,0 +1,15 @@
+.hidden {
+  display: none;
+}
+
+::ng-deep #revisit_visitor_name .autocomplete-container.active {
+  z-index: 2000;
+}
+
+.revisit-header-hint {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0.95;
+  margin-top: 4px;
+}

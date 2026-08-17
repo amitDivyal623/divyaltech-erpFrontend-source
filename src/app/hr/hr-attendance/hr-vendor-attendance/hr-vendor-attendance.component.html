@@ -1,0 +1,97 @@
+<body class="fixed-sn white-skin">
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Vendor Attendence</h5>
+                <div class="col-lg-12 col-md-12" [formGroup]="searchvendorattendance">
+                    <div class="row py-2 px-2">
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateFrom" id="attendanceDateFrom" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #fdate="ngbDatepicker" (click)="fdate.toggle()" type="text" class="form-control datepicker">
+                                <label for="attendanceDateFrom" class="active">Date From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline pr-2">
+                                <input placeholder="Select date" formControlName="dateTo" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #tdate="ngbDatepicker" (click)="tdate.toggle()" type="text" id="attendanceDateTo" class="form-control datepicker">
+                                <label for="attendanceDateTo" class="active">Date To</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4" style="display: none;">
+                            <select class="form-control field-ht colorful-select" id="ResourceType" formControlName="ResourceType">
+                                <option value="Labour"  selected>Labour</option>
+                                <option value="Machine"  selected>Machine</option>
+                            </select>
+                            <label class="top-lb active">Resource Type</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" id="ResourceType" formControlName="vendorname">
+                                <option value=""  selected>Select Vendor Name</option>
+                                <option *ngFor="let vendorlist of vendorDataList" value={{vendorlist.VendorId}}>
+                                    {{vendorlist.VendorName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Vendor Name</label>
+                        </div>
+                        <div class="form-row float-right mr-3">
+                            <button type="button" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="vendorAttendance()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid  px-4 my-4">
+            <section>
+                <div class="card ">
+                    <div class="table-responsive">
+                        <table id="vendorlist" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%" >
+                            <thead class="winter-neva-gradient">
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Vendors Name</th>
+                                    <th>Total Labours</th>
+                                    <th>Labours Name</th>
+                                    <!-- <th>Machine Used</th>
+                                    <th>Time Taken</th> -->
+                                    <!-- <th>Labours Present days</th> -->
+                                    <th>Project Name</th>
+                                    <th>Date</th>
+                                    <!-- <th>Machine Present days</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.vendoename}}</td>
+                                    <td>{{item.TotalLabour}}</td>
+                                    <td>{{item.labourName}}</td>
+                                    <!-- <td>{{item.machineUsed}}</td>
+                                    <td>{{item.ExpendedTime}}</td> -->
+                                    <!-- <td><input type="text" id="" value="{{item.Attendance}}" class="field-width1"></td> -->
+                                    <td>{{item.projectName}}</td>
+                                    <td>{{item.WorkDate}}</td>
+                                    <!-- <td><input type="text" id="" value="{{item.machineAttendance}}" class="field-width1"></td> -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>

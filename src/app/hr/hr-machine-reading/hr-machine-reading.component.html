@@ -1,0 +1,101 @@
+<body class="fixed-sn white-skin">
+    <!-- Main Navigation -->
+    <header>
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+        <!-- /.Navbar -->
+    </header>
+    <!-- Main Navigation -->
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Machine Reading List
+                    <button type="button" #openmodal style="display: none;" (click)="openMachineReadingModel">Add New Entry</button>
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"  (click)="addnewMachine()"><i class="fa fa-plus" aria-hidden="true"></i> Add New Entry</button>
+                </h5>
+                <div [formGroup]="searchMachine" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline pr-4">
+                                <input placeholder="Select date" formControlName="machineDate" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="datepicker-example" class="form-control datepicker">
+                                <label for="datepicker-example" class="active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select #setvalue formControlName="filtervendertype" class="form-control field-ht colorful-select">
+                                <option value="" selected="true">Select Vendor</option>
+                                <option *ngFor="let contractorlist of respcontractor" value={{contractorlist.contractorId}}>
+                                    {{contractorlist.contractorName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Vendor/Contractor Name</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="filterVehicletype" class="form-control field-ht colorful-select">
+                                <option value="" selected>Select Vehicle</option>
+                                <option *ngFor="let vechicledata of vechicalList; let i = index" value="{{vechicledata.VehicleID}}">{{vechicledata.VehicleName}}</option>
+                            </select>
+                            <label class="top-lb active">Vehicle Name</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="resetMachinesearch()" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i class="fa fa-refresh" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="machineSearch()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="machineTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Date</th>
+                                    <th>Project Name</th>
+                                    <th>Reading Start</th>
+                                    <th>Reading Stop</th>
+                                    <th>Machine Start Time</th>
+                                    <th>Machine Stop Time</th>
+                                    <th>Vehical Number</th>
+                                    <th>Spent Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of response">
+                                    <td>{{item.counter}}</td>
+                                    <td>{{item.ReadingDt}}</td>
+                                    <td>{{item.projectName}}</td>
+                                    <td>{{item.ReadingStart}}</td>
+                                    <td>{{item.ReadingEnd}}</td>
+                                    <td>{{item.TimeStart}}</td>
+                                    <td>{{item.TimeEnd}}</td>
+                                    <td>{{item.vehicalName}}</td>
+                                    <td>{{item.ExpendedTime}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="viewMachine(item.ReadingId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="editMachine(item.ReadingId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top" (click)="DeleteMachine(item.ReadingId)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="response?.length == 0">
+                                <tr>
+                                    <td colspan="7" class="no-data-available">No data available in table</td>
+                                </tr>
+                                <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

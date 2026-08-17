@@ -1,0 +1,23 @@
+[
+   
+   
+    { 
+    
+    "id" : 1,
+    "fullname" : "Deepesh Gupta",
+    "username": "firstuser",
+    "phone" : 466512655,
+    "email" : "exmple1@gmail.com"
+
+   },
+
+   
+   { 
+    "id" : 2,
+    "fullname" : "amit Gupta",
+    "username": "seconduser",
+    "phone" : 4561156655,
+    "email" : "exmple2@gmail.com"
+
+   }
+]

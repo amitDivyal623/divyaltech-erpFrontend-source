@@ -1,0 +1,39 @@
+.tab-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    
+    text-decoration: none;
+    color: #fff;
+    background-image: linear-gradient(to top, #616161 0%, #9bc5c3 100%);
+    background-blend-mode: multiply,multiply;
+    box-shadow: 0 0 4px rgba(255, 255, 255, .5);
+}
+.tab-link {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 60px;
+    
+    text-decoration: none;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: white;
+    transition: 0.4s all;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+.tab-nav {
+   list-style: none;
+   display: flex;
+   justify-content: center;
+   margin-top: 20px;
+}
+
+@media screen and (min-width: 360px) and (max-width: 768px){
+   /*.nav a {
+       display: none;
+   }*/
+}

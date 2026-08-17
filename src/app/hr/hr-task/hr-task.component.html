@@ -1,0 +1,219 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Task List
+                    <button *ngIf="hradminTab || hrUserTab || Admin || employeeTab || Administrator || CRMAdmin" type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_task_modal" (click)="addtask()"><i class="fa fa-plus" aria-hidden="true" (click)="addtask()"></i> Add New Task</button>
+                </h5>
+                <div [formGroup]="searchTask" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="customerName" class="form-control field-ht colorful-select" id="form-customername">
+                                <option value="" selected="true">Select Assignee</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Assignee</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="userName" class="form-control field-ht colorful-select" id="form-username">
+                                <option value="" selected="true">Select Reporter</option>
+                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                    {{Employeelist.EmployeeName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Reporter</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="task_date" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                <label for="date-picker-example" class="active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select formControlName="task_status" class="form-control field-ht colorful-select">
+                                <option value="" selected="true">Select Status</option>
+                                <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                    {{Status.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Status</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="taskSearch()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" data-toggle="modal" data-target="#add_emp_modal"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="taskTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>TaskTitle</th>
+                                    <th>TaskDescription</th>
+                                    <th>TaskDt</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.taskTitle}}</td>
+                                    <td class="overFlowData">{{item.taskDescription}}</td>
+                                    <td>{{item.taskDt}}</td>
+                                    <td>{{item.LookupValue}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="ViewTask(item.taskId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="editTask(item.taskId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="hradminTab || hrUserTab || Admin || employeeTab || Administrator" class="red-text" mdbtooltip="Remove" placement="top" (click)="deletTask(item.taskId)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                    <td colspan="6" class="no-data-available">No data available in table</td>
+                                </tr>
+                                <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New task modal -->
+            <div class="modal fade" id="add_task_modal" #myModal tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Task </p>
+                            <button type="button" class="close" #closebutton data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div [formGroup]="addTask" class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input formControlName="task_title" name="task_title" type="text" id="task_title" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addTask.controls['task_title'].invalid ) || (addTask.controls['task_title'].invalid && addTask.controls['task_title'].touched)}">
+                                        <label for="task_title" class="">Task Title *</label>
+                                        <div *ngIf=" (submitted && addTask.controls['task_title'].invalid) || (addTask.controls['task_title'].invalid && addTask.controls['task_title'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['task_title'].invalid) || (addTask.controls['task_title'].invalid && addTask.controls['task_title'].touched)">Title is required</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="date" id="form-date" [minDate]="minDate" [maxDate]="maxDate" placeholder="Select Date" class="form-control" ngbDatepicker #sdate="ngbDatepicker" value="dd-MM-yyyy" (click)="sdate.toggle()"
+                                        [ngClass]="{ 'is-invalid': (submitted && addTask.controls['date'].invalid ) || (addTask.controls['date'].invalid && addTask.controls['date'].touched)}" readonly>
+                                        <label for="form-date" class="active">Date *</label>
+                                        <div *ngIf=" (submitted && addTask.controls['date'].invalid) || (addTask.controls['date'].invalid && addTask.controls['date'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['date'].invalid) || (addTask.controls['date'].invalid && addTask.controls['date'].touched)">Date is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="status" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTask.controls['status'].invalid ) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)}">
+                                            <option value="" selected="true" disabled="disabled">Select Status</option>
+                                            <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                                {{Status.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Status*</label>
+                                        <div *ngIf=" (submitted && addTask.controls['status'].invalid) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['status'].invalid) || (addTask.controls['status'].invalid && addTask.controls['status'].touched)">Status is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="assignee" id="form-namecustomer" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTask.controls['assignee'].invalid ) || (addTask.controls['assignee'].invalid && addTask.controls['assignee'].touched)}">
+                                            <option value="" selected="true">Select Assignee</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Assignee*</label>
+                                        <div *ngIf=" (submitted && addTask.controls['assignee'].invalid) || (addTask.controls['assignee'].invalid && addTask.controls['assignee'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['assignee'].invalid) || (addTask.controls['assignee'].invalid && addTask.controls['assignee'].touched)">Assignee is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="reporter" id="form-nameuser" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTask.controls['reporter'].invalid ) || (addTask.controls['reporter'].invalid && addTask.controls['reporter'].touched)}">
+                                            <option value="" selected="true">Select Reporter</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Reporter*</label>
+                                        <div *ngIf=" (submitted && addTask.controls['reporter'].invalid) || (addTask.controls['reporter'].invalid && addTask.controls['reporter'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['reporter'].invalid) || (addTask.controls['reporter'].invalid && addTask.controls['reporter'].touched)">Reporter is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="task_description" class="md-textarea form-control" rows="3" required="" [ngClass]="{ 'is-invalid': (submitted && addTask.controls['task_description'].invalid ) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)}"></textarea>
+                                        <label for="form10">Task Description *</label>
+                                        <div *ngIf=" (submitted && addTask.controls['task_description'].invalid) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTask.controls['task_description'].invalid) || (addTask.controls['task_description'].invalid && addTask.controls['task_description'].touched)">Description is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <div *ngIf="saveButton">
+                                <button type="button" (click)="insertTask()" [disabled]="isButtonDisabled" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Delete Modal for Customer -->
+            <!-- End of Delete Modal for Customer -->
+
+
+        </div>
+
+    </main>
+    <!-- Main layout -->
+
+</body>

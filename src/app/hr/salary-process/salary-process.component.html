@@ -1,0 +1,83 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card px-2 my-2">
+                <form>
+                    <div class="table-responsive">
+						<div style="margin-left:75%;">
+							Working Day Of The Month  <input type="text"  value="{{WorkingDay}}" name="" id="" style="width: 100px;">
+						</div>
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead class="winter-neva-gradient">
+                                <tr>
+                                    <th></th>
+                                    <th width="1px">S.No.</th>
+                                    <th width="115px">Employee Name</th>
+                                    <th width="15px">Attnd</th>
+                                    <th >Basic Salary</th>
+                                    <th >HRA</th>
+                                    <th >CA</th>
+                                    <th >Gross Salary</th>
+                                    <th >Bonus</th>
+                                    <th >EMI</th>
+                                    <th class="PFcolumn">PF</th>
+                                    <th class="ESIcolumn">ESI</th>
+                                    <th >Net Salary</th>
+                                    <th >Advance</th>
+                                    <th >Amount To Pay</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>
+                                        <input type="hidden"  value="{{item.EmpId}}"  name="employeeID" id="employeeID_{{i}}">
+                                        <input type="hidden" value="{{item.Salary_id}}"  name="salaryid" id="salaryid_{{i}}">
+                                        <input type="hidden" value="{{item.EmploanId}}"  name="EmploanId" id="EmploanId_{{i}}">
+                                        <input type="hidden" value="{{item.slarydeduction}}"  name="slarydeduction" id="slarydeduction_{{i}}">
+                                    </td>
+                                    <td>{{item.counter}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td><input type="text"  value="{{item.attt}}" name="att" id="att_{{i}}" class="atta-filed-with"></td>
+                                    <td><input type="text"  #BasicSalary  value="{{item.BasicSalary}}" name="BasicSalary" id="BasicSalary_{{i}}" class="field-width BasicSalary"></td>
+                                    <td><input type="text"  value="{{item.HRA}}" name="HRA" id="HRA_{{i}}" class="field-width"></td>
+                                    <td><input type="text" value="{{item.CA}}"  name="CA" id="CA_{{i}}" class="field-width"></td>
+                                    <td><input type="text" value="{{item.GrossPay}}" name="GrossSalary" id="GrossSalary_{{i}}" class="field-width"></td>
+                                    <td><input type="text" (change)="amountCalculculation()" value="{{item.Bonus}} "  name="Bonus" id="Bonus_{{i}}" class="field-width"></td>
+                                    <td><input type="text" (change)="amountCalculculation()" value="{{item.EmiAmount}} " name="Loan" id="Loan_{{i}}" class="field-width"></td>
+                                    <td  class="PFcolumn">
+                                        <input type="text" (change)="amountCalculculation()" value="{{item.PF}}" name="PF" id="PF_{{i}}" class="field-width"></td>
+                                    <td class="ESIcolumn">
+                                        <input type="text" (change)="amountCalculculation()" value="{{item.ESI}}" name="ESI" id="ESI_{{i}}" class="field-width">
+                                    </td>
+                                    <td><input type="text" (change)="amountCalculculation()" value="{{item.NetPay}}"  name="NetSalary" id="NetSalary_{{i}}" class="field-width"></td>
+                                    <td><input type="text" (change)="amountCalculculation()" value=" "  name="AdvancePay1" id="AdvancePay1_{{i}}" class="field-width"></td>
+                                    <td><input type="text" (change)="amountCalculculation()" value="{{item.totalamountPay}}" name="AmountPay" id="AmountPay_{{i}}" class="field-width"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+                <div class="col-12 px-2 py-2">
+                    <button type="button" (click)="SubmitSalaryProcess()" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect">Salary Process</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</body>

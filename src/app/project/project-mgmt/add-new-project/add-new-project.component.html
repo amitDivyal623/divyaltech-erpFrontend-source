@@ -1,0 +1,1584 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <form [formGroup]="projectDetails">
+            <div class="container-fluid px-4 mb-2">
+                <div class="card">
+                    <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">{{header}}</h5>
+                    <div class="card-body">
+                        <!-- <button type="button" id="modalGodown" #childModalOption1 class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_visit_modal" style="display: none;"></button> -->
+                        <div class="form-row">
+                            <div class="col-md-2 px-3">
+                                <div class="md-form md-outline">
+                                    <input type="hidden" formControlName="persons_id" />
+                                    <ng-autocomplete [data]="customerdataList" [searchKeyword]="keyword"
+                                        (selected)='selectCust($event)' (inputChanged)='onCustomerSearch($event);'
+                                        [itemTemplate]="itemTemplate" id="customer_name" name="customer_name"
+                                        formControlName="customer_name">
+                                    </ng-autocomplete>
+                                    <ng-template #itemTemplate let-item>
+                                        <a [innerHTML]="(item?.cust_name || '') + (item?.ProductCode ? ', ' + item.ProductCode : '')"
+                                            [readonly]="Access"></a>
+                                    </ng-template>
+                                    <ng-template #notFoundTemplate let-notFound>
+                                        <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                    </ng-template>
+                                    <label for="customer_name" class="active" style="z-index: 1000;">Select
+                                        Customer</label>
+                                    <!-- [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['customer_name'].invalid ) || (projectDetails.controls['customer_name'].invalid && projectDetails.controls['customer_name'].touched)}"   <div *ngIf=" (submitted && projectDetails.controls['customer_name'].invalid) || (projectDetails.controls['customer_name'].invalid && projectDetails.controls['customer_name'].touched)" class="invalid-feedback" >Customer Name is required</div>                                 -->
+                                </div>
+                            </div>
+                            <div class="col-md-2 px-3">
+                                <div class="md-form md-outline">
+                                    <input type="hidden" name="projectId" formControlName="projectId" id="projectId">
+                                    <input type="text" id="projectName" formControlName="projectName" name="projectName"
+                                        class="form-control" value=""
+                                        [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['projectName'].invalid ) || (projectDetails.controls['projectName'].invalid && projectDetails.controls['projectName'].touched)}">
+                                    <label for="projectName" class="{{className}}">Project Name</label>
+                                    <!-- <div *ngIf=" (submitted && projectDetails.controls['projectName'].invalid) || (projectDetails.controls['projectName'].invalid && projectDetails.controls['projectName'].touched)" class="invalid-feedback" >Project Name is required</div> -->
+                                    <div *ngIf=" (submitted && projectDetails.controls['projectName'].invalid) || (projectDetails.controls['projectName'].invalid && projectDetails.controls['projectName'].touched)"
+                                        class="invalid-feedback">Project Name is required</div>
+                                </div>
+                            </div>
+                            <!---<div class="col-md-3 px-3">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="ProjectCo_ordinator" formControlName="ProjectCo_ordinator" name="ProjectCo_ordinator" class="form-control mdb-autocomplete" [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['ProjectCo_ordinator'].invalid ) || (projectDetails.controls['ProjectCo_ordinator'].invalid && projectDetails.controls['ProjectCo_ordinator'].touched)}">
+                                    <label for="ProjectCo_ordinator" class="{{className}}">Project Co-ordinator</label>
+                                    <div *ngIf=" (submitted && projectDetails.controls['ProjectCo_ordinator'].invalid) || (projectDetails.controls['ProjectCo_ordinator'].invalid && projectDetails.controls['ProjectCo_ordinator'].touched)" class="invalid-feedback" >Project Co_ordinator is required</div>
+                                </div>
+                            </div>--->
+                            <div class="col-md-2 md-form md-outline px-3">
+
+                                <ng-select [items]="projectCoordinatorUsers" bindLabel="EmployeeName"
+                                    bindValue="EmployeeId" placeholder="Select Project Co-ordinator"
+                                    formControlName="ProjectCo_ordinator" [searchable]="true" [clearable]="true"
+                                    class="field-ht colorful-select">
+                                </ng-select>
+
+                                <label class="top-lb active">Project Co-ordinator</label>
+
+                            </div>
+                            <div class="col-md-3 md-form md-outline px-3">
+                                <ng-select [items]="projectManagerUsers" bindLabel="EmployeeName" bindValue="EmployeeId"
+                                    placeholder="Select Project Manager" formControlName="projectmanager"
+                                    [searchable]="true" [clearable]="true" class="field-ht colorful-select">
+                                </ng-select>
+                                <label class="top-lb active">Project Manager</label>
+                                <!--[ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['projectmanager'].invalid ) || (projectDetails.controls['projectmanager'].invalid && projectDetails.controls['projectmanager'].touched)}"     <div *ngIf=" (submitted && projectDetails.controls['projectmanager'].invalid) || (projectDetails.controls['projectmanager'].invalid && projectDetails.controls['projectmanager'].touched)" class="invalid-feedback" >Project Manager is required</div> -->
+                            </div>
+                            <!--<div class="col-md-3 px-3">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="projectmanager" formControlName="projectmanager" name="projectmanager" class="form-control" [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['projectmanager'].invalid ) || (projectDetails.controls['projectmanager'].invalid && projectDetails.controls['projectmanager'].touched)}">
+                                    <label for="projectmanager" class="{{className}}">Project Manager</label>
+                                    <div *ngIf=" (submitted && projectDetails.controls['projectmanager'].invalid) || (projectDetails.controls['projectmanager'].invalid && projectDetails.controls['projectmanager'].touched)" class="invalid-feedback" >Project Manager is required</div>
+                                </div>
+                            </div>-->
+                            <div class="col-md-3 md-form md-outline px-3">
+                                <select class="form-control field-ht colorful-select" formControlName="project_type"
+                                    name="project_type">
+                                    <option value="">Select Project type</option>
+                                    <option *ngFor="let type of respType" value={{type.LookupDataId}}>
+                                        {{type.LookupValue}}
+                                    </option>
+                                </select>
+                                <label class="top-lb active">Project type</label>
+                                <!-- [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['project_type'].invalid ) || (projectDetails.controls['project_type'].invalid && projectDetails.controls['project_type'].touched)}"    <div *ngIf=" (submitted && projectDetails.controls['project_type'].invalid) || (projectDetails.controls['project_type'].invalid && projectDetails.controls['project_type'].touched)" class="invalid-feedback" >Project type is required</div> -->
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 px-3">
+                                <div class="md-form md-outline input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Rs</span>
+                                    </div>
+                                    <input type="text" class="form-control" formControlName="Expected_Cost"
+                                        name="Expected_Cost" placeholder="Expected Cost" aria-label="Expected Cost"
+                                        aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-md-3 md-form md-outline px-3">
+                                <select class="form-control field-ht colorful-select" formControlName="Status"
+                                    name="Status">
+                                    <option value="" selected>Select Status</option>
+                                    <option value="enabled" selected="true">Enabled</option>
+                                    <option value="disabled" selected="true">Disabled</option>
+                                    <!-- <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                        {{Status.LookupValue}}
+                                    </option> -->
+                                </select>
+                                <label class="top-lb active">Status</label>
+                                <!--[ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['Status'].invalid ) || (projectDetails.controls['Status'].invalid && projectDetails.controls['Status'].touched)}"    <div *ngIf=" (submitted && projectDetails.controls['Status'].invalid) || (projectDetails.controls['Status'].invalid && projectDetails.controls['Status'].touched)" class="invalid-feedback" >Status is required</div> -->
+                            </div>
+                            <div class="col-md-3 px-3">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="startDate" formControlName="startDate" name="startDate"
+                                        class="form-control mdb-autocomplete " [minDate]="minDate" [maxDate]="maxDate"
+                                        readonly ngbDatepicker #startDate="ngbDatepicker" (click)="startDate.toggle()">
+                                    <label for="startDate" class="{{className}}">Start Date</label>
+                                    <!--  [ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['startDate'].invalid ) || (projectDetails.controls['startDate'].invalid && projectDetails.controls['startDate'].touched)}" <div *ngIf=" (submitted && projectDetails.controls['startDate'].invalid) || (projectDetails.controls['startDate'].invalid && projectDetails.controls['startDate'].touched)" class="invalid-feedback" >Start Date is required</div> -->
+                                </div>
+                            </div>
+                            <div class="col-md-3 px-3">
+                                <div class=" md-form md-outline">
+                                    <input type="text" id="endDate" formControlName="endDate" name="endDate"
+                                        class="form-control mdb-autocomplete " [minDate]="minDate" [maxDate]="maxDate"
+                                        readonly ngbDatepicker #enddate="ngbDatepicker" (click)="enddate.toggle()">
+                                    <label for="endDate" class="{{className}}">End Date</label>
+                                    <!--[ngClass]="{ 'is-invalid': (submitted && projectDetails.controls['endDate'].invalid ) || (projectDetails.controls['endDate'].invalid && projectDetails.controls['endDate'].touched)}"    <div *ngIf=" (submitted && projectDetails.controls['endDate'].invalid) || (projectDetails.controls['endDate'].invalid && projectDetails.controls['endDate'].touched)" class="invalid-feedback" >End Date is required</div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-4 px-3">
+                                <div class="md-form md-outline">
+                                    <textarea type="text" id="project_detail" formControlName="project_dscription"
+                                        name="project_dscription" class="md-textarea form-control" rows="1"></textarea>
+                                    <label for="project_dscription" class="{{className}}">Project Description</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 px-3 md-form md-outline">
+                                <ng-select [items]="showAllStates" bindLabel="state_name" bindValue="state_id"
+                                    placeholder="Select State" formControlName="state" [searchable]="true"
+                                    [clearable]="true" class="colorful-select">
+                                </ng-select>
+                                <label for="state" class="ml-4 active">State</label>
+                            </div>
+                            <div class="col-md-5 px-3">
+                                <div class="md-form md-outline">
+                                    <textarea type="text" id="project_detail" formControlName="Address" name="Address"
+                                        class="md-textarea form-control" rows="1"></textarea>
+                                    <label for="Address" class="{{className}}">Address</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-3 px-3">
+                                <div class="md-form md-outline">
+                                    <input class="form-check-input filled-in CalendarForm" type="checkbox"
+                                        name="godownlist" id="godownlist" formControlName="godownlist">
+                                    <label for="godownlist">Godown Listing</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="container-fluid my-3 px-4">
+            <!-- Main docs tabs -->
+            <div class="main-tabs-docs" *ngIf="projectEditDiv">
+                <nav class="nav nav-pills nav-justified">
+                    <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active" href="#docsTabsWork"
+                        data-toggle="tab" role="tab" (click)="setActiveTab('WorkDetail')" aria-selected="false"><i
+                            class="fas fa-file-word mr-2" aria-hidden="true"></i>Work Detail</a>
+                    <a id="docs-tab-materials" class="nav-item nav-link link-nav" href="#docsTabsMaterial"
+                        data-toggle="tab" role="tab" (click)="setActiveTab('MaterialsUsed')" aria-selected="false"><i
+                            class="fa fa-linode mr-2" aria-hidden="true"></i>Materials Used</a>
+                    <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsTask" data-toggle="tab"
+                        role="tab" (click)="setActiveTab('Task')" aria-selected="false"><i
+                            class="fa fa-sticky-note mr-2" aria-hidden="true"></i>Task</a>
+                    <a id="docs-tab-notes" class="nav-item nav-link link-nav" href="#docsTabsNotes" data-toggle="tab"
+                        role="tab" (click)="setActiveTab('Notes')" aria-selected="false"><i
+                            class="fa fa-sticky-note mr-2" aria-hidden="true"></i>Notes</a>
+                    <a id="docs-tab-attach" class="nav-item nav-link link-nav" href="#docsTabsAttach" data-toggle="tab"
+                        role="tab" (click)="setActiveTab('Attachment')" aria-selected="false"><i
+                            class="fa fa-sticky-note mr-2" aria-hidden="true"></i>Attachment</a>
+                    <a id="docs-tab-history" class="nav-item nav-link link-nav" href="#docsTabsHistory"
+                        data-toggle="tab" role="tab" aria-selected="false"
+                        (click)="setActiveTab('History'); btnReload()"><i class="far fa-copy mr-2" aria-hidden="true"
+                            (click)="btnReload()"></i>History</a>
+                    <a id="docs-tab-stocks " class="nav-item nav-link link-nav" href="#docsTabsStocks "
+                        data-toggle="tab" role="tab" (click)="setActiveTab('Stocks')" aria-selected="false"><i
+                            class="far fa-copy mr-2" aria-hidden="true"></i>Stocks</a>
+                </nav>
+                <div class="tab-content panel-tab">
+                    <div class="tab-pane fade in show active" id="docsTabsWork" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="px-2 float-right">
+                                        <!-- <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect form-disable" #workModalButton data-toggle="modal" data-target="#add_work_modal" (click)="Newworkadd()"><i class="fa fa-plus" aria-hidden="true"></i> Add New Work Detail</button> -->
+
+                                        <button type="button"
+                                            class="btn btn-elegant btn-sm  waves-light waves-effect form-disable"
+                                            (click)="openWorkDetailModal()" data-toggle="modal"
+                                            data-target="#dailyDiaryModal"><i class="fa fa-plus" aria-hidden="true"></i>
+                                            Add New Entry</button>
+                                        <button type="button" style="display: none;" #modalbutton
+                                            (click)="addDailyDairy()"></button>
+                                        <button type="button"
+                                            class="btn btn-elegant btn-sm  waves-light waves-effect form-disable"
+                                            (click)="addnewMachine()"><i class="fa fa-plus" aria-hidden="true"></i> Add
+                                            New Machine Reading</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+                            <div class="col-md-12">
+                                <nav class="nav nav-pills nav-justified">
+                                    <a id="docs-tab-workdetail" class="nav-item nav-link link-nav"
+                                        [class.active]="activeTab === 'work'" (click)="setActiveTab('work')" role="tab"
+                                        aria-controls="docsTabsWork">
+                                        <i class="fas fa-file-word mr-2" aria-hidden="true"></i>Work Details Entry
+                                    </a>
+                                    <a id="docs-tab-materials" class="nav-item nav-link link-nav"
+                                        [class.active]="activeTab === 'machine'" (click)="setActiveTab('machine')"
+                                        role="tab" aria-controls="docsTabsMachine">
+                                        <i class="fa fa-linode mr-2" aria-hidden="true"></i>Machine Entry
+                                    </a>
+                                </nav>
+
+                                <!-- Single Tab Content Container -->
+                                <div class="tab-content">
+                                    <!-- Work Details Table -->
+                                    <div class="tab-pane fade" [class.show]="activeTab === 'work'"
+                                        [class.active]="activeTab === 'work'" id="docsTabsWork" role="tabpanel">
+
+                                        <!-- Work Filters -->
+                                        <div class="card-body border-bottom">
+                                            <form [formGroup]="workFilterForm">
+
+                                                <div class="row">
+
+                                                    <!-- From Date -->
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="date" formControlName="fromDate"
+                                                                class="form-control">
+                                                            <label class="active mt-3">From Date</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- To Date -->
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="date" formControlName="toDate"
+                                                                class="form-control">
+                                                            <label class="active mt-3">To Date</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Employee Type -->
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <select mdbInput class="form-control"
+                                                                formControlName="employeeType"
+                                                                (change)="onEmployeeTypeChange()">
+                                                                <option
+                                                                    *ngFor="let EmployeeTypelist of resplookupEmployeeType"
+                                                                    value={{EmployeeTypelist.LookupDataId}}>
+                                                                    {{EmployeeTypelist.LookupValue}}
+                                                                </option>
+                                                            </select>
+                                                            <label class="active">Employee Type</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Contractor Name (LIKE) -->
+                                                    <div class="col-md-3"
+                                                        *ngIf="workFilterForm.get('employeeType')?.value === '64294693-84BC-48D0-B0AD67468A685848'">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="text" formControlName="contractorName"
+                                                                class="form-control">
+                                                            <label class="active">Contractor Name</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Permanent Employee Dropdown (=) -->
+                                                    <div class="col-md-3"
+                                                        *ngIf="workFilterForm.get('employeeType')?.value === '24D522FA-0426-4F82-96FBE33CF6B968E6'">
+                                                        <div class="md-form md-outline">
+                                                            <select mdbInput class="form-control"
+                                                                formControlName="employeeId">
+                                                                <option value="">Select Employee</option>
+                                                                <option *ngFor="let emp of PermanentEmployeeType"
+                                                                    [value]="emp.EmployeeId">
+                                                                    {{ emp.EmployeeName }}
+                                                                </option>
+                                                            </select>
+                                                            <label class="active">Employee Name</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- Search + Reset Row -->
+                                                <div class="row mt-2">
+                                                    <div class="col-md-12 text-right">
+
+                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                            (click)="searchWorkDetails()">
+                                                            <i class="fa fa-search mr-1"></i> Search
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-secondary btn-sm ml-2"
+                                                            (click)="resetWorkFilters()">
+                                                            <i class="fa fa-undo mr-1"></i> Reset
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+                                        <div class="table-responsive card-body">
+                                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions"
+                                                [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0"
+                                                width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Sr No.</th>
+                                                        <th>Date</th>
+                                                        <th>Employee Name</th>
+                                                        <th>Employee Type</th>
+                                                        <th>Notes</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of workDetailsData; let i = index">
+                                                        <td></td>
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{item.entryDate | date:'dd/MM/yyyy'}}</td>
+                                                        <td>{{item.employeename && item.employeename.trim() !== '' ?
+                                                            item.employeename : item.empName}}</td>
+                                                        <td>{{item.lookupvalue}}</td>
+                                                        <td>{{item.notes}}</td>
+                                                        <td>
+                                                            <a class="black-text" mdbtooltip="View" data-toggle="modal"
+                                                                data-target="#dailyDiaryModal"
+                                                                (click)="viewWorkDetail('view_work',item.work_detail_id)">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>
+                                                            <a class="teal-text" mdbtooltip="Edit" data-toggle="modal"
+                                                                data-target="#dailyDiaryModal"
+                                                                (click)="viewWorkDetail('edit_work',item.work_detail_id)">
+                                                                <i class="fa-pencil-alt px-1 fas"></i>
+                                                            </a>
+                                                            <a class="red-text" mdbtooltip="Remove"
+                                                                (click)="deleteWorkDetail(item.work_detail_id)">
+                                                                <i class="fa-times px-1 fas"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody *ngIf="workDetailsData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="7" class="no-data-available">
+                                                            No data!
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- Machine Entry Table -->
+                                    <div class="tab-pane fade" [class.show]="activeTab === 'machine'"
+                                        [class.active]="activeTab === 'machine'" id="docsTabsMachine" role="tabpanel">
+
+                                        <!-- Machine Filters -->
+                                        <div class="card-body border-bottom">
+                                            <form [formGroup]="machineFilterForm">
+
+                                                <div class="row">
+
+                                                    <!-- From Date -->
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="date" formControlName="fromDate"
+                                                                class="form-control">
+                                                            <label class=" mt-3 active">From Date</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- To Date -->
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="date" formControlName="toDate"
+                                                                class="form-control">
+                                                            <label class="active mt-3">To Date</label>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- Vehicle Name -->
+                                                    <div class="col-md-2 md-form md-outline">
+                                                        <label class="active ml-3">Vehicle Name</label>
+                                                        <select class="form-control" formControlName="vehicleName">
+                                                            <option value="">Select Vehicle</option>
+                                                            <option *ngFor="let v of vehicleList" [value]="v.vehicleid">
+                                                                {{ v.vehiclename }} , {{ v.vehicleno }}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="text" formControlName="gatePass"
+                                                                class="form-control">
+                                                            <label class="active">Gate Pass</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Total Time Spent -->
+                                                    <div class="col-md-2 md-form md-outline">
+                                                        <label class="active ml-3">Total Time Spent</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="totalTimeSpent" readonly>
+                                                    </div>
+
+                                                    <!-- Total Run -->
+                                                    <div class="col-md-2 md-form md-outline">
+                                                        <label class="active ml-3">Total Run</label>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="totalRun" readonly>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <!-- Gate Pass -->
+                                                    <!-- <div class="col-md-2">
+                                                        <div class="md-form md-outline">
+                                                            <input mdbInput type="text" formControlName="gatePass"
+                                                                class="form-control">
+                                                            <label>Gate Pass</label>
+                                                        </div>
+                                                    </div> -->
+
+                                                </div>
+
+                                                <!-- Search + Reset -->
+                                                <div class="row mt-2">
+                                                    <div class="col-md-12 text-right">
+
+                                                        <button type="button" class="btn btn-primary btn-sm"
+                                                            (click)="searchMachineData()">
+                                                            <i class="fa fa-search mr-1"></i> Search
+                                                        </button>
+
+                                                        <button type="button" class="btn btn-secondary btn-sm ml-2"
+                                                            (click)="resetMachineFilters()">
+                                                            <i class="fa fa-undo mr-1"></i> Reset
+                                                        </button>
+
+                                                    </div>
+                                                </div>
+
+                                            </form>
+                                        </div>
+
+
+                                        <div class="table-responsive card-body">
+                                            <table id="dt-machine-checkbox" datatable [dtOptions]="dtOptions1"
+                                                [dtTrigger]="dtTrigger1" class="table table-striped" cellspacing="0"
+                                                width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Sr No.</th>
+                                                        <th>Date</th>
+                                                        <th>Vendor Name</th>
+                                                        <th>Vehicle Name</th>
+                                                        <th>Vehicle No.</th>
+                                                        <th>Gate Pass</th>
+                                                        <th>Time Spent</th>
+                                                        <th>Time Run</th>
+                                                        <th>Notes</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of machineData; let i = index">
+                                                        <td></td>
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{item.readingDt}}</td>
+                                                        <td>{{item.vendorname}}</td>
+                                                        <td>{{item.vehiclename}}</td>
+                                                        <td>{{item.vehicleno}}</td>
+                                                        <td>{{item.gate_pass_no}}</td>
+                                                        <td>{{item.expendedtime}}</td>
+                                                        <td>{{item.total_run}}</td>
+                                                        <td>{{item.notes}}</td>
+                                                        <td>
+                                                            <a class="black-text" mdbtooltip="View"
+                                                                (click)="viewMachine('view_machine',item.readingid)">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>
+                                                            <a class="teal-text" mdbtooltip="Edit"
+                                                                (click)="viewMachine('edit_machine',item.readingid)">
+                                                                <i class="fa-pencil-alt px-1 fas"></i>
+                                                            </a>
+                                                            <a class="red-text" mdbtooltip="Remove"
+                                                                (click)="deleteMachine(item.readingid)">
+                                                                <i class="fa-times px-1 fas"></i>
+                                                            </a>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody *ngIf="machineData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="9" class="no-data-available">
+                                                            No data!
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="docsTabsMaterial" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="px-2 float-right">
+                                        <button type="button"
+                                            class="btn btn-elegant btn-sm  waves-light waves-effect form-disable"
+                                            data-toggle="modal" data-target="#add_material_modal"
+                                            (click)="openMaterialModal()"><i class="fa fa-plus" aria-hidden="true"></i>
+                                            Add New Materials</button>
+                                        <button type="button"
+                                            class="btn btn-elegant btn-sm  waves-light waves-effect form-disable"
+                                            data-toggle="modal" data-target="#add_material_consumed_modal"
+                                            (click)="openMaterialConsumptionModal()"><i class="fa fa-plus"
+                                                aria-hidden="true"></i> Add Material Consumption</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+                            <div class=" col-md-12">
+
+                                <nav class="nav nav-pills nav-justified">
+                                    <a id="docs-tab-materialused" class="nav-item nav-link link-nav"
+                                        [class.active]="activeTab === 'MaterialsUsed'"
+                                        (click)="setActiveTab('MaterialsUsed')" role="tab"
+                                        aria-controls="docsTabsMaterial">
+                                        <i class="fas fa-file-word mr-2" aria-hidden="true"></i>Issued Materials
+                                    </a>
+                                    <a id="docs-tab-materials" class="nav-item nav-link link-nav"
+                                        [class.active]="activeTab === 'materialConsumed'"
+                                        (click)="setActiveTab('materialConsumed')" role="tab"
+                                        aria-controls="docsTabsMachineComsumed">
+                                        <i class="fa fa-linode mr-2" aria-hidden="true"></i>Consumption Lists
+                                    </a>
+                                </nav>
+
+
+                                <div class="tab-content">
+                                    <!--Material Used Table -->
+                                    <div class="tab-pane fade" [class.show]="activeTab === 'MaterialsUsed'"
+                                        [class.active]="activeTab === 'MaterialsUsed'" id="docsTabsMaterial"
+                                        role="tabpanel">
+
+                                        <div class="card-body" [formGroup]="searchMaterialUsedForm">
+
+                                            <div class="form-row ml-2">
+
+                                                <!-- From Date -->
+                                                <div class="col-md-2 px-2">
+                                                    <div class="md-form md-outline">
+                                                        <label class="active">From Date</label>
+                                                        <input type="date" class="form-control" formControlName="from"
+                                                            onkeydown="return false;">
+                                                    </div>
+                                                </div>
+
+                                                <!-- To Date -->
+                                                <div class="col-md-2 px-2">
+                                                    <div class="md-form md-outline">
+                                                        <label class="active">To Date</label>
+                                                        <input type="date" class="form-control" formControlName="to"
+                                                            onkeydown="return false;">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Gate Pass -->
+                                                <div class="col-md-2 px-2">
+                                                    <div class="md-form md-outline">
+                                                        <input type="text" class="form-control"
+                                                            formControlName="gate_pass">
+                                                        <label class="active">Gate Pass</label>
+                                                    </div>
+                                                </div>
+
+                                                <!-- To Warehouse -->
+                                                <div class="col-md-2 px-2 md-form md-outline">
+                                                    <label class="active ml-2">To Warehouse</label>
+                                                    <select formControlName="to_warehouse" class="form-control">
+                                                        <option value="">Select Warehouse</option>
+                                                        <option *ngFor="let w of warehouseList" [value]="w.godown_id">
+                                                            {{ w.godown_name }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Category -->
+                                                <div class="col-md-2 px-2 md-form md-outline">
+                                                    <label class="active ml-2">Category</label>
+                                                    <select formControlName="category" class="form-control"
+                                                        (change)="onCategoryChangeMaterialUsed($event)">
+                                                        <option value="">Select Category</option>
+                                                        <option *ngFor="let c of categoryLists" [value]="c.group_id">
+                                                            {{ c.group_name }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Sub Category -->
+                                                <div class="col-md-2 px-2 md-form md-outline">
+                                                    <label class="active ml-2">Sub Category</label>
+                                                    <select formControlName="subCategory" class="form-control"
+                                                        (change)="onSubCategoryChangeMaterialUsed($event)">
+                                                        <option value="">Select Sub Category</option>
+                                                        <option *ngFor="let s of filteredSubcategoryListsMaterialUsed"
+                                                            [value]="s.sub_group_id">
+                                                            {{ s.sub_group_name }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Item -->
+                                                <div class="col-md-3 md-form md-outline">
+
+                                                    <ng-select [items]="filteredMaterialsListMaterialUsed"
+                                                        bindValue="master_item_id" bindLabel="itemname"
+                                                        formControlName="item"
+                                                        (change)="onMaterialChangeMaterialUsed($event)"
+                                                        placeholder="Select Item" [searchable]="true"
+                                                        [clearable]="true">
+
+                                                        <ng-template ng-option-tmp let-item="item">
+                                                            <div *ngIf="item">
+                                                                {{ item.itemname }}
+                                                                <span *ngIf="item.unit_name" class="text-muted">
+                                                                    , {{ item.unit_name }}
+                                                                </span>
+                                                            </div>
+                                                        </ng-template>
+
+                                                    </ng-select>
+
+                                                </div>
+
+                                            </div>
+
+                                            <!-- Buttons -->
+                                            <div class="form-row mt-2">
+                                                <div class="col-12 d-flex justify-content-end">
+
+                                                    <button type="button" class="btn dusty-grass-gradient btn-sm mr-2"
+                                                        (click)="searchMaterialUsed()">
+                                                        <i class="fa fa-search mr-2"></i>Search
+                                                    </button>
+
+                                                    <button type="button" class="btn warm-flame-gradient btn-sm"
+                                                        (click)="resetMaterialUsed()">
+                                                        <i class="fas fa-redo-alt mr-2"></i>Reset
+                                                    </button>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="table-responsive card-body">
+                                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2"
+                                                [dtTrigger]="dtTrigger2" class="table table-striped" cellspacing="0"
+                                                width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th width="5%">S.No.
+                                                        </th>
+                                                        <th width="10%">Date
+                                                        </th>
+                                                        <th width="10%">Warehouse
+                                                        </th>
+                                                        <th width="10%">Gate Pass
+                                                        </th>
+                                                        <th width="10%">Material Used
+                                                        </th>
+                                                        <th width="10%">Quantity
+                                                        </th>
+                                                        <th width="10%">Unit
+                                                        </th>
+                                                        <th width="10%">Out Time
+                                                        </th>
+                                                        <th width="10%">Transfer
+                                                        </th>
+                                                        <th width="5%">Balance
+                                                        </th>
+                                                        <th width="10%">Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of materialUsedData; let i = index">
+                                                        <td></td>
+                                                        <td width="5%">{{i+1}}</td>
+                                                        <td width="10%">{{item.date | date:'dd/MM/yyyy'}}</td>
+                                                        <td width="10%">{{item.godown_name}}</td>
+                                                        <td width="10%">{{item.gatePass}}</td>
+                                                        <td width="10%">{{item.material_used.split(',').join(', ')}}
+                                                        </td>
+                                                        <td width="10%">{{item.quantity}}</td>
+                                                        <td width="10%">{{item.unit}}</td>
+                                                        <td width="10%">{{item.out_time}}</td>
+                                                        <td width="10%">{{item.transfer}}</td>
+                                                        <td width="5%">{{item.balance}}</td>
+                                                        <td width="10%">
+                                                            <a class="black-text" mdbtooltip="View" data-toggle="modal"
+                                                                data-target="#add_material_modal"
+                                                                (click)="viewMaterial('view_material',item.material_id)">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>
+                                                            <a class="teal-text" mdbtooltip="Edit" data-toggle="modal"
+                                                                data-target="#add_material_modal"
+                                                                (click)="viewMaterial('edit_material',item.material_id)">
+                                                                <i class="fa-pencil-alt px-1 fas"
+                                                                    aria-hidden="true"></i>
+                                                            </a>
+                                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                                (click)="deleteMaterial(item.material_id,item.project_id,item.material_used,item.quantity)"><i
+                                                                    class="fa-times px-1 fas"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody *ngIf="materialUsedData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="9" class="no-data-available">
+                                                            No data!
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!--Material Consumed Table -->
+                                    <div class="tab-pane fade" [class.show]="activeTab === 'materialConsumed'"
+                                        [class.active]="activeTab === 'materialConsumed'" id="docsTabsMachineComsumed"
+                                        role="tabpanel">
+                                        <div class="table-responsive card-body">
+                                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions3"
+                                                [dtTrigger]="dtTrigger3" class="table table-striped" cellspacing="0"
+                                                width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th width="5%">S.No.
+                                                        </th>
+                                                        <th width="10%">Date
+                                                        </th>
+                                                        <th width="10%">Gate Pass
+                                                        </th>
+                                                        <th width="15%">Materials , Units
+                                                        </th>
+                                                        <th width="10%">Used Quantity
+                                                        </th>
+                                                        <th width="10%">Scrap/Waste
+                                                        </th>
+                                                        <th width="10%">Balance
+                                                        </th>
+                                                        <th width="10%">Rate
+                                                        </th>
+                                                        <th width="10%">Total Amount
+                                                        </th>
+                                                        <th width="10%">Action
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of materialConsumptionData; let i = index">
+                                                        <td></td>
+                                                        <td width="5%">{{i+1}}</td>
+                                                        <td width="10%">{{item.date | date:'dd/MM/yyyy'}}</td>
+                                                        <td width="10%">{{item.gatePass}}</td>
+                                                        <td width="15%">{{item.item}} , {{item.unit}}</td>
+                                                        <td width="10%">{{item.used_quantity}}</td>
+                                                        <td width="10%">{{item.scrap}}</td>
+                                                        <td width="10%">{{item.balance_quantity}}</td>
+                                                        <td width="10%">{{item.rate}}</td>
+                                                        <td width="10%">{{item.total_amount}}</td>
+                                                        <td width="10%">
+                                                            <a class="black-text" mdbtooltip="View" data-toggle="modal"
+                                                                data-target="#add_material_consumed_modal"
+                                                                (click)="editMaterialConsumed('view_consumed',item.consumption_id,i)">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a> &nbsp;
+                                                            <!-- <a class="teal-text" mdbtooltip="Edit" data-toggle="modal"
+                                                                data-target="#add_material_consumed_modal"
+                                                                (click)="editMaterialConsumed('edit_consumed',item.consumption_id,i)">
+                                                                <i class="fa-pencil-alt px-1 fas"
+                                                                    aria-hidden="true"></i>
+                                                            </a>  --> &nbsp;
+                                                            <a class="red-text" mdbtooltip="Remove" placement="top"
+                                                                (click)="deleteMaterialConsumed(item.consumption_id,item.project_id,item.item,item.used_quantity,item.scrap)"><i
+                                                                    class="fa-times px-1 fas"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody *ngIf="materialConsumptionData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="9" class="no-data-available">
+                                                            No data!
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Grid column: Content-->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="docsTabsTask" role="tabpanel">
+                        <app-task-details></app-task-details>
+                    </div>
+                    <div class="tab-pane fade " id="docsTabsNotes" role="tabpanel">
+                        <app-notes-details></app-notes-details>
+                    </div>
+                    <div class="tab-pane fade" id="docsTabsAttach" role="tabpanel">
+                        <app-attachment-details></app-attachment-details>
+                    </div>
+                    <div class="tab-pane fade" id="docsTabsHistory" role="tabpanel">
+                        <app-history-details></app-history-details>
+                    </div>
+                    <div class="tab-pane fade" id="docsTabsStocks" role="tabpanel">
+                        <div class="tab-pane fade" [class.show]="activeTab === 'Stocks'"
+                            [class.active]="activeTab === 'Stocks'" id="docsTabsStocks" role="tabpanel">
+
+                            <div class="table-responsive card-body">
+                                <table id="dt-stocks-checkbox" datatable [dtOptions]="dtOptions4"
+                                    [dtTrigger]="dtTrigger4" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>S.No.</th>
+                                            <th>Date</th>
+                                            <th>Material</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th>Balance</th>
+                                            <th>Notes</th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr *ngFor="let item of stocksData; let i = index">
+                                            <td></td>
+                                            <td>{{i + 1}}</td>
+                                            <td>{{item.date | date:'dd/MM/yyyy'}}</td>
+                                            <td>{{item.material}}</td>
+                                            <td>{{item.quantity}}</td>
+                                            <td>{{item.unit}}</td>
+                                            <td>{{item.balance}}</td>
+                                            <td>{{item.notes}}</td>
+
+                                        </tr>
+                                    </tbody>
+
+                                    <tbody *ngIf="stocksData?.length == 0">
+                                        <tr>
+                                            <td colspan="9" class="no-data-available">No data!</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Main docs tabs -->
+
+            <!-- Edit New material modal -->
+            <div class="modal fade" id="add_material_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <div class="modal-content">
+
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Material</p>
+                            <button (click)="clearMaterials()" type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Form -->
+                        <form [formGroup]="materialForm" (ngSubmit)="saveMaterialForm()">
+                            <div class="modal-body">
+                                <input type="hidden" formControlName="material_id">
+                                <!-- Project Name & Date -->
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <input type="text" id="projectName" formControlName="projectName"
+                                            class="form-control">
+                                        <label for="projectName" class="ml-2 active">Project Name</label>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input type="datetime-local" id="date" formControlName="date"
+                                            class="form-control"
+                                            [ngClass]="{ 'is-invalid': (submitted && materialForm.controls['date'].invalid ) || (materialForm.controls['date'].invalid && materialForm.controls['date'].touched)}">
+                                        <div *ngIf=" (submitted && materialForm.controls['date'].invalid) || (materialForm.controls['date'].invalid && materialForm.controls['date'].touched)"
+                                            class="invalid-feedback">Date is required</div>
+                                        <!-- <label for="date" class="ml-2 active">Date</label> -->
+                                    </div>
+                                </div>
+
+                                <!-- New Fields Row 1 -->
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <label for="warehouse" class="ml-2 active">Warehouse List</label>
+                                        <select id="warehouse" formControlName="warehouse" class="form-control">
+                                            <option [ngValue]="''">Select Warehouse</option>
+                                            <option *ngFor="let w of warehouseList" [ngValue]="w.godown_id">
+                                                {{ w.godown_name }}
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col md-form md-outline">
+                                        <label for="vehicle" class="ml-2 active">Vehicle No/Name</label>
+                                        <select id="vehicle" formControlName="vehicleNameNo" class="form-control">
+                                            <option [ngValue]="''">Select Vehicle</option>
+                                            <option *ngFor="let v of vehicleList" [ngValue]="v.vehicleid">
+                                                {{ v.vehiclename }}, {{ v.vehicleno }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- New Fields Row 2 -->
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <label for="issuedTo" class="ml-2 active">Issued To</label>
+                                        <select id="issuedTo" formControlName="issuedTo" class="form-control">
+                                            <option value="">Select Person</option>
+                                            <option *ngFor="let p of employee" [value]="p.EmployeeId">{{p.EmployeeName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <label for="issuedBy" class="ml-2 active">Issued By</label>
+                                        <select id="issuedBy" formControlName="issuedBy" class="form-control">
+                                            <option value="">Select Person</option>
+                                            <option *ngFor="let p of employee" [value]="p.EmployeeId">{{p.EmployeeName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col md-form md-outline">
+                                        <input type="text" id="gatePass" formControlName="gatePass"
+                                            class="form-control">
+                                        <label for="gatePass" class="ml-2 active">Gate Pass</label>
+                                    </div>
+                                </div>
+
+                                <!-- Description Field -->
+                                <div class="form-row">
+                                    <div class="col md-form md-outline">
+                                        <textarea id="description" formControlName="description" class="form-control"
+                                            rows="3" style="resize: both;"></textarea>
+                                        <label for="description" class="ml-2 active">Description</label>
+                                    </div>
+                                </div>
+
+                                <hr>
+
+                                <!-- Button to add material -->
+                                <button type="button" class="btn btn-sm btn-primary mb-3" (click)="addMaterial()">
+                                    + Add Material
+                                </button>
+
+                                <!-- Material List -->
+                                <div formArrayName="materials">
+                                    <div *ngFor="let material of materials.controls; let i = index" [formGroupName]="i"
+                                        class="border p-2 mb-2">
+                                        <div class="form-row">
+
+                                            <!-- Material Used -->
+                                            <div class="col-md-3">
+                                                <label>Material Used</label>
+                                                <select formControlName="materialUsed" class="form-control"
+                                                    (change)="onMaterialChange($event, i)">
+                                                    <option value="">Select Material</option>
+                                                    <option *ngFor="let m of materialsList" [value]="m.master_item_id">
+                                                        {{m.itemname}}</option>
+                                                </select>
+                                                <div *ngIf="submitted && materialForm.get('materials')?.errors?.noMaterials"
+                                                    class="text-danger">
+                                                    Please add at least one material.
+                                                </div>
+                                                <div *ngIf="submitted && materialForm.get('materials')?.errors?.noMaterialUsed"
+                                                    class="text-danger">
+                                                    Please select Material Used.
+                                                </div>
+                                            </div>
+
+                                            <!-- Quantity -->
+                                            <div class="col-md-2">
+                                                <label>Quantity</label>
+                                                <input type="number" formControlName="quantity" class="form-control"
+                                                    min="1" step="1" (input)="updateQuantity(i, 'quantity')"
+                                                    [ngClass]="{ 'is-invalid': submitted && material.get('quantity').invalid }">
+                                                <div *ngIf="submitted && material.get('quantity').invalid"
+                                                    class="text-danger">
+                                                    Quantity is required and must be at least 1.
+                                                </div>
+                                            </div>
+
+                                            <!-- Unit -->
+                                            <div class="col-md-3">
+                                                <label>Unit</label>
+                                                <select formControlName="unit" class="form-control">
+                                                    <option *ngFor="let u of rowUnitsList[i]" [value]="u.unit_name">
+                                                        {{u.unit_name}}</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label>Out Time</label>
+                                                <input type="time" formControlName="out_time" class="form-control">
+                                            </div>
+
+                                            <!-- Remove Button -->
+                                            <div *ngIf="isHideWorkSave"
+                                                class="col-md-1 d-flex align-items-end back-btn">
+                                                <button (click)="removeMaterial(i)" type="button"
+                                                    class="close  btn btn-danger btn-sm remove-btn" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true" class="white-text">&times;</span>
+                                                </button>
+
+                                            </div>
+                                            <!-- <div class="col-md-1">
+                                              <label for="extraFieldsCheck{{ i }}">more</label>
+                                         <input type="checkbox" formControlName="showExtraFields" id="extraFieldsCheck{{ i }}" class="form-control form-check-input">
+                                          
+                                        </div> -->
+                                            <div class=" col-md-1 material-use">
+                                                <input type="checkbox" class="form-check-input"
+                                                    formControlName="showExtraFields" id="extraFieldsCheck{{ i }}">
+                                                <label class="form-check-label" for="extraFieldsCheck{{ i }}"></label>
+                                            </div>
+
+                                        </div>
+                                        <!-- Extra Fields (Shown only when checkbox is checked) -->
+                                        <div *ngIf="material.get('showExtraFields')?.value" class="form-row mt-3">
+                                            <div class="col-md-2">
+                                                <label>Used Quantity</label>
+                                                <input type="number" formControlName="used_quantity"
+                                                    class="form-control" min="1" step="1"
+                                                    (input)="updateQuantity(i, 'used_quantity')"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label>Scrap</label>
+                                                <input type="number" formControlName="scrap" class="form-control"
+                                                    min="0" step="1" (input)="updateQuantity(i, 'scrap')"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label>Rate</label>
+                                                <input type="number" formControlName="rate" class="form-control" min="0"
+                                                    step="0.01" (input)="updateAmount(i)">
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label>Amount</label>
+                                                <input type="number" formControlName="amount" class="form-control"
+                                                    [readonly]="true">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" #closeMaterialModal (click)="clearMaterials()"
+                                    class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                                <button type="submit" *ngIf="isHideWorkSave"
+                                    class="btn btn-sm btn-outline-success waves-effect"
+                                    [disabled]="isSaveDisabled">Save</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Edit Material Consumed -->
+            <div class="modal fade" id="add_material_consumed_modal" tabindex="-1" role="dialog"
+                aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info material-consumed-modal" role="document">
+                    <div class="modal-content">
+
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add Material Consumption</p>
+                            <button (click)="clearMaterialsConsumed()" type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" [formGroup]="materialConsumedForm">
+                            <input type="hidden" formControlName="consumption_id">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <input type="datetime-local" (input)="onDateSelected($event)" id="consumedDate"
+                                        formControlName="consumedDate" class="form-control"
+                                        [ngClass]="{ 'is-invalid': (submitted && materialConsumedForm.controls['consumedDate'].invalid ) || (materialConsumedForm.controls['consumedDate'].invalid && materialConsumedForm.controls['consumedDate'].touched)}">
+                                    <div *ngIf=" (submitted && materialConsumedForm.controls['consumedDate'].invalid) || (materialConsumedForm.controls['consumedDate'].invalid && materialConsumedForm.controls['consumedDate'].touched)"
+                                        class="invalid-feedback">Date is required</div>
+                                </div>
+                                <div class="col md-form md-outline">
+                                    <input type="text" formControlName="gatePass" class="form-control"
+                                        [ngClass]="{ 'is-invalid': (submitted && materialConsumedForm.controls['gatePass'].invalid ) || (materialConsumedForm.controls['gatePass'].invalid && materialConsumedForm.controls['gatePass'].touched)}">
+                                    <label for="gatePass" class="ml-2 active">Gate Pass (Daily Usage)</label>
+                                    <div *ngIf=" (submitted && materialConsumedForm.controls['gatePass'].invalid) || (materialConsumedForm.controls['gatePass'].invalid && materialConsumedForm.controls['gatePass'].touched)"
+                                        class="invalid-feedback">Gate Pass is required</div>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <!-- Button to add material -->
+                            <button type="button" class="btn btn-sm btn-primary mb-3" (click)="addConsumedMaterial()">
+                                + Add Material
+                            </button>
+
+                            <div formArrayName="consumedMaterials">
+                                <div *ngFor="let conMaterial of consumedMaterials.controls; let i= index"
+                                    [formGroupName]="i" class="border p-2 mb-2">
+                                    <!-- Material Used -->
+                                    <div class="form-row">
+                                        <input type="hidden" formControlName="consumedWarehouse">
+                                        <div class="col-md-3 md-form md-outline">
+                                            <label for="consumedMaterial" class="ml-2 active">Material Used</label>
+                                            <select formControlName="consumedMaterial" class="form-control"
+                                                (click)="onMaterialUsedChange($event, i)">
+                                                <option value="">Select Material</option>
+                                                <option *ngFor="let m of getAvailableMaterials(i)"
+                                                    [value]="m.material_id">
+                                                    {{m.material_used}} ({{m.godown_name}}) , Balance: {{m.balance}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="col md-form md-outline">
+                                            <label for="balanceQuantity" class="ml-2 active">Bal. Quan.</label>
+                                            <input type="number" formControlName="balanceQuantity" class="form-control">
+                                        </div>
+                                        <!-- <div class="col md-form md-outline">
+                                        <label for="consumedUnit" class="ml-2 active">Unit</label> 
+                                        <input type="text" id="consumedUnit" formControlName="consumedUnit" class="form-control">                                           
+                                    </div> -->
+                                        <div class="col-md-2 md-form md-outline">
+                                            <label for="usedQuantity" class="ml-2 active">Used Quantity</label>
+                                            <input type="number" formControlName="usedQuantity" class="form-control"
+                                                min="1" step="1" pattern="[0-9]*"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                (input)="onQuantityChange('usedQuantity',i)">
+                                        </div>
+                                        <div class="col md-form md-outline">
+                                            <input type="number" id="consumedScrap" class="form-control"
+                                                formControlName="consumedScrap" min="1" step="1" pattern="[0-9]*"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                (input)="onQuantityChange('consumedScrap',i)">
+                                            <label for="consumedScrap" class="ml-2 active">Scrap</label>
+                                        </div>
+                                        <div class="col md-form md-outline">
+                                            <input type="number" formControlName="consumedRate" class="form-control"
+                                                (input)="onRateChange(i)">
+                                            <label for="consumedRate" class="ml-2 active">Rate</label>
+                                        </div>
+                                        <div class="col md-form md-outline">
+                                            <input type="text" id="consumedAmount" formControlName="consumedAmount"
+                                                class="form-control">
+                                            <label for="consumedAmount" class="ml-2 active"> Amount</label>
+                                        </div>
+                                        <button (click)="removeConsumedMaterial(i)" type="button"
+                                            class="close  btn btn-danger btn-sm remove-btn" id="removeButton"
+                                            data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true" class="white-text">&times;</span>
+                                        </button>
+
+
+                                    </div>
+
+                                    <div class="mt-2 px-2" *ngIf="conMaterial.get('category')?.value">
+
+                                        <span class="badge badge-info mr-2 p-2">
+                                            Category: {{ conMaterial.get('category')?.value }}
+                                        </span>
+
+                                        <span class="badge badge-secondary p-2">
+                                            Sub Category: {{ conMaterial.get('subCategory')?.value }}
+                                        </span>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" #closeMaterialConModal (click)="clearMaterialsConsumed()"
+                                class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="submit" (click)="saveMaterialConsumption()"
+                                class="btn btn-sm btn-outline-success waves-effect" *ngIf="isQuantityValid"
+                                [disabled]="isConSaveDisabled">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add New visits modal -->
+            <div class="modal fade" id="add_visit_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Visits</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" id="stateform" name="stateform">
+                            <!-- Body -->
+                            <div class="modal-body">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class=" md-form md-outline">
+                                            <input type="text" id="drv_name" class="form-control" required="">
+                                            <label for="f2" class="">Visitors Name*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <input placeholder="Selected date" type="text" id="date-picker-example"
+                                                class="form-control datepicker">
+                                            <label for="date-picker-example" class="active">Select Visiting
+                                                date/time</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <textarea type="text" id="form10" class="md-textarea form-control" rows="2"
+                                                required=""></textarea>
+                                            <label for="form10">Notes</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm  btn-danger"
+                                    data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-outline-success waves-effect form-disable"
+                                    id="state_save_btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Add New files modal -->
+            <div class="modal fade" id="add_file_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New City</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" id="cityform" name="cityform">
+                            <!-- Body -->
+                            <div class="modal-body">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control" id="select_country" name="select_country">
+                                                <option value="" selected="true" disabled="disabled">Select Country
+                                                </option>
+                                                <option value="default">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control" id="select_state" name="select_state">
+                                                <option value="" selected="true" disabled="disabled">Select State
+                                                </option>
+                                                <option value="default">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class=" md-form md-outline">
+                                            <input type="text" id="city_name" name="city_name" class="form-control"
+                                                required="">
+                                            <label for="f2" class="">City Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm  btn-danger"
+                                    data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-outline-success waves-effect"
+                                    id="city_save_btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Add New Interest plot modal -->
+            <div class="modal fade" id="add_interest_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New City</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <form action="" id="cityform" name="cityform">
+                            <!-- Body -->
+                            <div class="modal-body">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control" id="select_country" name="select_country">
+                                                <option value="" selected="true" disabled="disabled">Select Country
+                                                </option>
+                                                <option value="default">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="md-form md-outline">
+                                            <select class="form-control" id="select_state" name="select_state">
+                                                <option value="" selected="true" disabled="disabled">Select State
+                                                </option>
+                                                <option value="default">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class=" md-form md-outline">
+                                            <input type="text" id="city_name" name="city_name" class="form-control"
+                                                required="">
+                                            <label for="f2" class="">City Name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm  btn-danger"
+                                    data-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-outline-success waves-effect"
+                                    id="city_save_btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <div class="d-flex justify-content-between m-3">
+                <!-- Left-most button -->
+                <button type="button" (click)="goToProjects()" class="btn btn-lg btn-primary waves-light waves-effect">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Projects
+                </button>
+
+                <!-- Right-most button -->
+                <button type="submit" (click)="projectSubmit()" [disabled]="isButtonDisabled"
+                    class="btn btn-lg dusty-grass-gradient waves-light waves-effect">
+                    <i class="fas fa-save mr-2"></i>Submit
+                </button>
+            </div>
+
+        </div>
+
+
+
+        <!--Work Detail Add New Modal -->
+        <div class="modal fade" id="dailyDiaryModal" tabindex="-1" role="dialog" aria-labelledby="dailyDiaryLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Work</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="modal.dismiss()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+
+                    <!-- Modal Body (Your form here) -->
+                    <form [formGroup]="workDetails" id="dailyDairy" name="dailyDairy">
+                        <div class="modal-body">
+                            <div class="col-lg-12 col-md-12">
+                                <!-- <input type="hidden" name="EntryID" formControlName="EntryID">-->
+                                <input type="hidden" name="work_detail_id" formControlName="work_detail_id">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input placeholder="Select date" formControlName="entryDate"
+                                                name="entryDate" [minDate]="minDate" [maxDate]="maxDate" ngbDatepicker
+                                                #dateadd1="ngbDatepicker" (click)="dateadd1.toggle()" type="text"
+                                                id="entryDate" class="form-control datepicker"
+                                                [ngClass]="{ 'is-invalid': (submitted && workDetails.controls['entryDate'].invalid ) || (workDetails.controls['entryDate'].invalid && workDetails.controls['entryDate'].touched)}">
+                                            <label for="entryDate" class="active">Date</label>
+                                            <div *ngIf=" (submitted && workDetails.controls['entryDate'].invalid) || (workDetails.controls['entryDate'].invalid && workDetails.controls['entryDate'].touched)"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf=" (submitted && workDetails.controls['entryDate'].invalid) || (workDetails.controls['entryDate'].invalid && workDetails.controls['entryDate'].touched)">
+                                                    Date is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 md-form md-outline px-2">
+                                        <input type="text" class="form-control field-ht colorful-select"
+                                            formControlName="projectName" id="projectName" name="projectName"
+                                            placeholder="Enter Project Name">
+                                        <label class="ml-2 active">Project Name *</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 md-form md-outline px-2">
+                                        <select class="form-control field-ht colorful-select"
+                                            formControlName="EmployeeType" name="EmployeeType">
+                                            <option value="" selected>Select Employee Type</option>
+                                            <option *ngFor="let EmployeeTypelist of resplookupEmployeeType"
+                                                value={{EmployeeTypelist.LookupDataId}}>
+                                                {{EmployeeTypelist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Employee Type </label>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 md-form md-outline px-2">
+                                        <select
+                                            *ngIf="workDetails.get('EmployeeType')?.value !== '64294693-84BC-48D0-B0AD67468A685848'"
+                                            class="form-control field-ht colorful-select" formControlName="EmployeeName"
+                                            name="EmployeeName">
+
+                                            <option *ngFor="let EmployeeList of PermanentEmployeeType"
+                                                value={{EmployeeList.EmployeeId}}>
+                                                {{EmployeeList.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <!-- Show text input when Enployee Type is 'Contractor' -->
+                                        <input
+                                            *ngIf="workDetails.get('EmployeeType')?.value === '64294693-84BC-48D0-B0AD67468A685848'"
+                                            type="text" class="form-control field-ht" formControlName="EmployeeName">
+                                        <label class="ml-2 active">Employee Name</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 md-form md-outline px-2">
+                                        <textarea id="working_notes" formControlName="working_notes"
+                                            name="working_notes" class="md-textarea form-control" rows="2" [ngClass]="{
+                                'is-invalid': (submitted && workDetails.controls['working_notes'].invalid) ||
+                                            (workDetails.controls['working_notes'].touched && workDetails.controls['working_notes'].invalid)
+                            }"></textarea>
+                                        <label for="working_notes" class="ml-2 active">Notes *</label>
+
+                                        <div *ngIf="(submitted && workDetails.controls['working_notes'].invalid) ||
+                                    (workDetails.controls['working_notes'].touched && workDetails.controls['working_notes'].invalid)"
+                                            class="invalid-feedback">
+                                            Notes is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3 mx-4">
+                            <button #closeWorkModal type="button" (click)="resetWorkDetail()"
+                                class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button *ngIf="isHideWorkSave" type="button" (click)="saveWorkDetail()"
+                                class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+</body>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple">
+    <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

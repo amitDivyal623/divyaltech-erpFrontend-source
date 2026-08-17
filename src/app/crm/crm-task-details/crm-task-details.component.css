@@ -1,0 +1,12 @@
+textarea:read-only {
+  background-color: #ffff!important;
+}
+.swal-wide{
+  width:850px !important;
+}
+.colheight{
+  max-height: 36rem;
+}
+.title:hover{
+  background-color:rgb(224, 224, 224);
+}

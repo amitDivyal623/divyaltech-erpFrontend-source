@@ -1,0 +1,102 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2" [formGroup]="SearchworkDiaryDetails">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Daily Diary List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="addDiary()"><i class="fa fa-plus" aria-hidden="true" (click)="addDiary()"></i> Add New Entry</button>
+                    <button type="button" style="display: none;" #modalbutton  (click)="addEmployee()"></button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline pr-4">
+                                <input placeholder="Select date" [minDate]="minDate" formControlName="searchentrydate" [(ngModel)]="model3" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                <label for="date-picker-example" class="active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" formControlName="searchproject">
+                                <option value="" selected="true">Select Project Name</option>
+                                <option *ngFor="let projectlist of respProject" value={{projectlist.projectId}}>
+                                    {{projectlist.projectName}}  /  {{projectlist.projectType}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Project Name</label>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" formControlName="searchemployeetype">
+                                <option value=""  selected>Select Employee Type</option>
+                                <option *ngFor="let EmployeeTypelist of resplookupEmployeeType" value={{EmployeeTypelist.LookupDataId}}>
+                                    {{EmployeeTypelist.LookupValue}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Employee Type</label>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="resetSearch()"><i class="fa fa-refresh" aria-hidden="true"></i>Reset</button>
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="diarySearch()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card px-2 my-4">
+                    <div class="table-responsive">
+                        <table id="" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="2%"></th>
+                                    <th width="5%">S.No.</th>
+                                    <th width="10%">Date</th>
+                                    <th width="15%">Project Name</th>
+                                    <th width="15%">Employee Name</th>
+                                    <th width="15%">Employee Type</th>
+                                    <th width="15%">Detail</th>
+                                    <th width="15%">Notes</th>
+                                    <th width="8%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                    <td></td>
+                                    <td>{{item.counter}}</td>
+                                    <td>{{item.entry_date}}</td>
+                                    <td>{{item.projectName}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td>{{item.LookupValue}}</td>
+                                    <td>{{item.details}}</td>
+                                    <td>{{item.labourDetails}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="viewDiary(item.entry_id)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="editDiary(item.entry_id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top" (click)="deleteDiary(item.entry_id)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New user modal -->
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

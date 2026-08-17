@@ -1,0 +1,402 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Property Booking List
+                    <button type="button" (click)="route('add-property-sale')" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i class="fa fa-plus" aria-hidden="true"></i> Add New Property Sale</button>
+                </h5>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline margin-mdform">
+                                <input type="text" id="prop-purchase" class="form-control" required="">
+                                <label for="prop-purchase" class="">Property Purchased By</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline pr-4">
+                                <input class="form-control" placeholder="Select date" name="td" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()" readonly>
+                                <label for="date-picker-example" class="active">Transaction date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="property" class="form-control">
+                                <label for="property" class="">Property</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="contact-person" class="form-control" value="">
+                                <label for="contact-person" class="">Contact Person</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Date
+                                    </th>
+                                    <th>Property Info
+                                    </th>
+                                    <th>Booked Info
+                                    </th>
+                                    <th>Customer Info
+                                    </th>
+                                    <th>Amount
+                                    </th>
+                                    <th>Description
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td>1</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-property-sale')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-property-sale')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>2</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-property-sale')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-property-sale')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>3</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-property-sale')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-property-sale')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>4</td>
+                                    <td>25/06/2015</td>
+                                    <td>Details</td>
+                                    <td>Fance</td>
+                                    <td>Rs 1,00,000</td>
+                                    <td>Raman</td>
+                                    <td>Notes</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="route('view-property-sale')"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="route('edit-property-sale')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New property sale modal -->
+            <div class="modal fade" id="add_property_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Property Sales</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="Select date" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()" readonly>
+                                        <label for="date-picker-example" class="active">Transaction date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="add-property" class="form-control">
+                                        <label for="add-property" class="">Property</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Booking</option>
+                                            <option value="default">Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Booking</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Sales Amount" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="default">Reo</option>
+                                        <option value="2">Insane</option>
+                                        <option value="3">Riya</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="sales" class="form-control" required="">
+                                        <label for="sales" class="">Sales Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- View property sale modal -->
+            <div class="modal fade" id="view_property_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Property Sales</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="2015-15-12" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()" disabled>
+                                        <label for="date-picker-example" class="active">Transaction date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-autocomplete" class="form-control" disabled>
+                                        <label for="form-autocomplete" class="">Property</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                            <option value="" selected="true" disabled="disabled">Select Booking</option>
+                                            <option value="default" selected>Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Booking</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Sales Amount" aria-label="Username" aria-describedby="basic-addon1" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select" disabled>
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="default" selected>Reo</option>
+                                        <option value="2">Insane</option>
+                                        <option value="3">Riya</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="qty" class="form-control" required="" disabled>
+                                        <label for="qty" class="">Sales Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3" required="" disabled></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Edit property sale modal -->
+            <div class="modal fade" id="edit_book_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Edit Property Sales</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline pr-4">
+                                        <input class="form-control" placeholder="2015-15-12" name="ntd" ngbDatepicker #ntd="ngbDatepicker" (click)="ntd.toggle()">
+                                        <label for="date-picker-example" class="active">Transaction date</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="form-autocomplete" class="form-control">
+                                        <label for="form-autocomplete" class="">Property</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                            <option value="" selected="true" disabled="disabled">Select Booking</option>
+                                            <option value="default" selected>Reo</option>
+                                            <option value="2">Insane</option>
+                                            <option value="3">Riya</option>
+                                        </select>
+                                    <label class="ml-2 active">Booking</label>
+                                </div>
+                                <div class="col">
+                                    <div class="md-form md-outline input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">Rs</span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="Sales Amount" aria-label="Username" aria-describedby="basic-addon1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <select class="form-control field-ht colorful-select">
+                                        <option value="" selected="true" disabled="disabled">Select Customer</option>
+                                        <option value="default" selected>Reo</option>
+                                        <option value="2">Insane</option>
+                                        <option value="3">Riya</option>
+                                    </select>
+                                    <label class="ml-2 active">Customer</label>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" id="qty" class="form-control" required="">
+                                        <label for="qty" class="">Sales Done By</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" class="md-textarea form-control" rows="3" required=""></textarea>
+                                        <label for="form10">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <a type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</a>
+                            <a type="button" class="btn btn-sm btn-outline-success waves-effect">Save</a>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- Main layout -->
+</body>

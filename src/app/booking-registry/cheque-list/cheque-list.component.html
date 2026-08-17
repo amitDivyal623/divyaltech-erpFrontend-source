@@ -1,0 +1,248 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Cheque List
+                    <button type="button" style="display: none;" #chequemodal (click)="openModalButton()" id="openModalButton" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_cheque_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Cheque</button>
+                </h5>
+                <div [formGroup]="searchCrmCheque" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="filter_nameonCheq" id="filter_nameonCheq" class="form-control">
+                                <label for="filter_nameonCheq" class="">Name on Cheque</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline ">
+                                <input placeholder="Select date" readonly ngbDatepicker #lpdate="ngbDatepicker" formControlName="filter_chequeDate" id="filter_chequeDate" (click)="lpdate.toggle()" type="text" class="form-control datepicker">
+                                <label for="lpdate" class="active">Cheque Date from</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" readonly ngbDatepicker #csdate="ngbDatepicker" formControlName="filter_chequesubmit" id="filter_chequesubmit" (click)="csdate.toggle()" type="text" class="form-control datepicker">
+                                <label for="date-picker-example" class="ml-1 active">Cheque Date  to</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <select class="form-control field-ht colorful-select" id="filter_Remark" formControlName="filter_Remark">
+                                    <option value="" selected="true">Select Remark</option>
+                                    <option *ngFor="let statuslist of resplookupstatus" value={{statuslist.LookupDataId}}>
+                                        {{statuslist.LookupValue}}
+                                    </option>
+                                </select>
+                                <label class="active">Cheque Status</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" (click)="resetSearch()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="ChequeSearch()" class="btn dusty-grass-gradient btn-sm waves-light waves-effect float-left"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Name on Cheque</th>
+                                    <th>Cheque Date</th>
+                                    <th>Cheque Number</th>
+                                    <th>cheque received by</th>
+                                    <th>Payee Name</th>
+                                    <th>Cheque Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.chequeName}}</td>
+                                    <td>{{item.cheque_date| date:'dd-MM-yyyy'}}</td>
+                                    <td>{{item.chequeNo}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td>{{item.reg_persons_name}}</td>
+                                    <td>{{item.LookUpValue}}</td>
+                                    <td>
+                                        <a class="black-text" id="{{i+1}}" ngbTooltip="View Cheque" placement="top" (click)="viewCheque(item.transaction_id)"> <i class="fa fa-eye " aria-hidden="true"></i></a>
+                                        <a class="text-success" id="{{i+1}}" ngbTooltip="Edit Cheque" placement="top" (click)="editCheque(item.transaction_id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="text-danger" id="{{i+1}}" ngbTooltip="Remove Cheque" placement="top" #Customerdata (click)="delete(item.id)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="data?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New Cheque modal -->
+            <div class="modal fade" id="add_cheque_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                    <div class="modal-content ">
+                        <div class="modal-header mdb-color ">
+                            <p class="heading lead font-weight-bold" id="modaltextheader">{{PopupTitle}}</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <div [formGroup]="addChequeList" class="modal-body">
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="add_ChequeNumber" id="add_ChequeNumber" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_ChequeNumber'].invalid ) || (addChequeList.controls['add_ChequeNumber'].invalid && addChequeList.controls['add_ChequeNumber'].touched)}">
+                                        <label for="add_ChequeNumber" class="active">Cheque Number</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_ChequeNumber'].invalid && addChequeList.controls['add_ChequeNumber'].errors.required) || (addChequeList.controls['add_ChequeNumber'].invalid && addChequeList.controls['add_ChequeNumber'].touched && addChequeList.controls['add_ChequeNumber'].errors.required)"
+                                            class="invalid-feedback">Cheque Number is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="add_amtpaid" id="add_amtpaid" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_amtpaid'].invalid ) || (addChequeList.controls['add_amtpaid'].invalid && addChequeList.controls['add_amtpaid'].touched)}">
+                                        <label for="add_amtpaid" class="active">Cheque Amount</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_amtpaid'].invalid && addChequeList.controls['add_amtpaid'].errors.required) || (addChequeList.controls['add_amtpaid'].invalid && addChequeList.controls['add_amtpaid'].touched && addChequeList.controls['add_amtpaid'].errors.required)"
+                                            class="invalid-feedback">Cheque Amount is required.
+                                        </div>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_amtpaid'].errors && addChequeList.controls['add_amtpaid'].errors.pattern && !addChequeList.controls['add_amtpaid'].errors.required) || (addChequeList.controls['add_amtpaid'].touched && addChequeList.controls['add_amtpaid'].errors && addChequeList.controls['add_amtpaid'].errors.pattern)"
+                                            class="invalid-feedback">Enter Only Numeric value
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="add_submittedby" id="add_submittedby" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_submittedby'].errors) || (addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)}">
+                                            <option value="" selected="true">Select received By</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class=" active">Cheque Submitted By</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_submittedby'].errors)  ||(addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_submittedby'].errors.required) || (addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)">Cheque Submitted is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <input placeholder="Select date" readonly ngbDatepicker #chedate="ngbDatepicker" formControlName="add_chequeDate" (click)="chedate.toggle()" type="text" class="form-control datepicker" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_chequeDate'].invalid ) || (addChequeList.controls['add_chequeDate'].invalid && addChequeList.controls['add_chequeDate'].touched)}">
+
+                                        <label for="date-picker-example" class="ml-1 active">Cheque Date</label>
+
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_chequeDate'].invalid) || (addChequeList.controls['add_chequeDate'].invalid && addChequeList.controls['add_chequeDate'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_chequeDate'].invalid) || (addChequeList.controls['add_chequeDate'].invalid && addChequeList.controls['add_chequeDate'].touched)">Cheque Date is required</div>
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <input type="text" formControlName="add_nameonCheq" id="add_nameonCheq" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_nameonCheq'].invalid ) || (addChequeList.controls['add_nameonCheq'].invalid && addChequeList.controls['add_nameonCheq'].touched)}">
+                                        <label for="add_nameonCheq" class="active">Name on Cheque</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_nameonCheq'].invalid && addChequeList.controls['add_nameonCheq'].errors.required) || (addChequeList.controls['add_nameonCheq'].invalid && addChequeList.controls['add_nameonCheq'].touched && addChequeList.controls['add_nameonCheq'].errors.required)"
+                                            class="invalid-feedback">Name is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <input placeholder="Select date" readonly ngbDatepicker #subdate="ngbDatepicker" formControlName="add_chequesubmit" (click)="subdate.toggle()" type="text" class="form-control active" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_chequesubmit'].invalid ) || (addChequeList.controls['add_chequesubmit'].invalid && addChequeList.controls['add_chequesubmit'].touched)}">
+
+                                        <label for="date-picker-example" class="ml-1 active">Cheque Submitted Date</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_chequesubmit'].invalid) || (addChequeList.controls['add_chequesubmit'].invalid && addChequeList.controls['add_chequesubmit'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_chequesubmit'].invalid) || (addChequeList.controls['add_chequesubmit'].invalid && addChequeList.controls['add_chequesubmit'].touched)">Cheque Submitted Date is required</div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="add_Remark" formControlName="add_Remark" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_Remark'].errors) || (addChequeList.controls['add_Remark'].touched && addChequeList.controls['add_Remark'].invalid)}">
+                                            <option value="" disabled >Select</option>
+                                            <!-- <option value="Completed">Completed</option>
+                                            <option value="Active">Active</option>
+                                            <option value="Pending">Pending</option> -->
+                                            
+                                            <option *ngFor="let status of resplookupstatus" value={{status.LookupDataId}}>
+                                                {{status.LookupValue}}
+                                            </option>
+                                         
+                                        </select>
+                                        <label class="active">Cheque Status</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_Remark'].errors)  ||(addChequeList.controls['add_Remark'].touched && addChequeList.controls['add_Remark'].invalid)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_Remark'].errors.required) || (addChequeList.controls['add_Remark'].touched && addChequeList.controls['add_Remark'].invalid)">Cheque Status is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                   
+                                </div>
+                                <div class="col-md-4">
+                                   
+                                </div>
+                                <div class="col-md-4">
+                                    <!-- <div class="md-form md-outline">
+                                        <input placeholder="Select date" readonly ngbDatepicker #cleardate="ngbDatepicker" formControlName="add_chequeCleared" (click)="cleardate.toggle()" type="text" class="form-control datepicker" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_chequeCleared'].invalid ) || (addChequeList.controls['add_chequeCleared'].invalid && addChequeList.controls['add_chequeCleared'].touched)}">
+                                        <label for="date-picker-example" class="ml-1 active">Cheque Cleared Date</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_chequeCleared'].invalid) || (addChequeList.controls['add_chequeCleared'].invalid && addChequeList.controls['add_chequeCleared'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_chequeCleared'].invalid) || (addChequeList.controls['add_chequeCleared'].invalid && addChequeList.controls['add_chequeCleared'].touched)">Cheque Cleared Date is required</div>
+                                        </div>
+                                    </div> -->
+                                    <input type="hidden" formControlName="transaction_id">
+                                </div>
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="col-md-4">
+                                    <!-- <div class="md-form md-outline">
+                                        <select formControlName="add_submittedby" id="add_submittedby" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addChequeList.controls['add_submittedby'].errors) || (addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)}">
+                                            <option value="" selected="true">Select Submitted By</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class=" active">Cheque Submitted By</label>
+                                        <div *ngIf=" (submitted && addChequeList.controls['add_submittedby'].errors)  ||(addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addChequeList.controls['add_submittedby'].errors.required) || (addChequeList.controls['add_submittedby'].touched && addChequeList.controls['add_submittedby'].invalid)">Cheque Submitted is required</div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="updateChequeDetail()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

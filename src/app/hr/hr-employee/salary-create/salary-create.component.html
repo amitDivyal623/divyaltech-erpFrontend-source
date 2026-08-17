@@ -1,0 +1,50 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Salary Creation</h5>
+                <div class="card-body">
+                    <div class="row px-4 pt-2">
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" id="salary-month" class="form-control" [ngbTypeahead]="months" />
+                                <label for="salary-month" class=" ">Month</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <input type="text" id="salary-year" class="form-control">
+                                <label for="salary-year" class=" ">Year</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+</body>

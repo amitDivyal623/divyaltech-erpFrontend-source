@@ -1,0 +1,197 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Company Calendar
+                    <button type="button"  id="openModalButton" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="modalOpen()" ><i class="fa fa-plus" aria-hidden="true"></i> Add New Calendar</button>
+					<button type="button" #customermodal  id="openModalButton" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_cust_modal" style="display: none;"></button>
+                </h5>
+                <div  class="card-body" [formGroup]="SearchworkCalendar">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="Search_month"  id="Search_month" class="form-control" required="">
+                                <label for="form-customer" class="Active">Month</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="Search_year"  id="Search_year" class="form-control" required="">
+                                <label for="form-customer" class="Active">Year</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button"  class="btn dusty-grass-gradient btn-sm waves-light waves-effect" (click)="searchCalendar()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        <button type="button"  class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="ResetCalendar()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="CalendarTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%" >
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.</th>
+                                    <th>Month</th>
+                                    <th>Year</th>
+                                    <th>Leave Type</th>
+                                    <th>Leave Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+								<tr *ngFor="let item of data;let i=index">
+									<td></td>
+									<td>{{item.counter}}</td>
+									<td>{{item.Month}}</td>
+									<td>{{item.year}}</td>
+									<td>{{item.leavetype}}</td>
+									<td>{{item.leaveDate}}</td>
+									<td>
+										<a class="teal-text" id="" mdbtooltip="Edit" placement="top" data-toggle="modal" (click)="getEdit(item.id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+										<a class="red-text" id="" mdbtooltip="Remove" (click)="CalendarDelete(item.id)"  placement="top"><i class="fa-times px-1 fas"></i></a>
+									</td>
+								</tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New Customer modal -->
+            <div class="modal fade" id="add_cust_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<form [formGroup]="CalendarForm">
+					<div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+						<!-- Content -->
+						<div class="modal-content ">
+							<!-- Header -->
+							<div class="modal-header mdb-color ">
+								<p class="heading lead font-weight-bold" id="modaltextheader">{{Calendar}}</p>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true" class="white-text">&times;</span>
+								</button>
+							</div>
+
+							<!-- Body -->
+							<div  class="modal-body">
+								<div class="form-row">
+									<div class="col-12">
+										<div class="md-form md-outline">
+											<input type="hidden" name="calender_id" id="calender_id" value="">
+											<select id="Company_Name" name="Company_Name" class="form-control field-ht colorful-select CalendarForm">
+												<option  value=''>Select Company</option>
+												<option *ngFor="let company of companylist" value={{company.company_id}}>
+													{{company.Company_name}}
+												</option>
+												<option value=''>Other</option>
+											</select>
+											<label class="ml-2 Active">Company</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-row">
+									<div class="col">
+										<div class="md-form md-outline">
+											<select id="Leave_Month" name="Leave_Month" class="form-control field-ht colorful-select CalendarForm">
+												<option  value=''>Select Month</option>
+												<option  value='1'>Janaury</option>
+												<option value='2'>February</option>
+												<option value='3'>March</option>
+												<option value='4'>April</option>
+												<option value='5'>May</option>
+												<option value='6'>June</option>
+												<option value='7'>July</option>
+												<option value='8'>August</option>
+												<option value='9'>September</option>
+												<option value='10'>October</option>
+												<option value='11'>November</option>
+												<option value='12'>December</option>
+											</select>
+											<label class="ml-2 Active">Month</label>
+										</div>
+									</div>
+									<div class="col">
+										<div class="md-form md-outline">
+											<select id="Leave_Year" name="Leave_Year" class="form-control field-ht colorful-select CalendarForm" >
+												<option value="">Select Year</option>
+												<option value="2016">2016</option>
+												<option value="2017">2017</option>
+												<option value="2018">2018</option>
+												<option value="2019">2019</option>
+												<option value="2020">2020</option>
+												<option value="2021">2021</option>
+												<option value="2015">2022</option>
+												<option value="2016">2023</option>
+												<option value="2017">2024</option>
+												<option value="2018">2025</option>
+												<option value="2019">2026</option>
+												<option value="2020">2027</option>
+												<option value="2021">2028</option>
+											</select>
+											<label class="ml-2 Active">Year</label>
+										</div>
+								</div>
+								</div>
+								<div class="form-row">
+									<div class="col">
+										<div class="md-form md-outline">
+											<select id="Leave_Type" class="form-control field-ht colorful-select CalendarForm" name="Leave_Type">
+												<option value="" disabled="disabled ">Select Leave Type</option>
+												<option *ngFor="let EmployeeTypelist of resplookupEmployeeType" value={{EmployeeTypelist.LookupDataId}}>
+													{{EmployeeTypelist.LookupValue}}
+												</option>
+											</select>
+											<label class="ml-2 Active">Leave Type</label>
+										</div>
+									</div>
+									<div class="col">
+										<div class=" md-form md-outline">
+											<input placeholder="Select date"  id="leaveDate" name="leaveDate" readonly ngbDatepicker #leavefrom="ngbDatepicker" [minDate]="minDate"	[maxDate]="maxDate"  (click)="leavefrom.toggle()" type="text" class="form-control datepicker CalendarForm">
+											<label for="cust_contprn" class="Active">Leave Date</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-row ">
+									<div class="col ">
+										<div class="md-form md-outline ">
+											<input class="form-check-input filled-in CalendarForm" type="checkbox" name="sundayasleave" value="1" id="sundayasleave" (change)=sundayLeave($event)>
+											<label class="sundayasleave" for="sundayasleave">All Sunday As Leave</label>
+										</div>
+									</div>
+								</div>
+							<!-- Footer -->
+							</div>
+							<div class="modal-footer">
+								<button type="button" #closebutton class="btn btn-sm btn-danger CalendarForm" data-dismiss="modal">Cancel</button>
+								<button type="button" (click)="submitCalendar()" [disabled]="isButtonDisabled" class="btn btn-sm btn-outline-success waves-effect" >Save</button>
+							</div>
+							<!-- Content -->
+						</div>
+					</div>
+				</form>
+            </div>
+            <!-- End of Customer modal -->
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

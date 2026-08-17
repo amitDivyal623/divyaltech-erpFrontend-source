@@ -1,0 +1,195 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Company Info List
+                    <button type="button" #companyinfomodal (click)="opencompanyinfomodal()" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_comp_info_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Company</button>
+                </h5>
+                <div class="card-body" [formGroup]="filtercompany" >
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="filter_company_name" id="filter_company_name" class="form-control" required="">
+                                <label for="filter_company_name" class="">Company Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="filter_company_ref_number" id="filter_company_ref_number" class="form-control" required="">
+                                <label for="filter_company_ref_number" class="">Company Ref No</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 select-outline px-4">
+                            <div class="md-form md-outline">
+                                <input type="email" formControlName="filter_email_id" id="filter_email_id" name="filter_email_id" class="form-control" required>
+                                <label for="filter_email_id" class="">Email Id</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="companyinfoSearch()" ><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <div class="table-responsive card-body">
+                    <table id="companyTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>S.No.</th>
+                                <th>Company Name</th>
+                                <th>Company Ref Number</th>
+                                <th>Email Id</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of data;let i=index">
+                                <td></td>
+                                <td>{{i+1}}</td>
+                                <td>{{item.CompanyName}}</td>
+                                <td>{{item.CompanyRefNo}}</td>
+                                <td>{{item.EmailId}}</td>
+                                <td>{{item.Status}}</td>
+                                <td>
+                                    <a class="black-text" (click)="view(item.CompanyId)" mdbtooltip="View" placement="top"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a class="teal-text" (click)="edit(item.CompanyId)" mdbtooltip="Edit" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                    <a class="red-text" (click)="remove(item.CompanyId)" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Add New Company modal -->
+            <div class="modal fade" (click)="companyinfomodalbackdropbtn()" id="add_comp_info_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold" id="modaltextheader">Add New Company Info</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                        </div>
+                        <!-- Body -->
+                        <div class="modal-body" [formGroup]="addcompany">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="CompanyId" id="CompanyId">
+                                            <input type="text" formControlName="company_ref_number" id="company_ref_number" name="company_ref_number" class="form-control" required>
+                                            <label for="company_ref_number" class="Active">Company Ref No</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-9 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="company_name" id="company_name" name="company_name" class="form-control" required>
+                                            <label for="company_name" class="Active">Company Name*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="pan_number" formControlName="pan_number" name="pan_number" class="form-control">
+                                            <label for="pan_number" class=" Active">PAN Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="reg_number" name="reg_number" formControlName="reg_number" class="form-control">
+                                            <label for="reg_number" class=" Active">Registration Number</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="gst_number" formControlName="gst_number" class="form-control">
+                                            <label for="gst_number" class="Active ">GST Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline input-group margin-mdform">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">+91</span>
+                                            </div>
+                                            <input type="text" formControlName="mobile_number" id="mobile_number" class="form-control" placeholder="Mobile No." aria-label="Mobile No." aria-describedby="basic-addon1 ">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="email" formControlName="email_id" id="email_id" name="email_id" class="form-control" required>
+                                            <label for="email_id" class="Active">Email Id</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="state" formControlName="state" class="form-control" >
+                                            <label for="state" class="Active">State</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline ">
+                                            <input type="text" id="city" formControlName="city" class="form-control" >
+                                            <label for="city" class="Active">City</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="pincode" formControlName="pincode" class="form-control">
+                                            <label for="pincode" class="Active">Pincode</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <textarea type="text" id="address" formControlName="address" class="md-textarea form-control" rows="2" value=""></textarea>
+                                            <label for="address" class="Active" >Address</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3 mx-4">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="submit" [disabled]="isButtonDisabled" (click)="onSubmit()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- End of Add New Company Modal -->
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

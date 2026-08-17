@@ -1,0 +1,136 @@
+.bar-graph-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0 8px 0;
+}
+ 
+.bar-graph-axis-labels {
+  display: flex;
+  justify-content: space-around;
+  font-size: 13px;
+  color: #888;
+  margin-left: 50px;
+  margin-bottom: 4px;
+  margin-right: 0;
+  padding: 0 16px;
+}
+ 
+.bar-graph-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 0 16px;
+}
+ 
+.bar-graph-label {
+  width: 70px;
+  font-weight: 500;
+  font-size: 13px;
+}
+ 
+.bar-graph-bar-bg {
+  background: #f5f5f5;
+  flex: 1;
+  height: 24px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-left: 6px;
+  margin-right: 0;
+  position: relative;
+}
+ 
+.bar-graph-bar-fill {
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+.bar-graph-bar-fill-january {
+  width: 55%;
+  background: #fbc02d;
+}
+.bar-graph-bar-fill-february {
+  width: 35%;
+  background: #e53935;
+}
+.bar-graph-bar-fill-march {
+  width: 85%;
+  background: #1976d2;
+}
+.bar-graph-bar-fill-april {
+  width: 70%;
+  background: #4fc3f7;
+}
+ 
+.bar-graph-container {
+  width: 100%;
+}
+ 
+.bar-graph-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+ 
+.bar-graph-label {
+  width: 80px;
+  text-align: right;
+  padding-right: 10px;
+}
+ 
+.bar-graph-bar-bg {
+  flex-grow: 1;
+  height: 20px;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+ 
+.bar-graph-bar-fill {
+  height: 100%;
+  background-color: #4e73df;
+  transition: width 0.5s ease;
+}
+ 
+.bar-graph-value {
+  width: 50px;
+  text-align: left;
+  padding-left: 10px;
+}
+ 
+ 
+.bar-graph-bar-fill-january { background-color: #4e73df; }
+.bar-graph-bar-fill-february { background-color: #1cc88a; }
+.bar-graph-bar-fill-march { background-color: #36b9cc; }
+.bar-graph-bar-fill-april { background-color: #f6c23e; }
+.bar-graph-bar-fill-may { background-color: #e74a3b; }
+.bar-graph-bar-fill-june { background-color: #858796; }
+.bar-graph-bar-fill-july { background-color: #5a5c69; }
+.bar-graph-bar-fill-august { background-color: #4e73df; }
+.bar-graph-bar-fill-september { background-color: #1cc88a; }
+.bar-graph-bar-fill-october { background-color: #36b9cc; }
+.bar-graph-bar-fill-november { background-color: #f6c23e; }
+.bar-graph-bar-fill-december { background-color: #e74a3b; }
+
+
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 8px;
+}
+
+.card-header{
+  border-radius: 8px 8px 0px 0px;
+}
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.btn-floating {
+  display: inline-block;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.btn-floating:hover {
+  transform: scale(1.2);
+  background-color: #0056b3;
+}

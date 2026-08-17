@@ -1,0 +1,235 @@
+<body class="fixed-sn white-skin">
+
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">User Management List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="addlogin()"><i class="fa fa-plus" aria-hidden="true"></i> Add New User</button>
+                    <button type="button" #UserLoginModal data-toggle="modal" data-target="#add_user_modal" style="display: none;"></button>
+                </h5>
+                <div class="card-body" [formGroup]="filteruserform" >
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" id="filterusername" formControlName="filterusername" class="form-control" required="">
+                                <label for="filterusername" class="">User Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 select-outline px-4">
+                            <div class="md-form md-outline">
+                                <input type="email" id="filteruseremailid" formControlName="filteruseremailid" name="filteruseremailid" class="form-control" required>
+                                <label for="filteruseremailid" class="">Email Id</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="searchuserdata()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid  px-4 mb-4">
+            <section>
+
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="userTable" class="table table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.</th>
+                                    <th>User Name</th>
+                                    <th>Email Id</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of data;let i=index">
+                                    <td></td>
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.UserName}}</td>
+                                    <td>{{item.EmailId}}</td>
+                                    <td *ngIf="item.Status==0">DeActive</td>
+                                    <td *ngIf="item.Status==1">Active</td>
+                                    <!-- <td>{{item.Status}}</td> -->
+                                    <td>
+                                        <a class="black-text" (click)="edit(item.UserId,'view')" ><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" (click)="edit(item.UserId,'edit')"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" (click)="remove(item.UserId)" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+            <!-- Add New user modal -->
+            <div class="modal fade" id="add_user_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">{{heading}}</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div class="modal-body" [formGroup]="adduserform">
+                            <div class="col-lg-12 col-md-12">
+
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" name="userId" formControlName="userId">
+                                            <input type="text" id="username" formControlName="username" class="form-control" required="" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['username'].invalid ) || (adduserform.controls['username'].invalid && adduserform.controls['username'].touched)}">
+                                            <label for="username" class="{{activeClass}}">Username</label>
+                                            <div class="invalid-feedback">Please Enter User Name</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                      <ng-autocomplete [data]="employeedataList" formControlName="firstname" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['firstname'].invalid ) || (adduserform.controls['firstname'].invalid && adduserform.controls['firstname'].touched)}">
+                                          </ng-autocomplete>
+                                          <ng-template #itemTemplate let-item>
+                                              <a [innerHTML]="item.name"></a>
+                                          </ng-template>
+                                          <ng-template #notFoundTemplate let-notFound>
+                                              <div [innerHTML]="notFound"></div>
+                                          </ng-template>
+                                          <label for="firstname" class="active">Full Name*</label>
+                                          <div class="invalid-feedback">Please Enter Full Name</div>
+                                    </div>
+                                </div>
+                                <!-- <div class="row">
+                                    <div class="col-lg-12 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                          <ng-autocomplete [data]="employeedataList" formControlName="firstname" [searchKeyword]="keyword" (selected)='selectEvent($event)' (inputChanged)='onChangeSearch($event)' (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['firstname'].invalid ) || (adduserform.controls['firstname'].invalid && adduserform.controls['firstname'].touched)}">
+                                          </ng-autocomplete>
+                                          <ng-template #itemTemplate let-item>
+                                              <a [innerHTML]="item.name"></a>
+                                          </ng-template>
+                                          <ng-template #notFoundTemplate let-notFound>
+                                              <div [innerHTML]="notFound"></div>
+                                          </ng-template>
+                                          <label for="firstname" class="active">Full Name*</label>
+                                          <div class="invalid-feedback">Please Enter Full Name</div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="password" autocomplete="new-password"  (click)="passchange()" formControlName="userpassword" id="userpassword" class="form-control" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['userpassword'].invalid ) || (adduserform.controls['userpassword'].invalid && adduserform.controls['userpassword'].touched)}">
+                                            <label for="userpassword" class="{{activeClass}}">Password</label>
+                                            <div class="invalid-feedback">Please Enter Password</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="password" autocomplete="new-password"  (click)="passchange()" formControlName="cnfrmuserpassword" id="cnfrmuserpassword" class="form-control" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['cnfrmuserpassword'].invalid ) || (adduserform.controls['cnfrmuserpassword'].invalid && adduserform.controls['cnfrmuserpassword'].touched)}">
+                                            <label for="cnfrmuserpassword" class="{{activeClass}}">Confirm Password</label>
+                                            <div *ngIf=" (submitted && adduserform.controls['cnfrmuserpassword'].errors && adduserform.controls['cnfrmuserpassword'].errors.required) || (adduserform.controls['cnfrmuserpassword'].touched && adduserform.controls['cnfrmuserpassword'].errors && adduserform.controls['cnfrmuserpassword'].errors.required)" class="invalid-feedback">Please Enter Confirm Password</div>
+                                            <div *ngIf=" (submitted && adduserform.controls['cnfrmuserpassword'].errors && adduserform.controls['cnfrmuserpassword'].errors.confirmedValidator && !adduserform.controls['cnfrmuserpassword'].errors.required) || (adduserform.controls['cnfrmuserpassword'].touched && adduserform.controls['cnfrmuserpassword'].errors && adduserform.controls['cnfrmuserpassword'].errors.confirmedValidator && !adduserform.controls['cnfrmuserpassword'].errors.required)" class="invalid-feedback">Password and Confirm Password must be match.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="useremailid" id="useremailid" class="form-control" required="" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['useremailid'].invalid ) || (adduserform.controls['useremailid'].invalid && adduserform.controls['useremailid'].touched)}">
+                                            <label for="useremailid" class="{{activeClass}}">Email Id*</label>
+                                            <div *ngIf=" (submitted && adduserform.controls['useremailid'].errors && adduserform.controls['useremailid'].errors.required) || (adduserform.controls['useremailid'].touched && adduserform.controls['useremailid'].errors && adduserform.controls['useremailid'].errors.required)" class="invalid-feedback">Please Enter Email Address.
+                                            </div>
+                                            <div *ngIf=" (submitted && adduserform.controls['useremailid'].errors && adduserform.controls['useremailid'].errors.pattern && !adduserform.controls['useremailid'].errors.required) || (adduserform.controls['useremailid'].touched && adduserform.controls['useremailid'].errors && adduserform.controls['useremailid'].errors.pattern && !adduserform.controls['useremailid'].errors.required)" class="invalid-feedback">Please Enter Valid Email.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">+91</span>
+                                            </div>
+                                            <input type="text" formControlName="usercontactno" class="form-control" placeholder="Contact Number" aria-label="Username" aria-describedby="basic-addon1" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['usercontactno'].invalid ) || (adduserform.controls['usercontactno'].invalid && adduserform.controls['usercontactno'].touched)}">
+                                            <div *ngIf=" (submitted && adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].errors.required) || (adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].touched && adduserform.controls['usercontactno'].errors.required)" class="invalid-feedback">Please Enter Contact Number</div>
+                                            <div *ngIf=" (submitted && adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].errors.pattern) || (adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].touched && adduserform.controls['usercontactno'].errors.pattern)" class="invalid-feedback">Please Enter Only Numeric Number. </div>
+                                            <div *ngIf=" (submitted && adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].errors.maxlength && !adduserform.controls['usercontactno'].errors.pattern && !adduserform.controls['usercontactno'].errors.required) || (adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].touched && adduserform.controls['usercontactno'].errors.maxlength && !adduserform.controls['usercontactno'].errors.pattern)" class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                            <div *ngIf=" (submitted && adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].errors.minlength && !adduserform.controls['usercontactno'].errors.pattern && !adduserform.controls['usercontactno'].errors.required) || (adduserform.controls['usercontactno'].errors && adduserform.controls['usercontactno'].touched && adduserform.controls['usercontactno'].errors.minlength && !adduserform.controls['usercontactno'].errors.pattern)" class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 px-2 md-form md-outline">
+                                        <input formControlName="Overtime" min="0" type="number" id="Overtime" name="Overtime" class="form-control">
+                                        <label for="reading_start" class="Active">Overtime hour</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                      <select formControlName="Company" class="form-control field-ht colorful-select" (change)="getuserdetailsbyId($event)" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['Company'].invalid ) || (adduserform.controls['Company'].invalid && adduserform.controls['Company'].touched)}">
+                                          <option value="" selected="true">Select Company</option>
+                                          <option *ngFor="let companyData of company; let i = index" [value]="companyData[0]">{{companyData[1]}}</option>
+                                      </select>
+                                      <label class="ml-2 active">Company</label>
+                                      <div class="invalid-feedback">Company</div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2 md-form md-outline">
+                                      <ng-select formControlName="userrole" [items]="RoleIddata" bindLabel="name"  bindValue="" placeholder="Select User Role" appendTo="body" [multiple]="true" [(ngModel)]="selected" [ngClass]="{ 'is-invalid': (submitted && adduserform.controls['userrole'].invalid ) || (adduserform.controls['userrole'].invalid && adduserform.controls['userrole'].touched)}">
+                                      </ng-select>
+                                      <!-- <tag-input
+                                      [(ngModel)]="selectedTagItems"
+                                      [identifyBy]="'id'"
+                                      [displayBy]="'title'" 
+                                    >
+                                      <tag-input-dropdown
+                                        [appendToBody]="true"
+                                        [showDropdownIfEmpty]="true"
+                                        [autocompleteItems]="tagItems"
+                                        [identifyBy]="'id'"
+                                        [displayBy]="'title'"
+                                      >
+                                      </tag-input-dropdown>
+                                    </tag-input> -->
+                                      <!-- <ng-select [(ngModel)]="selected" [multiple]="true" formControlName="userrole">
+                                        <ng-option *ngFor="let items of RoleIddata"  [value]="items.id">{{items.name}}</ng-option>
+                                     </ng-select> -->
+                                      <label class="ml-2 active" style="z-index: 10000;">Role</label>
+                                      <div class="invalid-feedback">Please Enter Role</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-4">
+                            <button type="button" #closebutton (click)="closeModal()"  class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="adduser()" [disabled]="isButtonDisabled" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+
+    </main>
+    <!-- Main layout -->
+</body>

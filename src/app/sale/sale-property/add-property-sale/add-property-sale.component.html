@@ -1,0 +1,276 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">
+                    Add Property Sale
+                </h5>
+                <div class="card-body">
+                    <div class="row px-3">
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="indent-number" class="form-control ">
+                                    <label for="indent-number" class=" ">Sale Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #odate="ngbDatepicker" (click)="odate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Sold Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="quot-number" class="form-control ">
+                                    <label for="quot-number" class=" ">Quotation Number</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #qdate="ngbDatepicker" (click)="qdate.toggle()" type="text" id="date-picker-example" class="form-control">
+                                <label for="jtd" class="active ">Quotation Date</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="supplier-name" class="form-control ">
+                                    <label for="supplier-name" class=" ">Customer Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input id="form-state" type="text" class="form-control" [ngbTypeahead]="projectname" />
+                                <label for="form-state" class=" ">Project Name</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <input id="form-state" type="text" class="form-control">
+                                <label for="form-state" class=" ">Project Location</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <select id="unit" class="form-control field-ht colorful-select">
+                                    <option value="" selected disabled>Select Person name</option>
+                                    <option value="1">K.G.</option>
+                                    <option value="2">Tone</option>
+                                    <option value="3">Dazon</option>
+                                </select>
+                                <label class="active">Sales person</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-12 px-2">
+                            <div class="md-form md-outline">
+                                <div class="md-form md-outline">
+                                    <input type="text" id="quot-number" class="form-control ">
+                                    <label for="quot-number" class=" ">Agent Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12 px-2">
+                            <div class="md-form md-outline ml-1">
+                                <textarea type="text" id="company-address" class="md-textarea form-control overflow-auto" rows="1" value=""></textarea>
+                                <label for="company-address">Remarks</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 px-2 mt-3">
+                            <div class="border-box mb-4">
+                                <span class="border-label">Property Detail</span>
+                                <div class="row">
+                                    <div class="col-12 float-right mr-3">
+                                        <table class="table table-striped table-responsive maxHeight text-center" formArrayName="products">
+                                            <thead>
+                                                <tr class="bg-dark text-white">
+                                                    <th class="sno">
+                                                        #
+                                                    </th>
+                                                    <th class="itemId">
+                                                        Product Id
+                                                    </th>
+                                                    <th class="datePicker">
+                                                        Product Name
+                                                    </th>
+                                                    <th class="datePicker">
+                                                        Block
+                                                    </th>
+                                                    <th class="datePicker">
+                                                        Floor
+                                                    </th>
+                                                    <th class="itemId">
+                                                        BHK
+                                                    </th>
+                                                    <th class="datePicker">
+                                                        Plot/Flat No.
+                                                    </th>
+                                                    <th class="action">
+                                                        Total Area
+                                                    </th>
+                                                    <th class="datePicker">
+                                                        Facing
+                                                    </th>
+                                                    <th class="itemId">
+                                                        Unit Price
+                                                    </th>
+                                                    <th class="quantity">
+                                                        Disc.
+                                                    </th>
+                                                    <th class="itemId">
+                                                        GST
+                                                    </th>
+                                                    <th class="quantity">
+                                                        CGST
+                                                    </th>
+                                                    <th class="quantity">
+                                                        SGST
+                                                    </th>
+                                                    <th class="quantity">
+                                                        IGST
+                                                    </th>
+                                                    <th class="itemId">
+                                                        Total Amount
+                                                    </th>
+                                                    <th class="action">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody *ngFor="let product of products.controls; let i=index" [formGroupName]="i">
+                                                <tr>
+                                                    <td scope="row" class="sno">{{i+1}}</td>
+                                                    <td class="itemId">
+                                                        <input type="text" formControlName="itemId" id="item-id" class="form-control" value="" readonly>
+                                                    </td>
+                                                    <td class="itemName">
+                                                        <select id="unit" id="item-name" formControlName="itemName" class="form-control">
+                                                            <option value="" selected="true" disabled="disabled">Select</option>
+                                                            <option value="default" >Independent house</option>
+                                                            <option value="2">Land </option>
+                                                            <option value="3">Office</option>
+                                                            <option value="4">Apartment</option>
+                                                            <option value="5">Other</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <select id="unit" formControlName="unit" class="form-control">
+                                                            <option value="" selected="true" disabled="disabled">Select Block</option>
+                                                            <option value="default" >'A' Block</option>
+                                                            <option value="2">'B' Block</option>
+                                                            <option value="3">'C' Block</option>
+                                                            <option value="4">'D' Block</option>
+                                                            <option value="5">'E' Block</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="itemId">
+                                                        <select id="unit" id="Rate" formControlName="rate" class="form-control">
+                                                            <option value="" selected="true" disabled="disabled">Select Floor</option>
+                                                            <option value="default" >1st</option>
+                                                            <option value="2">2nd</option>
+                                                            <option value="3">3rd</option>
+                                                            <option value="4">4th</option>
+                                                            <option value="5">5th</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="itemId">
+                                                        <select class="form-control" id="amount" formControlName="rate">
+                                                            <option value="" selected="true" disabled="disabled">Select</option>
+                                                            <option value="default" >1BHK</option>
+                                                            <option value="2">2BHK</option>
+                                                            <option value="3">3BHK</option>
+                                                            <option value="4">4BHK</option>
+                                                            <option value="5">5BHK</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <input type="text" id="Discount" formControlName="discount" class="form-control ">
+                                                    </td>
+                                                    <td class="action">
+                                                        <input type="text" id="Discount" formControlName="discount" class="form-control ">
+                                                    </td>
+                                                    <td class="unit">
+                                                        <select id="gst" formControlName="unit" class="form-control">
+                                                            <option value="" selected="true" disabled="disabled">Select Area</option>
+                                                            <option value="default" >North facing</option>
+                                                            <option value="2">South facing </option>
+                                                            <option value="3">East facing</option>
+                                                            <option value="4">West facing</option>
+                                                            <option value="5">None</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="itemId">
+                                                        <input type="text" id="amount" formControlName="rate" class="form-control text-right">
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <input type="text" id="Discount" formControlName="discount" class="form-control ">
+                                                    </td>
+                                                    <td class="unit">
+                                                        <select id="gst" formControlName="unit" class="form-control">
+                                                            <option value="" selected disabled>Select GST</option>
+                                                            <option value="1">None</option>
+                                                            <option value="2">GST 5%</option>
+                                                            <option value="3">GST 12%</option>
+                                                            <option value="4">GST 18%</option>
+                                                            <option value="5">GST 28%</option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <input type="text" id="CGST" formControlName="cgst" class="form-control ">
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <input type="text" id="SGST" formControlName="sgst" class="form-control ">
+                                                    </td>
+                                                    <td class="quantity">
+                                                        <input type="text" id="IGST" formControlName="igst" class="form-control ">
+                                                    </td>
+                                                    <td class="itemId">
+                                                        <input type="text" id="TAmount" formControlName="tamount" class="form-control text-right" disabled>
+                                                    </td>
+                                                    <td class="action">
+                                                        <input type="button" (click)="removeProduct(i)" class="btn btn-danger btn-sm" style="margin-top: 0px!important;" value="Remove">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <thead>
+                                                <tr>
+                                                    <td colspan="13">
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                        <button type="button" (click)="addProduct()" class="btn btn-secondary btn-sm float-left blue-gradient waves-light waves-effect"><i class="fa fa-plus" aria-hidden="true"></i> More Products</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class=" float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fas fa-save mr-2" aria-hidden="true"></i>Submit</button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+</body>

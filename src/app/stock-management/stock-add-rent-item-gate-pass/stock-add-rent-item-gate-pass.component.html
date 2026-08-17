@@ -1,0 +1,301 @@
+<body class="fixed-sn white-skin">
+
+    <header>
+        <app-header></app-header>
+        <app-navbar></app-navbar>
+    </header>
+
+    <main>
+        <div class="container-fluid px-4">
+            <div class="card p-3">
+
+                <h5 class="card-header info-tab white-text">Rent Item Gate Pass</h5>
+
+                <form [formGroup]="rentForm">
+
+                    <!-- HEADER -->
+                    <div class="row mb-3 mt-3">
+
+                        <div class="col-md-2 md-form md-outline">
+                            <input type="date" class="form-control" formControlName="issueDate">
+                            <label class="active mt-3 ml-3">Issue Date</label>
+                            <div class="text-danger" *ngIf="isFieldInvalid(rentForm, 'issueDate')">
+                                Issue Date is required
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 md-form md-outline">
+                            <input type="time" class="form-control" formControlName="issueTime">
+                            <label class="active ml-3">Issue Time</label>
+                            <div class="text-danger" *ngIf="isFieldInvalid(rentForm, 'issueTime')">
+                                Issue Time is required
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 md-form md-outline">
+                            <input type="text" class="form-control" formControlName="gatePass">
+                            <label class="active ml-3">Gate Pass</label>
+                            <div class="text-danger" *ngIf="isFieldInvalid(rentForm, 'gatePass')">
+                                Gate Pass is required
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 md-form md-outline">
+                            <ng-select [items]="projectsList" bindLabel="project_name" bindValue="project_id"
+                                formControlName="projectName" placeholder="Select Project" [searchable]="true"
+                                [clearable]="true">
+                            </ng-select>
+                            <label class="active ml-3">Project Name</label>
+
+                        </div>
+
+                        <div class="col-md-3 md-form md-outline">
+                            <textarea class="form-control" formControlName="notes" rows="1"></textarea>
+                            <label class="active ml-3">Notes</label>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <!-- ADD ITEM BUTTON -->
+                    <button *ngIf="!isViewMode && !isEditMode" class="btn btn-primary btn-sm mb-3" type="button"
+                        (click)="addItem()">
+                        + ADD ITEM BOX
+                    </button>
+
+                    <!-- ITEMS -->
+                    <div formArrayName="items">
+
+                        <div *ngFor="let row of items.controls; let i=index" [formGroupName]="i" class="item-box">
+
+                            <!-- 🔹 ROW 1 -->
+                            <div class="row">
+
+                                <!-- FROM WAREHOUSE -->
+                                <div class="col-md-3 md-form md-outline">
+                                    <ng-select [items]="warehouseList" bindLabel="name" bindValue="id"
+                                        formControlName="fromWarehouse" placeholder="Select Warehouse"
+                                        [searchable]="true" [clearable]="true" (change)="onWarehouseChange(i)">
+
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                    </ng-select>
+                                    <label class="active ml-3">From Warehouse</label>
+                                    <div class="text-danger" *ngIf="isFieldInvalid(row, 'fromWarehouse')">
+                                        Warehouse is required
+                                    </div>
+                                </div>
+
+                                <!-- CATEGORY -->
+                                <div class="col-md-3 md-form md-outline">
+                                    <ng-select [items]="categoryLists[i]" bindLabel="name" bindValue="id"
+                                        formControlName="category" placeholder="Select Category" [searchable]="true"
+                                        [clearable]="true" (change)="onCategoryChange(i)"
+                                        [disabled]="!items.at(i).get('fromWarehouse')?.value">
+
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                    </ng-select>
+                                    <label class="active ml-3">Category</label>
+                                    <div class="text-danger" *ngIf="isFieldInvalid(row, 'category')">
+                                        Category is required
+                                    </div>
+                                </div>
+
+                                <!-- SUB CATEGORY -->
+                                <div class="col-md-3 md-form md-outline">
+                                    <ng-select [items]="filteredSubcategories[i]" bindLabel="name" bindValue="id"
+                                        formControlName="subCategory" placeholder="Select Sub Category"
+                                        [searchable]="true" [clearable]="true" (change)="onSubCategoryChange(i)"
+                                        [disabled]="!items.at(i).get('fromWarehouse')?.value">
+
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <span [title]="item.name">
+                                                {{ item.name }}
+                                            </span>
+                                        </ng-template>
+
+                                    </ng-select>
+                                    <label class="active ml-3">Sub Category</label>
+                                    <div class="text-danger" *ngIf="isFieldInvalid(row, 'subCategory')">
+                                        Sub Category is required
+                                    </div>
+                                </div>
+
+                                <!-- ITEM -->
+                                <div class="col-md-3 md-form md-outline">
+                                    <ng-select [items]="filteredItems[i]" bindLabel="item" bindValue="item_id"
+                                        formControlName="item" placeholder="Select Item" [searchable]="true"
+                                        [clearable]="true" (change)="onItemChange(i)"
+                                        [disabled]="!items.at(i).get('fromWarehouse')?.value">
+
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <span [title]="item.item">
+                                                {{ item.item }}
+                                            </span>
+                                        </ng-template>
+
+                                        <ng-template ng-label-tmp let-item="item">
+                                            <span [title]="item.item">
+                                                {{ item.item }}
+                                            </span>
+                                        </ng-template>
+
+                                    </ng-select>
+                                    <label class="active ml-3">Item</label>
+                                    <div class="text-danger" *ngIf="isFieldInvalid(row, 'item')">
+                                        Item is required
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- 🔹 ROW 2 -->
+                            <div class="row align-items-end mt-2">
+
+                                <div class="col-md-2 md-form md-outline">
+                                    <input type="number" class="form-control" formControlName="currentQty" readonly
+                                        inputmode="decimal">
+                                    <label class="active ml-3">Current Qty</label>
+                                </div>
+
+                                <div class="col-md-2 md-form md-outline">
+                                    <input type="number" class="form-control" formControlName="issuedQty"
+                                        inputmode="decimal" min="0" step="any" (input)="onIssuedChange(i)"
+                                        onwheel="this.blur()">
+                                    <label class="active ml-3">Issued Qty</label>
+                                    <div class="text-danger" *ngIf="isFieldInvalid(row, 'issuedQty')">
+                                        Issued Qty is required
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 md-form md-outline">
+                                    <input type="number" class="form-control" formControlName="receivedQty" readonly
+                                        inputmode="decimal">
+                                    <label class="active ml-3">Received Qty</label>
+                                </div>
+
+                                <div class="col-md-2 md-form md-outline">
+                                    <input type="number" class="form-control" formControlName="balanceQty" readonly
+                                        inputmode="decimal">
+                                    <label class="active ml-3">Balance Qty</label>
+                                </div>
+
+                                <!-- DELETE ICON -->
+                                <div class="col-md-2 d-flex justify-content-end align-items-end">
+                                    <button *ngIf="!isViewMode && !isEditMode" class="btn btn-outline-danger btn-sm"
+                                        type="button" (click)="removeItem(i)">
+                                        <i class="fa fa-trash"></i> Remove Item
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <!-- 🔹 RECEIVED SECTION (UNCHANGED) -->
+                            <div class="mt-3">
+
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h6 class="mb-0">Received Date & Time</h6>
+
+                                    <button *ngIf="!isViewMode && canAddReceipt(i)" class="btn btn-info btn-sm" type="button"
+                                        (click)="addReceipt(i)">
+                                        + RECEIVED ENTRY
+                                    </button>
+                                </div>
+
+                                <div formArrayName="receipts">
+
+                                    <div *ngFor="let r of getReceipts(i).controls; let j=index" [formGroupName]="j"
+                                        class="row align-items-end mb-2">
+
+                                        <div class="col-md-4 md-form md-outline">
+                                            <input type="datetime-local" class="form-control"
+                                                formControlName="receivedAt">
+                                            <label class="active ml-3">Received Date & Time</label>
+                                            <div class="text-danger" *ngIf="isFieldInvalid(r, 'receivedAt')">
+                                                Date is required
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3 md-form md-outline">
+                                            <input type="number" class="form-control" formControlName="receivedQty" 
+                                                (input)="onReceiptChange(i, j)">
+                                            <label class="active ml-3">Received Qty</label>
+                                            <div class="text-danger" *ngIf="isFieldInvalid(r, 'receivedQty')">
+                                                Qty is required
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-1 d-flex justify-content-end align-items-end">
+                                            <button *ngIf="!r.get('receipt_id')?.value"
+                                                class="btn btn-danger btn-sm icon-btn" type="button"
+                                                (click)="removeReceipt(i,j)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- FOOTER BUTTONS -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+
+                        <!-- GO BACK -->
+                        <button class="btn btn-secondary" type="button" (click)="goBackToRentGatePassList()">
+
+                            <i class="fa fa-arrow-left mr-2"></i>
+                            GO BACK
+
+                        </button>
+
+                        <!-- SAVE -->
+                        <button *ngIf="!isViewMode" class="btn btn-success" type="button" (click)="save()"
+                            [disabled]="isSaveDisabled">
+
+                            SAVE
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </main>
+
+</body>

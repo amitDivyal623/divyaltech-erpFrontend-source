@@ -1,0 +1,63 @@
+<div class="row p-2">
+    <div class="col-lg-12 col-md-12" [formGroup]="searchAttandence">
+        <div class="row py-2 px-2">
+            <div class="col-md-2 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" id="salary-month" class="form-control" formControlName="month">
+                    <label for="salary-month" class="active">Month</label>
+                </div>
+            </div>
+            <div class="col-md-2 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" id="salary-year" class="form-control" formControlName="year">
+                    <label for="salary-year" class="active">Enter Year</label>
+                </div>
+            </div>
+            <div class="col-md-3 md-form md-outline px-4">
+                <select class="form-control field-ht colorful-select" id="form-customername" formControlName="employee">
+                    <option value="" selected="true">Select Employee Name</option>
+                    <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                        {{Employeelist.EmployeeName}}
+                    </option>
+                </select>
+                <label class="top-lb active">Employee</label>
+            </div>
+            <div class="col-md-5 px-2 float-right">
+                <button type="button" (click)="searching()" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 mb-2">
+        <section>
+            <div class="card px-2 my-2">
+                <div class="table-responsive">
+                    <table id="attandancetable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="table table-striped" cellspacing="0" width="100%">
+                            <thead class="winter-neva-gradient">
+                                <tr>
+                                    <th width="10%">S.No.</th>
+                                    <th width="15%">Month/Year</th>
+                                    <th width="25%">Emp Id</th>
+                                    <th width="20%">Employee Name</th>
+                                    <th width="10%">Total days</th>
+                                    <th width="20%">Present days</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.montyear}}</td>
+                                    <td>{{item.EmployeeId}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td>{{item.TotalDayOfMonth}}</td>
+                                    <td><input type="text" id="" value="{{item.attt}}" class=fill-input></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="col-md-12">
+        <button type="button " class="float-right btn blue-gradient btn-sm waves-light waves-effect " (click)="result( 'Deduction') "><i class="fas fa-forward mr-2 " aria-hidden="true "></i>Next</button>
+    </div>
+</div>

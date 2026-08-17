@@ -1,0 +1,18 @@
+.height{
+    max-height: 19.5rem!important;
+  }
+  .overFlowData{
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .no-data-available {
+    text-align: center;
+  }
+  .dataTables_empty {
+    display: none;
+  }
+  ::ng-deep table.dataTable td.dataTables_empty {
+    display: none;
+  }

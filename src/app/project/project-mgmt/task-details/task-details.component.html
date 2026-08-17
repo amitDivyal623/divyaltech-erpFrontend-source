@@ -1,0 +1,273 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="px-2 float-right">
+                <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect form-disable" (click)="Newtaskadd()" ><i class="fa fa-plus" aria-hidden="true"></i> Add New Task</button>
+                <button type="button" style="display: none;" #taskModalButton data-toggle="modal" data-target="#add_task_modal"></button>
+                <button type="button" style="display: none;" #taskEditModel data-toggle="modal" data-target="#editTask"></button>
+            </div>
+        </div>
+    </div>
+    <!--Grid column: Content-->
+    <div class=" col-md-12">
+        <div class="card">
+            <div class="table-responsive card-body">
+                <table id="dt-material-checkbox" class="table table-striped" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>S.No.
+                            </th>
+                            <th>Task Detail
+                            </th>
+                            <th>Task Date
+                            </th>
+                            <th>Status
+                            </th>
+                            <th>Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of taskdata;let i=index">
+                            <td></td>
+                            <td>{{item.counter}}</td>
+                            <td>{{item.Description}}</td>
+                            <td>{{item.TaskDt|date: "dd/MM/yyyy"}}</td>
+                            <td>{{item.Status}}</td>
+                            <td>
+                                <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" (click)="TaskEdit(item.TaskId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                <ng-container *ngIf="role.includes('Admin') || role.includes('Project Manager')">
+                                    <a class="red-text" mdbtooltip="Remove" placement="top" (click)="DeleteTask(item.TaskId)"><i class="fa-times px-1 fas"></i></a>
+                                </ng-container>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--Grid column: Content-->
+</div>
+
+<!-- Add New task modal -->
+<div class="modal fade" id="add_task_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <!-- Content -->
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header mdb-color">
+                <p class="heading lead font-weight-bold">{{taskModalHadding}}</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <form [formGroup]="taskDetails"  id="taskDetails" name="taskDetails">
+                <!-- Body -->
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col">
+                            <div class=" md-form md-outline">
+                                <input type="hidden" name="task_id" formControlName="task_id">
+                                <input formControlName="task_title" name="task_title" type="text" id="task_title" class="form-control">
+                                <label for="task_title" class="active">Project Title</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="task_date" name="task_date" id="taskdate" value="{{projecttaskdate}}" [minDate]="minDate" [maxDate]="maxDate" placeholder="Select Date" class="form-control" ngbDatepicker #taskdate="ngbDatepicker" (click)="taskdate.toggle()" readonly>
+                                <label for="taskdate" class="active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form md-outline">
+                                <select formControlName="taskstatus" name="taskstatus" class="form-control field-ht colorful-select">
+                                    <option value="" selected="true">Select Status</option>
+                                    <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                        {{Status.LookupValue}}
+                                    </option>
+                                    </select>
+                                <label class="ml-2 active">Status</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form md-outline">
+                                <select formControlName="assigneeBy" name="assigneeBy" id="form-namecustomer" class="form-control field-ht colorful-select">                                                   
+                                        <option value="" selected>Select Assignee By</option>
+                                        <option *ngFor="let EmployeeList of Employees" value={{EmployeeList.EmployeeId}}>
+                                            {{EmployeeList.EmployeeName}}
+                                        </option>
+                                    </select>
+                                <label class="ml-2 active">Assignee By</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="md-form md-outline">
+                                <select formControlName="assigneeTo" name="assigneeTo" id="form-namecustomer" class="form-control field-ht colorful-select">
+                                        <option value="" selected>Select Assignee To</option>
+                                        <option *ngFor="let EmployeeList of Employees" value={{EmployeeList.EmployeeId}}>
+                                            {{EmployeeList.EmployeeName}}
+                                        </option>
+                                    </select>
+                                <label class="ml-2 active">Assignee To</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="md-form md-outline">
+                                <textarea type="text" id="form10" formControlName="task_description" name="task_description" class="md-textarea form-control" rows="2" required=""></textarea>
+                                <label for="form10">Task Description</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Footer -->
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm  btn-danger" #taskclose data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-sm btn-outline-success waves-effect form-disable" id="taskSubmit" (click)="taskSubmit()">Save</button>
+            </div>
+        </div>
+        <!-- Content -->
+    </div>
+</div>
+
+
+<div class="modal fade" id="editTask" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header mdb-color">
+                <p class="heading lead font-weight-bold">{{taskModalHadding}}</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+            <!-- Body -->
+            <div class="modal-body">
+                <div class="row" [formGroup]="taskDetails" id="taskDetails" name="taskDetails">
+                    <div  class="col-lg-8 col-sm-12 mb-4 overflow-auto colheight">
+                        <div class="form-row mt-4">
+                            <h6 class="font-weight-bold ml-2">Task Title</h6>
+                        </div>
+                        <div class="form-row mt-2">
+                            <input #title (click)="editTaskTitle()" formControlName="task_title" class="form-control" />
+                        </div>
+                        <code *ngIf="taskDetails.controls['task_title'].touched && taskDetails.controls['task_title'].invalid">Title is required</code>
+                        <div *ngIf="!Access" class="form-row d-flex justify-content-start">
+                            <button type="button" (click)="saveTaskTitle(taskId)" class="btn btn-sm btn-primary">Save</button>
+                            <button type="button" (click)="hideTaskTitleSave()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                        </div>
+                        <div class="form-row mt-4">
+                            
+                            <h6 class="font-weight-bold ml-2">Description</h6>
+                        </div>
+                        <div class="form-row mt-2 mb-2">
+                            <textarea  formControlName="task_description" (click)="displaySave()" ngbTooltip="Click to Edit" placement="top"  class="text-justify border-0 form-control" style="min-height: 6rem;" [readonly]="writeAccess"></textarea>
+                        </div>
+                        <code *ngIf="taskDetails.controls['task_description'].touched && taskDetails.controls['task_description'].invalid">Description is required</code>
+                        <div *ngIf="showSave" class="form-row mt-3 d-flex justify-content-start">
+                            <button type="button" (click)="saveMsg(taskId)" class="btn btn-sm btn-primary">Save</button>
+                            <button type="button"  (click)="hideSave()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                        </div>
+                        
+                    </div>
+                    <div class="col-lg-4 col-sm-12">
+                        <div class="card shadow-none">
+                            <div class="form-row mb-2 mt-2 ">
+                                <h4>Other Information</h4>
+                            </div>
+                            <div class="form-row">
+                                <div [formGroup]="task_status" class="col-md-12 md-form md-outline" (click)="showConfirmation(editable)">
+                                    <select formControlName="status" (change)='showMsg(taskId)'  id="status" class="form-control field-ht colorful-select" >
+                                        <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                            {{Status.LookupValue}}
+                                        </option> 
+                                    </select>
+                                    <label class="ml-2 active">Status</label>
+                                </div>
+                                <div class="col-md-12 md-form md-outline">
+                                    <select formControlName="assigneeTo" disabled id="assigneeTo" class="form-control">
+                                        <option *ngFor="let Employeelist of Employees" value={{Employeelist.EmployeeId}}>
+                                            {{Employeelist.EmployeeName}}
+                                        </option>
+                                    </select>
+                                    <label for="enquiry_cust" class="active">Reporter</label>
+                                </div>
+                                <div class="col-md-12" [formGroup]="task_Assignee">
+                                    <div class="md-form md-outline margin-mdform">
+                                        <select formControlName="TaskAssigne" id="TaskAssigne" (change)='editTaskAssigne()' class="form-control">
+                                            <option *ngFor="let Employeelist of Employees" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label for="enquiry_cust" class="active">Assignee</label>
+                                    </div>
+                                    <div *ngIf="!AccessAssigne" class="form-row d-flex justify-content-start">
+                                        <button type="button" (click)="saveTaskAssgine(taskId)" class="btn btn-sm btn-primary">Save</button>
+                                        <button type="button" (click)="hideTaskAssgine()" class="btn btn-sm bg-white text-dark">Cancel</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="md-form md-outline">
+                                        <div class="col-md-12"><label style="height: 32px;" class="form-control">{{taskDate | date: 'dd/MM/yyyy'}}</label></div>
+                                        <label for="date-picker-example" class="active">Date*</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="card fill-flex mt-4 mb-3">
+                            <div class="card-header bg-white text-dark">
+                                <h5>Comments</h5>
+                            </div>
+                            <div class="card-body mt-3 mx-3">
+                                <div class="card card-body mb-3" *ngFor="let taskData of taskBriefDetails; let i = index" >
+                                    <div *ngIf="taskData[14] != ''" class="comm">
+                                        <div class="form-row mt-2 font-weight-bold">
+                                            <div class="col"></div>
+                                            <div class="col text-right"></div>
+                                        </div>
+                                        <div class="form-row">
+                                            <textarea #swiper id="{{taskData[13]}}" class="mt-2 mx-1 flex-fill text-justify border-0 commentBox"  style="min-height: 5rem;" [readonly]="writeAccess">{{taskData[14]}}</textarea>
+                                        </div>
+                                        <div *ngIf="editable == true">
+                                            <div class="form-row d-flex justify-content-start">
+                                                <button type="button" (click)="showCommentSave($event)" id="showCommentSave_{{i}}" class=" border-0 bg-white text-primary">Edit</button>
+                                            </div>
+                                            <div class="form-row d-flex justify-content-start ">
+                                                <button type="button" id="showeditButton_{{i}}" (click)="commentSave(taskData[13])"  class="showeditButton border-0 bg-white text-primary">Save</button>
+                                                <button type="button" id="showeditCancleButton_{{i}}" (click)="showCommentEdit($event)" class="showeditButton border-0 bg-white text-danger">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <textarea class="form-control" formControlName="comment"  placeholder="Add your comment"></textarea>
+                                    <div class="input-group-append">
+                                        <button id="basic-addon2" (click)="addComment(taskId)"  class="input-group-text bg-dark text-white">Add</button>
+                                    </div>
+        
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                <!-- <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button> -->
+            </div>
+        </div>
+    </div>
+</div>

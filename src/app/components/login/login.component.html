@@ -1,0 +1,87 @@
+<body class="login-page" style="overflow-y: hidden;">
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Navbar -->
+        <!-- Navbar -->
+        <form id="form" method="post" action="#">
+            <!-- Intro Section -->
+            <section class="view intro-2">
+                <div class="mask rgba-stylish-strong h-100 d-flex justify-content-center align-items-center">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-6 col-md-10 col-sm-12 mx-auto mt-1">
+
+                                <!-- Form with header -->
+                                <div class="card wow fadeIn" data-wow-delay="0.3s">
+
+                                    <div [formGroup]="loginForm" class="card-body">
+
+                                        <!-- Header -->
+                                        <div class="form-header peach-gradient" style="text-align: center;">
+
+                                            <h3 class="font-weight-500 my-2 py-1 " id="login_lb">LOGIN</h3>
+                                            <h3 class="font-weight-500 my-2 py-1" id="forgot_pwd_lb"
+                                                style="display: none;">FORGOT PASSWORD</h3>
+                                        </div>
+
+                                        <!-- Body -->
+                                        <div class="md-form" id="user_lb">
+                                            <i class="fas fa-user prefix white-text"></i>
+                                            <input type="text" formControlName="username" id="orangeForm-name"
+                                                name=username class="form-control" required="">
+                                            <label for="orangeForm-name">User Name</label>
+                                        </div>
+                                        <code class="text-white" style="margin-left: 2.5rem;"
+                                            *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].invalid">User Name is required</code>
+                                        <div class="md-form" id="pwd_lb">
+                                            <i class="fas fa-lock prefix white-text"></i>
+                                            <input type="password" formControlName="pass" id="orangeForm-pass"
+                                                name=password class=" form-control" required="" #passwordfield>
+                                            <span
+                                                (click)="passwordfield.type=passwordfield.type=='password'?'text':'password'"
+                                                class="fa fa-fw field-icon toggle-password"
+                                                [ngClass]="(passwordfield.type=='password')?' fa-eye':' fa-eye-slash'"></span>
+                                            <label for="orangeForm-pass" class="active" style="margin-top: -12px;">Password</label>
+                                        </div>
+                                        <code class="text-white" style="margin-left: 2.5rem;"
+                                            *ngIf="loginForm.controls['pass'].touched && loginForm.controls['pass'].invalid">Password is required</code>
+                                        <div class="inline-ul  float-right" id="forgot_pwd_tb">
+                                            <span class="psw" style="color: white;">Forgot <a id="forgot_pwd_link"
+                                                    style="color: white;"><strong><u (click)=forgotPass() (keyup.enter)="forgotPass()">PASSWORD</u></strong>?</a>                                                
+                                            </span>
+                                        </div>
+
+
+                                        <div class="text-center mt-5">
+                                            <button class="btn peach-gradient waves-effect waves-light"
+                                                style="display: none;" id="login_link">Log in</button>
+
+                                            <button type="submit" class="btn peach-gradient waves-effect waves-light"
+                                                (click)=login() (keyup.enter)="login()"  data-toggle="modal" data-target="#otp_confirm_modal" id="login_btn">Log in</button>
+
+
+                                            <button type="submit" class="btn peach-gradient waves-effect waves-light"
+                                                id="request_btn" style="display: none;">Send request</button>
+                                            <hr class="mt-4">
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- Form with header -->
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </header>
+    <!-- Main Navigation -->
+
+      
+    
+</body>
+<ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-clip-rotate-multiple">
+    <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>

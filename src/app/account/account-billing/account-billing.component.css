@@ -1,0 +1,10 @@
+.mdform {
+    margin-top: 1.3rem !important;
+    margin-bottom: .5rem !important;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #ffffff !important;
+    opacity: 1;
+}

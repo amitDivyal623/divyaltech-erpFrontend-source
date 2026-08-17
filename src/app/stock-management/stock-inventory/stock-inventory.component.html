@@ -1,0 +1,694 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid mb-3 px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Stock Inventory & Summary
+                    <ng-container>
+                        <button type="button"
+                            class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                            data-toggle="modal" data-target="#add_master_modal" (click)="opeModal()"><i
+                                class="fa fa-plus" aria-hidden="true"></i> Add Inventory</button>
+                    </ng-container>
+                </h5>
+                <div class="card-body" [formGroup]="searchContract">
+                    <div class="form-row ml-2 align-items-end">
+                        <!-- <div class="col-md-3 md-form md-outline px-4">
+                            <select class="form-control field-ht colorful-select" id="searchVendorName" formControlName="searchVendorName">
+                                <option value="" >Select Vendor name</option>
+                                <option *ngFor="let type of respcontractor" value={{type.contractorId}}>
+                                    {{type.contractorName}}
+                                </option>
+                            </select>
+                            <label class="top-lb active">Vendor Name</label>
+                        </div> -->
+                        <div class="col-md-2.5 px-1 mb-2">
+                            <label class="d-block mb-0 text-muted small">Date Range</label>
+                            <div class="d-flex">
+                                <!-- From Date -->
+                                <input type="date" class="form-control" formControlName="from"
+                                    placeholder="From Date" />
+                                <!-- To Date -->
+                                <input type="date" class="form-control" formControlName="to" placeholder="To Date" />
+                            </div>
+                        </div>
+                        <div class="col-md-2 px-2 mb-2">
+                            <label for="form-projectmanager" class="d-block mb-0 text-muted small">Inventory
+                                Items</label>
+                            <input type="text" id="form-projectmanager" class="form-control"
+                                formControlName="item_name">
+                        </div>
+                        <div class="col-md-2 px-2 mb-2">
+                            <label class="d-block mb-0 text-muted small">Warehouse</label>
+                            <ng-select class="w-100" [items]="warehouselists" bindLabel="godown_name"
+                                bindValue="godown_id" formControlName="warehouse" placeholder="Select Warehouse"
+                                [searchable]="true" [clearable]="true" notFoundText="No warehouses found">
+                            </ng-select>
+                        </div>
+                        <!-- <div class="col-md-2 px-2">
+                            <div class="md-form md-outline">
+                                <label class="active">PO Balance</label>
+                                <select id="form-po-balance" class="form-control" formControlName="po_balance">
+                                    <option value="">Select PO Balance</option>
+                                    <option value="50000_above">50,000 and above</option>
+                                    <option value="20000_50000">20,000 to 50,000</option>
+                                    <option value="upto_20000">Up to 20,000</option>
+                                </select>
+                            </div>
+                        </div> -->
+                        <div class="col-md-2 px-2 mb-2">
+                            <label class="d-block mb-0 text-muted small">PO No.</label>
+                            <ng-select class="w-100" [items]="poLists" bindLabel="purchase_order_number"
+                                bindValue="purchase_order_number" formControlName="po_no" placeholder="PO No"
+                                [searchable]="true" [clearable]="true" notFoundText="No PO numbers found">
+                            </ng-select>
+                        </div>
+
+                        <div class="form-row float-right mr-3 ml-3">
+                            <button type="button" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"
+                                (click)="searchInventory()"><i class="fa fa-search mr-2"
+                                    aria-hidden="true"></i>Search</button>
+                            <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                (click)="resetInventory()"><i class="fas fa-redo-alt mr-2"
+                                    aria-hidden="true"></i>Reset</button>
+                        </div>
+                    </div>
+                    <br>
+                    <!-- <div class="form-row ml-2">
+                       
+                        <div class="col-md-2 md-form md-outline">
+                            <label class="active ml-1">Category</label>
+                            <select formControlName="category" class="form-control" (change)="onFilterChange()">
+                                <option value="">Select category</option>
+                                <option *ngFor="let m of categoryLists" [value]="m.group_id">{{m.group_name}}</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-2 md-form md-outline">
+                            <label class="active ml-1">Sub Category</label>
+                            <select formControlName="subcategory" class="form-control" (change)="onFilterChange()">
+                                <option value="">Select Sub Category</option>
+                                <option *ngFor="let m of filteredSubcategoryLists" [value]="m.sub_group_id">
+                                    {{m.sub_group_name}}</option>
+                            </select>
+                        </div>
+                       
+                        <div class="col-md-2 md-form md-outline">
+                            <label class="active ml-1">Item</label>
+                            <select formControlName="item" class="form-control" (change)="onFilterChange()">
+                                <option value="">Select Item</option>
+                                <option *ngFor="let m of filteredMaterialsList" [value]="m.master_item_id">
+                                    {{m.itemname}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 md-form md-outline">
+                            <input type="text" id="current_balance" class="form-control"
+                                formControlName="current_balance">
+                            <label for="current_balance" class="active ml-1">Current Balance</label>
+                        </div>
+                        <div class="col-md-2 md-form md-outline">
+                            <input type="text" id="total_amount" class="form-control" formControlName="total_amount">
+                            <label for="total_amount" class="active ml-1">Total Amount</label>
+                        </div>
+
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="card-body">
+
+                        <ul class=" nav nav-pills nav-justified" role="tablist">
+                            <li class="nav-item  link-nav">
+                                <a class="nav-item nav-link link-nav active" data-toggle="tab" href="#tabInventory"
+                                    role="tab">
+                                    Inventory
+                                </a>
+                            </li>
+
+                            <li class="nav-item   link-nav">
+                                <a class="nav-item nav-link link-nav" data-toggle="tab" href="#tabSummary"
+                                    (shown.bs.tab)="onTabChange('tabSummary')">
+                                    Stock Summary
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+
+                            <div class="tab-pane fade show active pt-3" id="tabInventory" role="tabpanel">
+                                <div class="table-responsive">
+                                    <table id="buyertable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                        class="table table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Inventory Date</th>
+                                                <!-- <th>Po No.</th> -->
+                                                <th>Inventory Items </th>
+                                                <th>Descriptions </th>
+                                                <th>Units </th>
+                                                <th>Current Bal.</th>
+                                                <th>PO Number</th>
+                                                <th>Recieved Quan.</th>
+                                                <th>PO Bal.</th>
+                                                <th>Warehouse</th>
+                                                <th>Rate</th>
+                                                <th>Amount</th>
+                                                <!-- <th>Project name</th> -->
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            <tr *ngFor="let item of workContractData;let i=index">
+                                                <td></td>
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.date | date:'dd/MM/yyyy'}}</td>
+                                                <!-- <td>{{item.po_number}}</td> -->
+                                                <td>
+                                                    <span [ngbTooltip]="item.item" placement="top" container="body">
+                                                        {{ item.item?.length > 20 ? (item.item | slice:0:20) + '...' :
+                                                        item.item }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <span [ngbTooltip]="item.item_description" placement="top"
+                                                        container="body">
+                                                        {{ item.item_description?.length > 20 ? (item.item_description |
+                                                        slice:0:20) + '...' : item.item_description }}
+                                                    </span>
+                                                </td>
+                                                <td>{{item.unit}} </td>
+                                                <td>{{item.current_balance}}</td>
+                                                <td>{{item.po_number}}</td>
+                                                <td>{{item.recieved_quantity}}</td>
+                                                <td>{{item.po_balance}}</td>
+                                                <td>{{item.warehouse}}</td>
+                                                <td>{{item.rate}}</td>
+                                                <td>{{item.amount}}</td>
+                                                <!-- <td>{{item.project_name}}</td> -->
+                                                <td>
+                                                    <a class="black-text"
+                                                        (click)="ViewInventory('view_inventory',item.inventory_id)"
+                                                        data-toggle="modal" data-target="#add_master_modal"><i
+                                                            class="fa fa-eye"></i></a>
+                                                    <!-- <a class="teal-text"
+                                                        (click)="ViewInventory('edit_inventory',item.inventory_id)"
+                                                        data-toggle="modal" data-target="#add_master_modal"><i
+                                                            class="fas fa-pencil-alt px-1"></i></a> -->
+                                                    <a class="red-text" (click)="removeInventory(item)"><i
+                                                            class="fas fa-times px-1"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tbody *ngIf="workContractData?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade pt-3" id="tabSummary" role="tabpanel"
+                                [formGroup]="stockSummaryGrp">
+                                <div class="form-row ml-2 align-items-end">
+
+                                    <!-- Date Range -->
+                                    <!-- From Date -->
+                                    <div class="col-md-2 px-1 mb-2">
+                                        <label class="d-block mb-0 text-muted small">From Date</label>
+                                        <input type="date" class="form-control" formControlName="from">
+                                    </div>
+
+                                    <!-- To Date -->
+                                    <div class="col-md-2 px-1 mb-2">
+                                        <label class="d-block mb-0 text-muted small">To Date</label>
+                                        <input type="date" class="form-control" formControlName="to">
+                                    </div>
+
+                                    <!-- Warehouse -->
+                                    <div class="col-md-2 px-2 mb-2">
+                                        <label class="d-block mb-0 text-muted small">Warehouse</label>
+                                        <ng-select class="w-100" [items]="warehouselists" bindLabel="godown_name"
+                                            bindValue="godown_id" formControlName="warehouse"
+                                            placeholder="Select Warehouse" [searchable]="true" [clearable]="true"
+                                            notFoundText="No warehouses found">
+                                        </ng-select>
+                                    </div>
+
+                                    <!-- Category -->
+                                    <div class="col-md-2 px-2 mb-2">
+                                        <label class="d-block mb-0 text-muted small">Category</label>
+                                        <ng-select class="w-100" [items]="categoryLists" bindLabel="group_name"
+                                            bindValue="group_id" formControlName="category"
+                                            placeholder="Select Category" [searchable]="true" [clearable]="true"
+                                            notFoundText="No categories found">
+                                        </ng-select>
+                                    </div>
+
+                                    <!-- Sub Category -->
+                                    <div class="col-md-2 px-2 mb-2">
+                                        <label class="d-block mb-0 text-muted small">Sub Category</label>
+                                        <ng-select class="w-100" [items]="filteredSubcategoryListsSearch"
+                                            bindLabel="sub_group_name" bindValue="sub_group_id"
+                                            formControlName="subCategory" placeholder="Select Sub Category"
+                                            [searchable]="true" [clearable]="true"
+                                            notFoundText="No sub categories found">
+                                        </ng-select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-row ml-2 mb-2 align-items-end">
+
+                                    <!-- Item -->
+                                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 px-2 mb-1 md-form md-outlin">
+                                        <!-- <label class="active ml-2 mt-n1">Item</label> -->
+                                        <ng-select class="w-100" [items]="filteredMaterialsListSearch"
+                                            bindLabel="itemname" bindValue="master_item_id" formControlName="item"
+                                            placeholder="Select Item" [searchable]="true" [clearable]="true">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <span class="item-hover"
+                                                    [title]="item.itemname + ' , ' + item.unit_name">
+                                                    {{ item.itemname }},
+                                                    <span class="text-muted">{{ item.unit_name }}</span>
+                                                </span>
+                                            </ng-template>
+
+                                            <ng-template ng-label-tmp let-item="item">
+                                                <span class="item-hover"
+                                                    [title]="item.itemname + ' , ' + item.unit_name">
+                                                    {{ item.itemname }},
+                                                    <span class="text-muted">{{ item.unit_name }}</span>
+                                                </span>
+                                            </ng-template>
+
+                                        </ng-select>
+
+                                        <span *ngIf="stockSummaryGrp.get('item')?.value"
+                                            class="position-absolute text-primary font-weight-bold"
+                                            style="right: 2.3rem;top: 0.45rem;cursor: pointer; font-size: 1.5rem; line-height: 1; z-index: 10; "
+                                            (click)="clearItemSelectionSummary()">
+                                            ×
+                                        </span>
+                                    </div>
+
+                                    <!-- Current Balance -->
+                                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 px-2 md-form md-outline">
+                                        <label class="active ml-2">Current Balance</label>
+                                        <input type="text" class="form-control" formControlName="currentBalance"
+                                            disabled placeholder="0">
+                                    </div>
+
+                                    <!-- Unit Conversion -->
+                                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 px-2 md-form md-outline"
+                                        *ngIf="stockSummaryGrp.get('item')?.value">
+
+                                        <label class="active ml-2">Unit Conversion</label>
+
+                                        <select class="form-control" formControlName="unitConversion"
+                                            (change)="onUnitChange($event.target.value)">
+
+                                            <!-- <option value="">Select Unit</option> -->
+                                            <option *ngFor="let u of convertUnitDropdown" [value]="u">
+                                                {{ u }}
+                                            </option>
+
+                                        </select>
+                                    </div>
+
+
+                                    <!-- Buttons -->
+                                    <div class="form-row ml-auto mr-3">
+                                        <button type="button"
+                                            class="btn dusty-grass-gradient btn-sm waves-light waves-effect"
+                                            (click)="searchstockSummary()">
+                                            <i class="fa fa-search mr-2"></i>Search
+                                        </button>
+
+                                        <button type="button"
+                                            class="btn warm-flame-gradient btn-sm waves-light waves-effect ml-2"
+                                            (click)="resetStockSummary()">
+                                            <i class="fas fa-redo-alt mr-2"></i>Reset
+                                        </button>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="table-responsive">
+                                    <table id="summaryTable" datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1"
+                                        class="table table-striped" width="100%">
+
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Items</th>
+                                                <th>Units</th>
+                                                <th>Category</th>
+                                                <th>Sub Category</th>
+                                                <th>Warehouse</th>
+                                                <th>Current Balance</th>
+                                                <th>Total Amount</th>
+                                                <th>Last Updated Date</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody *ngIf="stockSummary?.length > 0">
+                                            <tr *ngFor="let item of stockSummary; let i = index">
+                                                <td></td>
+                                                <td>{{ i + 1 }}</td>
+                                                <td>{{ item.item }}</td>
+                                                <td>{{ item.unit }}</td>
+                                                <td>{{ item.category }}</td>
+                                                <td>{{ item.subcategory }}</td>
+                                                <td>{{ item.warehouse }}</td>
+                                                <td>{{ item.current_balance }}</td>
+                                                <td>{{ item.total_amount }}</td>
+                                                <td>{{ item.updated_dt | date:'dd/MM/yyyy' }}</td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tbody *ngIf="stockSummary?.length === 0">
+                                            <tr>
+                                                <td colspan="10" class="text-center">
+                                                    No data available
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                        <tfoot>
+                                            <tr>
+                                                <th></th>
+
+                                                <th colspan="6" class="text-right font-weight-bold">
+                                                    Total
+                                                </th>
+
+                                                <th class="font-weight-bold">
+                                                    {{ totalCurrentBalance }}
+                                                </th>
+
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+
+        <!--Starts Inventory Add modal-->
+        <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">{{modalTitle}}</p>
+                        <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="CancelButton()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div [formGroup]="inventoryForm" class="modal-body">
+
+                        <!-- Hidden inventory_id -->
+                        <input type="hidden" formControlName="inventory_id" />
+
+                        <div class="form-row">
+                            <!-- Date -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="date" formControlName="date" class="form-control field-ht" id="date">
+                                <div *ngIf="inventoryForm.get('date')?.invalid && (inventoryForm.get('date')?.touched || formSubmitted)"
+                                    class="text-danger small">
+                                    Date is required
+                                </div>
+                                <!-- <label class="ml-1 active" for="date">Date</label> -->
+                            </div>
+
+                            <!-- Bill No -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="text" formControlName="bill_no" class="form-control field-ht" id="bill_no">
+                                <label class="ml-1 active" for="bill_no">Bill No</label>
+                            </div>
+
+                            <!-- Challan No -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="text" formControlName="challan_no" class="form-control field-ht"
+                                    id="challan_no">
+                                <label class="ml-1 active" for="challan_no">Challan No</label>
+                            </div>
+                            <!-- PO Number -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="text" formControlName="po_number" class="form-control field-ht"
+                                    id="po_number">
+                                <label class="ml-1 active" for="po_number">PO Number</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+
+                            <!-- Category -->
+                            <div class="col-md-3 md-form md-outline">
+                                <label class="active ml-1">Category</label>
+                                <select formControlName="category" class="form-control"
+                                    (change)="onCategoryChange($event)">
+                                    <option value="">Select category</option>
+                                    <option *ngFor="let m of categoryLists" [value]="m.group_id">{{m.group_name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Sub Category -->
+                            <div class="col-md-3 md-form md-outline">
+                                <label class="active ml-1">Sub Category</label>
+                                <select formControlName="subcategory" class="form-control"
+                                    (change)="onSubCategoryChange($event)">
+                                    <option value="">Select Sub Category</option>
+                                    <option *ngFor="let m of filteredSubcategoryLists" [value]="m.sub_group_id">
+                                        {{m.sub_group_name}}</option>
+                                </select>
+                            </div>
+                            <!-- Item -->
+                            <!-- <div class="col-md-3 md-form md-outline">
+                                    <label class="active ml-1">Item</label>
+                                    <select formControlName="item" class="form-control" (change)="onMaterialChange($event)">
+                                        <option value="">Select Item</option>
+                                        <option *ngFor="let m of filteredMaterialsList" [value]="m.itemname">{{m.itemname}}</option>
+                                    </select>
+                                </div> -->
+
+                            <div class="col-md-6 md-form md-outline position-relative" id="item-ng-select">
+                                <ng-select [items]="filteredMaterialsList" bindLabel="itemname"
+                                    bindValue="master_item_id" placeholder="Select Item" notFoundText="No items found"
+                                    formControlName="item" [searchable]="true" [clearable]="true"
+                                    (change)="onMaterialChange($event)">
+
+                                    <!-- Selected value - Simple title attribute -->
+                                    <ng-template ng-label-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.itemname">
+                                            {{ item.itemname }}
+                                        </span>
+                                    </ng-template>
+
+                                    <!-- Dropdown options - Simple title attribute -->
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <span class="item-hover" [title]="item.itemname">
+                                            {{ item.itemname }}
+                                        </span>
+                                    </ng-template>
+                                </ng-select>
+
+                                <span *ngIf="inventoryForm.get('item')?.value"
+                                    class="position-absolute text-primary font-weight-bold"
+                                    style="right: 2.3rem;top: 0.45rem;cursor: pointer; font-size: 1.5rem; line-height: 1; z-index: 10; "
+                                    (click)="clearItemSelection()">
+                                    ×
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <!-- Unit -->
+                            <div class="col-md-3 md-form md-outline">
+                                <label class="active ml-1">Unit</label>
+                                <select formControlName="unit" class="form-control" id="unit"
+                                    (change)="onInventoryUnitChange($event.target.value)">
+                                    <option value="">Select Unit</option>
+                                    <option *ngFor="let u of inventoryUnitDropdown" [value]="u">{{ u }}</option>
+                                </select>
+                            </div>
+                            <!-- Warehouse -->
+                            <div class="col-md-4 md-form md-outline">
+                                <label class="active ml-1">Warehouse</label>
+                                <select formControlName="warehouse" class="form-control"
+                                    (change)="onChangeWarehouse($event)">
+                                    <option value="">Warehouse</option>
+                                    <option *ngFor="let m of warehouselists" [value]="m.godown_id">{{m.godown_name}}
+                                    </option>
+                                </select>
+                                <div *ngIf="inventoryForm.get('warehouse')?.invalid && (inventoryForm.get('warehouse')?.touched || formSubmitted)"
+                                    class="text-danger small">
+                                    Please select an Item first, then choose a Warehouse
+                                </div>
+                            </div>
+                            <!-- Vendor Name -->
+                            <div class="col-md-4 md-form md-outline">
+                                <label class="active ml-1">Vendor Name</label>
+                                <select formControlName="vendor_name" class="form-control">
+                                    <option value="">Select Vendor</option>
+                                    <option *ngFor="let m of vendorLists" [value]="m.vendorid">{{m.vendorname}}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Ordered Company -->
+                            <div class="col-md-4 md-form md-outline">
+                                <label class="active ml-1">Ordered Company</label>
+                                <select formControlName="company_name" class="form-control">
+                                    <option value="">Select Company</option>
+                                    <option *ngFor="let m of companyLists" [value]="m.master_company_id">
+                                        {{m.company_name}}
+                                    </option>
+                                </select>
+                            </div>
+                            <!-- Current Balance -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="current_balance" class="form-control field-ht"
+                                    id="current_balance">
+                                <label class="ml-1 active" for="current_balance">Current Balance</label>
+                            </div>
+                            <!-- Add Stock -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="add_stock" class="form-control field-ht"
+                                    id="add_stock">
+                                <label class="ml-1 active" for="add_stock">Add Stock</label>
+                            </div>
+
+                            <!-- Ordered Quantity -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="number" formControlName="ordered_quantity" class="form-control field-ht"
+                                    id="ordered_quantity">
+                                <label class="ml-1 active" for="ordered_quantity">Ordered Quantity</label>
+                            </div>
+                            <!-- Received Quantity -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="number" formControlName="recieved_quantity" class="form-control field-ht"
+                                    id="recieved_quantity">
+                                <label class="ml-1 active" for="recieved_quantity">Received Quantity</label>
+                            </div>
+                            <!-- Received Quantity -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="number" formControlName="short" class="form-control field-ht"
+                                    id="recieved_quantity">
+                                <label class="ml-1 active" for="recieved_quantity">Short Quantity</label>
+
+                            </div>
+                            <!-- Excess -->
+                            <div class="col-md-3 md-form md-outline">
+                                <input type="number" formControlName="excess" class="form-control field-ht" id="excess">
+                                <label class="ml-1 active" for="excess">Excess</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+
+
+                            <!-- Rejected -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="rejected" class="form-control field-ht"
+                                    id="rejected">
+                                <label class="ml-1 active" for="rejected">Rejected</label>
+                            </div>
+
+                            <!-- Accepted -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="accepted" class="form-control field-ht"
+                                    id="accepted">
+                                <label class="ml-1 active" for="accepted">Accepted</label>
+                            </div>
+
+                            <!-- PO Balance -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="po_balance" class="form-control field-ht"
+                                    id="po_balance">
+                                <label class="ml-1 active" for="po_balance">PO Balance</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <!-- Rate -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="rate" class="form-control field-ht" id="rate"
+                                    (input)="onRateChange()">
+                                <label class="ml-1 active" for="rate">Rate</label>
+                            </div>
+
+                            <!-- Amount -->
+                            <div class="col-md-4 md-form md-outline">
+                                <input type="number" formControlName="amount" class="form-control field-ht" id="amount">
+                                <label class="ml-1 active" for="amount">Amount</label>
+                            </div>
+
+                            <!-- Project Name -->
+                            <div class="col-md-4 md-form md-outline">
+                                <label class="active ml-1">Project Name</label>
+                                <select formControlName="project_name" class="form-control">
+                                    <option value="">Project Name</option>
+                                    <option *ngFor="let m of projectLists" [value]="m.project_id">{{m.project_name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" #closebutton (click)="CancelButton()" class="btn btn-sm btn-danger"
+                            data-dismiss="modal">Cancel</button>
+                        <button type="button" *ngIf="isHideSave" (click)="addInventoryData()"
+                            [disabled]="isButtonDisabled"
+                            class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+        <!-- End Inventory Add modal-->
+
+    </main>
+    <!-- Main layout -->
+</body>

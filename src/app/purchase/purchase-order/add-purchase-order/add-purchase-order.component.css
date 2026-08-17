@@ -1,0 +1,123 @@
+.border-box {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    /* min-width: 0; */
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgb(0 0 0 / 25%);
+    border-radius: .25rem;
+    padding: 1.25rem .25rem;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.border-label {
+    position: absolute;
+    line-height: 25px;
+    top: 0px;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    padding: 0.25rem 1rem;
+    background-color: #fff;
+    color: rgba(0, 0, 0, 0.6);
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    left: 2.5rem;
+}
+
+.sno {
+    min-width: 2rem!important;
+}
+
+.grandtotal {
+    width: 20%;
+    position: relative;
+    min-width: 150px;
+    
+}
+
+
+@media (max-width: 768px) {
+    .grandtotal {
+        width: 50%; 
+        margin-left: 22rem;   
+    }
+}
+
+@media (max-width: 480px) {
+    .grandtotal {
+        width: 100%;   
+        margin-left: 22rem;
+    }
+}
+
+.totalamount{
+    max-width: 8rem !important;
+    min-width: 8rem!important;
+}
+
+.itemName {
+    max-width: 17rem !important;
+    min-width: 12rem!important;
+}
+.gst{
+    min-width:7rem !important;
+}
+.unitName{
+    min-width: 5rem !important;
+}
+/* .unit {
+    max-width: 9rem!important;
+    min-width: 9rem!important;
+} */
+.rate{
+    min-width: 6rem !important;
+}
+.rateamount{
+    min-width: 6rem !important;
+}
+.quantity {
+    max-width: 4.5rem !important;
+    min-width: 5rem;
+    
+}
+.companyName{
+    min-width: 15rem !important;
+}
+.VendorName{
+    min-width: 15rem !important;
+}
+
+.datePicker {
+    max-width: 10rem !important;
+    min-width: 10rem!important;
+}
+
+.description {
+    min-width: 14rem !important;
+}
+
+
+.action {
+    max-width: 7rem !important;
+    min-width: 7rem!important;
+}
+
+.maxHeight {
+    overflow-y: hidden!important;
+}
+
+.new-nav {
+    border: 1px solid #ddd !important;
+    border-bottom-color: transparent !important;
+}
+
+.nav-pills,
+.link-nav {
+    color: #ff970c !important;
+    background-color: #fff !important;
+}

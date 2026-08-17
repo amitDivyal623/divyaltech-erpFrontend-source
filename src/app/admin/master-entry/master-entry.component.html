@@ -1,0 +1,345 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Master Entry List
+                    <button type="button"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+                        data-toggle="modal" data-target="#add_master_modal" (click)="lookupFormreset()"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add New Entry</button>
+                </h5>
+                <div [formGroup]="searchLookupData" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-4  md-form md-outline px-4">
+
+                            <ng-select formControlName="HeadName" [items]="myBooks" bindLabel="LookupName"
+                                bindValue="LookupTypeId" placeholder="Select Head Name" [searchable]="true"
+                                [clearable]="true" class="custom-ng-select">
+                            </ng-select>
+                            <label class="top-lb active">HeadName</label>
+                        </div>
+                        <div class="col-md-4 float-right mr-3">
+                            <button type="button" (click)="LookupSearch()"
+                                class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                                    class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                            <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect"
+                                (click)="LookupReset()"><i class="fas fa-redo-alt mr-2"
+                                    aria-hidden="true"></i>Reset</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Head Name</th>
+                                    <th>Added Value</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.HeadName}}</td>
+                                    <td class="overFlowData">{{item.LookupValue}}</td>
+                                    <td>{{item.Status}}</td>
+                                    <td>
+                                        <a class="black-text" id="{{item.LookupDataId}}" mdbtooltip="View"
+                                            placement="top" data-toggle="modal" data-target="#view_ety_modal"
+                                            (click)="getitem(item.LookupDataId, 'view')"><i class="fa fa-eye"
+                                                aria-hidden="true"></i></a>
+                                        <a class="teal-text" id="{{item.LookupDataId}}" mdbtooltip="Edit"
+                                            placement="top" data-toggle="modal" data-target="#edit_ety_modal"
+                                            (click)="getitem(item.LookupDataId, 'edit')"><i
+                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a class="red-text" id="{{item.LookupDataId}}" mdbtooltip="Remove"
+                                            (click)="deletlookupData(item.LookupDataId)" placement="top"><i
+                                                class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New modal -->
+            <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Entry</p>
+                            <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="addLookUpData" class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <ng-select formControlName="txtheadname" [items]="myBooks" bindLabel="LookupName"
+                                        bindValue="LookupTypeId" placeholder="Select Head Name" [searchable]="true"
+                                        [clearable]="true" class="custom-ng-select">
+                                    </ng-select>
+                                    <code
+                                        *ngIf="addLookUpData.controls['txtheadname'].touched && addLookUpData.controls['txtheadname'].invalid">Head is required</code>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupvalue" id="txtlookupvalue"
+                                            class="form-control " value="">
+                                        <label for="txtlookupvalue" class=" ">Add New Value</label>
+                                    </div>
+                                    <code
+                                        *ngIf="addLookUpData.controls['txtlookupvalue'].touched && addLookUpData.controls['txtlookupvalue'].invalid">Value is required</code>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupshortname" id="txtlookupshortname"
+                                            class="form-control " value="">
+                                        <label for="txtlookupshortname" class=" ">Short Code</label>
+                                    </div>
+                                    <code
+                                        *ngIf="addLookUpData.controls['txtlookupshortname'].touched && addLookUpData.controls['txtlookupshortname'].invalid">Short Code is required</code>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input class="form-check-input filled-in" formControlName="txtstatus"
+                                            type="checkbox" value="" id="txtstatus">
+                                        <label class="form-check-label" for="txtstatus">Enabled?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="insertLookUpData()" [disabled]="isButtonDisabled"
+                                class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- View modal -->
+            <div class="modal fade" id="view_ety_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Entry</p>
+                            <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="editLookUpData" class="modal-body">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <ng-select formControlName="txtheadname" [items]="myBooks" bindLabel="LookupName"
+                                        bindValue="LookupTypeId" placeholder="Select Head Name" [searchable]="true"
+                                        [clearable]="true" class="custom-ng-select">
+                                    </ng-select>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupvalue" id="txtlookupvalue"
+                                            class="form-control " value="" readonly>
+                                        <label for="LookUpvalue" class="active">Add New Value</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupshortname" id="txtlookupshortname"
+                                            class="form-control " value="" readonly>
+                                        <label for="txtlookupshortname" class="active">Short Code</label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input class="form-check-input filled-in" formControlName="txtstatus"
+                                            type="checkbox" value="" id="txtstatus" readonly>
+                                        <label class="form-check-label" for="txtstatus">Enabled?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            <!-- Edit modal -->
+            <div class="modal fade" id="edit_ety_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Edit Entry</p>
+                            <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="editLookUpData" class="modal-body">
+                            <input type="hidden" formControlName="LookupDataId" id="LookupDataId" class="form-control "
+                                value="">
+                            <div class="form-row">
+                                <div class="col md-form md-outline">
+                                    <ng-select formControlName="txtheadname" [items]="myBooks" bindLabel="LookupName"
+                                        bindValue="LookupTypeId" placeholder="Select Head Name" [searchable]="true"
+                                        [clearable]="true" class="custom-ng-select">
+                                    </ng-select>
+                                    <code
+                                        *ngIf="editLookUpData.controls['txtheadname'].touched && editLookUpData.controls['txtheadname'].invalid">Head is required</code>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupvalue" id="txtlookupvalue"
+                                            class="form-control " value="">
+                                        <label for="LookUpvalue" class=" active">Add New Value</label>
+                                    </div>
+                                    <code
+                                        *ngIf="editLookUpData.controls['txtlookupvalue'].touched && editLookUpData.controls['txtlookupvalue'].invalid">Value is required</code>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="txtlookupshortname" id="txtlookupshortname"
+                                            class="form-control " value="">
+                                        <label for="txtlookupshortname" class="active">Short Code</label>
+                                    </div>
+                                    <code
+                                        *ngIf="editLookUpData.controls['txtlookupshortname'].touched && editLookUpData.controls['txtlookupshortname'].invalid">Short Code is required</code>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input class="form-check-input filled-in" formControlName="txtstatus"
+                                            type="checkbox" value="" id="txtstatus">
+                                        <label class="form-check-label" for="txtstatus">Enabled?</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <button type="button" #editCloseBtn class="btn btn-sm btn-danger"
+                                data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="updateLookUpData()"
+                                class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+
+    <!-- JQuery -->
+    <script>
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+
+        var container = document.querySelector('.custom-scrollbar');
+        var ps = new PerfectScrollbar(container, {
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+        $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+        });
+        $('.datepicker').pickadate();
+        $('#input_starttime').pickatime({
+            twelvehour: true
+        });
+        $('#input_endtime').pickatime({
+            // 12 or 24 hour
+            twelvehour: false,
+            // Light or Dark theme
+        });
+    </script>
+    <script>
+        /*$('#dt-material-checkbox').dataTable({
+
+                    columnDefs: [{
+                        orderable: false,
+                        className: 'select-checkbox',
+                        targets: 0
+                    }],
+                    select: {
+                        style: 'os',
+                        selector: 'td:first-child'
+                    }
+                });
+
+                $('#dtMaterialDesignExample_wrapper, #dt-material-checkbox_wrapper').find('label').each(function() {
+                    $(this).parent().append($(this).children());
+                });
+                $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').find(
+                    'input')(function() {
+                    $('input').removeClass('form-control-sm');
+                });
+                $('#dtMaterialDesignExample_wrapper .dataTables_length, #dt-material-checkbox_wrapper .dataTables_length').addClass(
+                    'd-flex flex-row');
+                $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').addClass(
+                    'md-form');
+                $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').removeClass(
+                    'custom-select custom-select-sm form-control form-control-sm');
+                $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').addClass('mdb-select');
+                $('#dtMaterialDesignExample_wrapper .mdb-select, #dt-material-checkbox_wrapper .mdb-select').materialSelect();
+                $('#dtMaterialDesignExample_wrapper .dataTables_filte, #dt-material-checkbox_wrapper .dataTables_filterr').find(
+                    'label').remove();*/
+    </script>
+</body>

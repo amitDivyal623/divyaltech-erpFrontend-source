@@ -1,0 +1,210 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Warehouse Entry List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_master_modal" (click)="onModalOpen()"><i class="fa fa-plus" aria-hidden="true"></i> Add Warehouse Entry</button>
+                </h5>
+                <div class="card-body" [formGroup]="searchWarehouse">
+                    <div class="form-row">
+                        <div class="col-md-2 px-3 md-form md-outline">
+                            <input type="text" id="warehouseName" formControlName="warehouseName" class="form-control">
+                            <label for="warehouseName" class="ml-3 active">Warehouse Name</label>
+                        </div>
+                        <div class="col-md-2 px-3 md-form md-outline">
+                        
+                            <ng-select [items]="states" bindLabel="state_name" bindValue="state_id" placeholder="Select State"
+                                formControlName="state" [searchable]="true" [clearable]="true" class="colorful-select">
+                            </ng-select>
+                        
+                            <label class="ml-3 active">State</label>
+                        
+                        </div>
+                    <div class="col-md-2 px-3">
+                        <div class="md-form md-outline">
+                            <select id="state" formControlName="status" class="form-control colorful-select">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="1">Enabled</option>
+                                <option value="0">Disabled</option>
+                            </select>
+                        </div>
+                    </div>                        
+                        <div class="col-md-4 float-right mr-3">
+                            <button (click)="searchWarehouses()" type="button"  class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true" ></i>Search</button>
+                            <button type="button" class="btn warm-flame-gradient btn-sm waves-light waves-effect" (click)="resetWarehouse()"><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- table Section  -->
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                            <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Sr No.</th>
+                                        <th>Warehouse Name
+                                        </th>
+                                        <th>Warehouse Code
+                                        </th>
+                                        <th>State
+                                        </th>
+                                        <th>Status
+                                        </th>
+                                        <th>Address
+                                        </th>
+                                        <th>Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of warehouseDatalists;let i=index">
+                                        <td>{{i+1}}</td>
+                                        <td>{{item.godown_name}}</td>
+                                        <td>{{item.godown_code}}</td>
+                                        <td>{{item.state_name}}</td>
+                                        <td>{{item.status_enabled == 1 ? 'Enabled' : 'Disabled'}}</td>
+                                        <td>{{item.address}}</td>
+                                        <td>
+                                            <a class="black-text" mdbtooltip="View" placement="top" data-toggle="modal" (click)="editWarehouseDetail('view_warehouse',item.godown_id)" data-target="#add_master_modal"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                            <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" (click)="editWarehouseDetail('edit_warehouse', item.godown_id)" data-target="#add_master_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                            <a class="red-text" mdbtooltip="Remove" placement="top" (click)="deleteWarehouseDetail(item.godown_id)"><i class="fa-times px-1 fas"></i></a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                                <tbody *ngIf="warehouseDatalists?.length == 0">
+                                    <tr>
+                                        <td colspan="3" class="no-data-available">
+                                            No
+                                            data!
+                                        </td>
+                                    </tr>
+                                </tbody> 
+                            </table> 
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+
+
+        <!-- Add New Entry Modal -->
+        <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="addMasterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+            <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header mdb-color">
+                <p class="heading lead font-weight-bold">Add New Entry</p>
+                <button type="button"
+                        class="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                        (click)="onModalClose()">
+                <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <!-- Body (wrap in form for resetForm support) -->
+            <form [formGroup]="addMasterForm" #addMasterFormDir="ngForm" class="modal-body">
+                <input type="hidden" formControlName="godown_id">
+                <!-- Row 1: Warehouse Name + Warehouse Code -->
+                <div class="form-row">
+                    <!-- Warehouse Name -->
+                    <div class="col-md-6 md-form md-outline">
+                    <input type="text"
+                            id="warehouseName"
+                            formControlName="warehouseName"
+                            class="form-control"
+                            (blur)="generateWarehouseCode()">
+                    <label for="warehouseName" class="ml-2 active">Warehouse Name</label>
+                    <code *ngIf="addMasterForm.controls['warehouseName'].invalid && 
+                                (addMasterForm.controls['warehouseName'].touched || 
+                                addMasterForm.controls['warehouseName'].dirty)">
+                        Warehouse Name is required
+                    </code>
+                    </div>
+
+                    <!-- Warehouse Code -->
+                    <div class="col-md-6 md-form md-outline">
+                    <input type="text" id="warehouseCode" formControlName="warehouseCode" class="form-control" readonly>
+                    <label for="warehouseCode" class="ml-2 active">Warehouse Code</label>
+                    <code *ngIf="addMasterForm.controls['warehouseCode'].invalid && 
+                                (addMasterForm.controls['warehouseCode'].touched || 
+                                addMasterForm.controls['warehouseCode'].dirty)">
+                        Warehouse Code is required
+                    </code>
+                    </div>
+                </div>
+                <!-- Row 2: State (half width) -->
+                <div class="form-row">
+                    <div class="col-md-6 md-form md-outline">
+                        <select id="state" formControlName="state" class="form-control colorful-select">
+                        <option value="" selected disabled>Select State</option>
+                        <option *ngFor="let s of states" [value]="s.state_id">{{ s.state_name }}</option>
+                        </select>
+                        <label for="state" class="ml-2 active">State</label>
+                        <code *ngIf="addMasterForm.controls['state'].invalid && (addMasterForm.controls['state'].touched || addMasterForm.controls['state'].dirty)">
+                        State is required
+                        </code>
+                    </div>
+                    <!-- Status Enabled Checkbox -->
+                    <div class="col-md-6 px-3">
+                        <div class="md-form md-outline">
+                        <input class="form-check-input filled-in" 
+                                type="checkbox" 
+                                id="statusEnabled" 
+                                formControlName="statusEnabled">
+                        <label for="statusEnabled">Status Enabled</label>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Row 3: Address (full width) -->
+                <div class="form-row">
+                    <div class="col-12 md-form md-outline">
+                        <textarea id="address" formControlName="address" class="form-control md-textarea" rows="3"></textarea>
+                        <label for="address" class="ml-2 active">Address</label>
+                        <code *ngIf="addMasterForm.controls['address'].invalid && (addMasterForm.controls['address'].touched || addMasterForm.controls['address'].dirty)">
+                        Address is required
+                        </code>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <div class="modal-footer mx-3">
+                <button type="button" #closeWarehousebutton class="btn btn-sm btn-danger" data-dismiss="modal" (click)="onModalClose()">Cancel</button>
+                <button type="button" *ngIf="isHideButton" class="btn btn-sm btn-outline-success waves-effect" (click)="saveMasterEntry()">Save</button>
+            </div>
+            </div>
+        </div>
+        </div>
+
+
+
+    </main>
+    <!-- Main layout -->
+
+</body>

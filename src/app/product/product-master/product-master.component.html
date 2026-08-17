@@ -1,0 +1,158 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">Product List
+                    <button type="button" (click)="route('add-product')"
+                        class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"><i
+                            class="fa fa-plus" aria-hidden="true"></i> Add New Product</button>
+                </h5>
+                <div [formGroup]="searchproduct" class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" formControlName="productname" id="productname" class="form-control">
+                                <label for="productname" class="active">Product Name</label>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2 md-form md-outline">
+
+                            <ng-select [items]="productTypeDataList" bindLabel="productType_name"
+                                bindValue="productTypeId" formControlName="ProductType"
+                                placeholder="Select Product Type" [searchable]="true" [clearable]="true"
+                                (change)="productTypeData($event)">
+                            </ng-select>
+                            <label class="ml-2 active">Product Type</label>
+
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-2 md-form md-outline">
+
+                            <ng-select [items]="productCategoryDataList" bindLabel="productCategoryName"
+                                bindValue="productCategoryId" formControlName="productCategory"
+                                placeholder="Select Product Category" [searchable]="true" [clearable]="true">
+                            </ng-select>
+                            <label class="ml-2 active">Product Category</label>
+
+                        </div>
+                        <div class="col-lg-3 col-md-12 px-4 md-form md-outline">
+
+                            <ng-select [items]="blockData" bindLabel="LookupValue" bindValue="LookupDataId"
+                                formControlName="block" placeholder="Select Block" [searchable]="true"
+                                [clearable]="true">
+                            </ng-select>
+                            <label class="ml-4 active">Block</label>
+
+                        </div>
+
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+
+                                <ng-select [items]="respKhasra" bindLabel="Khasra" bindValue="Khasra"
+                                    formControlName="khasra" placeholder="Select Khasra" [searchable]="true"
+                                    [clearable]="true">
+                                </ng-select>
+                                <label class="active">Khasra</label>
+
+                            </div>
+                            <small class="text-muted" *ngIf="searchproduct.get('khasra').disabled">
+                                First select the Product Type then select the Khasra
+                            </small>
+                        </div>
+
+                        <div class="col-lg-3 col-md-12 px-2 md-form md-outline" *ngIf="isNameSelected">
+
+                            <ng-select [items]="lookupDataList" bindLabel="LookupValue" bindValue="LookupDataId"
+                                placeholder="Select Status" formControlName="status" [searchable]="true"
+                                [clearable]="true" class="field-ht colorful-select">
+                            </ng-select>
+                            <label class="ml-4 active" style="position:absolute;left:-8px;">Status</label>
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="productReset()"
+                            class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right"><i
+                                class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="productSearch()"
+                            class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                                class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid my-4 px-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Product Code</th>
+                                    <th>Product Name</th>
+                                    <th>Khasra Number(RawLand)</th>
+                                    <th>Khasra Number(Plot)</th>
+                                    <th>Product Type</th>
+                                    <th>Product Category</th>
+                                    <th>Total Available Quantity</th>
+
+                                    <th>Sales Rate</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tr *ngFor="let product of dataa; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{product.ProductCode}}</td>
+                                <td>{{product.ProductName}}</td>
+                                <td>{{product.rawLand_khasra}}</td>
+                                <td>{{product.plot_khasra}}</td>
+                                <td>{{product.ProductType_name}}</td>
+                                <td>{{product.ProductCategoryName}}</td>
+                                <td>{{product.TotalAvailableQuantity}}</td>
+
+                                <td>{{product.SalesRate}}</td>
+                                <td>
+                                    <a class="black-text" mdbtooltip="View" placement="top"
+                                        (click)="viewProduct(product.ProductId)"><i class="fa fa-eye"
+                                            aria-hidden="true"></i></a>
+                                    <a class="teal-text" id="{{i+1}}" mdbtooltip="Edit" data-toggle="modal"
+                                        data-target="#edit_ety_modal" (click)="editProduct(product.ProductId)"
+                                        placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                    <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text" id="{{i+1}}" mdbtooltip="Remove"
+                                        (click)="deleteproduct(product.ProductId)" placement="top"><i
+                                            class="fa-times px-1 fas"></i></a>
+                                </td>
+                            </tr>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Main layout -->
+</body>

@@ -1,0 +1,277 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div [formGroup]="GRNFormGrp">
+            <div class="container-fluid mb-3 px-4">
+                <div class="card">
+                    <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;"> {{pageTitle }}
+
+                    </h5>
+                    <div class="card-body">
+                        <div class="form-row ml-2">
+
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-2">Date</label>
+                                <input type="date" class="form-control" formControlName="grn_date">
+                                <div *ngIf="GRNFormGrp.get('grn_date').touched && GRNFormGrp.get('grn_date').invalid"
+                                    class="text-danger small">
+                                    Date is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <ng-select *ngIf="mode !== 'view_grn' && !grnId" id="project" class="w-100" [items]="GENList" bindLabel="gen_no"
+                                    bindValue="gen_id" formControlName="gen_no" placeholder="Select GE No."
+                                    [searchable]="true" [clearable]="true"
+                                    notFoundText="No gate entries found"
+                                    (change)="onGenSelect(GRNFormGrp.get('gen_no')?.value)">
+                                </ng-select>
+
+                                <input *ngIf="mode === 'view_grn' || grnId" type="text" class="form-control" formControlName="gen_no">
+                                <label class="active ml-2">GE No.</label>
+                                <div *ngIf="GRNFormGrp.get('gen_no').touched && GRNFormGrp.get('gen_no').invalid"
+                                    class="text-danger small">
+                                    GE Number is required.
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">PO No.</label>
+                                <input type="text" class="form-control" formControlName="po_no">
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Bill No.</label>
+                                <input type="text" class="form-control" formControlName="bill_no">
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Challan No.</label>
+                                <input type="text" class="form-control" formControlName="challan_no">
+                            </div>
+                        </div>
+                        <div class="form-row ml-2">
+
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Vehicle No.</label>
+                                <input type="text" class="form-control" formControlName="vehcile_no">
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">From Vendor</label>
+                                <input type="text" class="form-control" formControlName="from_vendor">
+                                <input type="hidden" formControlName="company_name">
+                                <!-- <input type="hidden" formControlName="rate"> -->
+                                <!-- <input type="hidden" formControlName="grand_total"> -->
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">To Warehouse</label>
+                                <input type="text" class="form-control" formControlName="to_warehouse">
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Requested by</label>
+                                <input type="text" class="form-control" formControlName="requested_by">
+                            </div>
+                            <div class="col-md-2 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Contact</label>
+                                <input type="text" class="form-control" formControlName="contact">
+                            </div>
+                        </div>
+                        <div class="form-row ml-2">
+                            <div class="col-md-11 ml-3 mr-3 md-form md-outline">
+                                <label class="active ml-1 text-dark">Remarks</label>
+                                <textarea class="form-control" formControlName="remarks" rows="3">
+                                </textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid px-4 my-4 mb-3">
+                <section>
+                    <div class="card">
+                        <div class="container-fluid px-4">
+                            <div class="card mt-3 mb-3">
+                                <h5 class="card-header info-tab white-text pl-4" style="font-weight: 500;">
+                                    Item Details
+                                </h5>
+
+                                <div formArrayName="items">
+                                    <div class="grn-items-table-wrap">
+                                        <table class="table table-bordered table-striped grn-items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="col-sno">S.No</th>
+                                                    <th class="col-item-name">Item Name</th>
+                                                    <th class="col-description">Description</th>
+                                                    <th class="col-unit">Unit</th>
+                                                    <th class="col-qty">Quantity</th>
+                                                    <th class="col-qty">Received Qty</th>
+                                                    <th class="col-qty">Short Qty</th>
+                                                    <th class="col-qty">Excess Qty</th>
+                                                    <th class="col-qty">Rejected Qty</th>
+                                                    <th class="col-qty">Accepted</th>
+                                                    <th class="col-qty">PO Balance</th>
+                                                    <th *ngIf="canViewFinancials" class="col-financial">Rate</th>
+                                                    <th *ngIf="canViewFinancials" class="col-financial">Discount</th>
+                                                    <th *ngIf="canViewFinancials" class="col-financial">Amount</th>
+                                                </tr>
+                                            </thead>
+    
+                                            <tbody>
+                                                <tr *ngFor="let row of GRNFormGrp.get('items')['controls']; let i = index"
+                                                    [formGroupName]="i">
+                                                    <td>{{ i + 1 }}</td>
+    
+                                                    <!-- readonly -->
+                                                    <td><input class="form-control" formControlName="item_name" readonly>
+                                                    </td>
+                                                    <td><input class="form-control" formControlName="item_description" readonly>
+                                                    </td>
+                                                    <td><input class="form-control" formControlName="unit" [attr.title]="row.get('unit')?.value || ''" readonly>
+                                                    </td>
+                                                    <td><input class="form-control" formControlName="quantity" readonly>
+                                                    </td>
+    
+                                                    <!-- received: numeric only, triggers short/excess -->
+                                                    <td>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="received_qty" (input)="onReceivedQtyChange(i)"
+                                                            (keypress)="allowDecimalNumbers($event)">
+                                                        <small class="text-danger"
+                                                            *ngIf="row.get('received_qty')?.touched && row.get('received_qty')?.invalid">
+                                                            * Required
+                                                        </small>
+                                                    </td>
+    
+                                                    <!-- computed disabled fields -->
+                                                    <td>
+                                                        <input type="text" class="form-control" formControlName="short_qty"
+                                                            disabled>
+                                                    </td>
+    
+                                                    <td>
+                                                        <input type="text" class="form-control" formControlName="excess_qty"
+                                                            disabled>
+                                                    </td>
+    
+                                                    <!-- rejected: editable numeric -->
+                                                    <td>
+                                                        <input type="text" class="form-control"
+                                                            formControlName="rejected_qty" (input)="onRejectedQtyChange(i)"
+                                                            (keypress)="allowDecimalNumbers($event)">
+                                                    </td>
+    
+                                                    <!-- accepted: editable numeric; updates po_balance -->
+                                                    <td>
+                                                        <input type="text" class="form-control" formControlName="accepted"
+                                                            (input)="onAcceptedChange(i)"
+                                                            (keypress)="allowDecimalNumbers($event)">
+                                                        <small class="text-danger"
+                                                            *ngIf="row.get('accepted')?.touched && row.get('accepted')?.invalid">
+                                                            * Required
+                                                        </small>
+                                                    </td>
+    
+                                                    <!-- po_balance computed and disabled -->
+                                                    <td>
+                                                        <input type="text" class="form-control" formControlName="po_balance"
+                                                            disabled>
+                                                    </td>
+    
+                                                    <!-- rate, discount numeric-only -->
+                                                    <td *ngIf="canViewFinancials">
+                                                        <input type="text" class="form-control" formControlName="rate"
+                                                            (input)="onRateOrDiscountChange(i)"
+                                                            (keypress)="allowOnlyNumbers($event)" disabled>
+                                                    </td>
+    
+                                                    <td *ngIf="canViewFinancials">
+                                                        <input type="text" class="form-control" formControlName="discount"
+                                                            (input)="onRateOrDiscountChange(i)"
+                                                            (keypress)="allowDecimalNumbers($event)">
+                                                    </td>
+    
+                                                    <!-- amount disabled (computed later) -->
+                                                    <td *ngIf="canViewFinancials">
+                                                        <input type="text" class="form-control text-right"
+                                                            [value]="row.get('amount')?.value | currency:'INR':'symbol':'1.2-2'"
+                                                            readonly>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot *ngIf="canViewFinancials">
+                                                <tr>
+                                                    <!-- Columns till Discount -->
+                                                    <td colspan="11" class="text-right font-weight-bold">
+                                                        Grand Total
+                                                    </td>
+    
+                                                    <!-- Amount column -->
+                                                    <td class="font-weight-bold text-right">
+                                                        {{ GRNFormGrp.get('grand_total')?.value |
+                                                        currency:'INR':'symbol':'1.2-2' }}
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+    
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </div>
+
+        </div>
+        <div class="container-fluid px-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <!-- Left -->
+                <button class="btn btn-secondary px-4" type="button" (click)="onBack()">
+                    ← Back
+                </button>
+
+                <!-- Right group -->
+                <div class="d-flex gap-2">
+                    <button *ngIf="mode == 'view_grn' && canShowPayButton" class="btn btn-primary px-5" type="button"
+                        (click)="redirectToTransaction()">
+                        Pay
+                    </button>
+
+                    <button *ngIf="mode !== 'view_grn'"  class="btn btn-success px-5" type="button" (click)="onSaveGRN()"
+                        [disabled]="isSavingGRN">
+                        <span *ngIf="!isSavingGRN">Save GRN</span>
+                        <span *ngIf="isSavingGRN">
+                            <i class="fa fa-spinner fa-spin mr-2"></i> Saving...
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </main>
+    <!-- Main layout -->
+</body>

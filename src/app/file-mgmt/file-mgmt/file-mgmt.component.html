@@ -1,0 +1,167 @@
+<body  class="fixed-sn white-skin">
+     <!-- Main Navigation -->
+     <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+    <main>
+        <div  class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Filemanager
+                    <button type="button"  #chequemodal id="openModalButton" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_cheque_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New file</button>
+                </h5>
+                <div class="card-body" [formGroup]="searchform">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" id="file_name" class="form-control"  formControlName="file_name">
+                                <label for="file_name" class="">Name of file</label>
+
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline ">
+                                <input placeholder="Select date" readonly ngbDatepicker #lpdate="ngbDatepicker" id="file_uploadedtfrom" (click)="lpdate.toggle()" type="text" formControlName="file_uploadedtfrom" class="form-control datepicker">
+                                <label for="lpdate" class="active">Uploaded Date from</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input placeholder="Select date" readonly ngbDatepicker #csdate="ngbDatepicker"  id="file_uploaded_dtto" (click)="csdate.toggle()" type="text" formControlName="file_uploaded_dtto" class="form-control datepicker">
+                                <label for="date-picker-example" class="ml-1 active">Uploaded Date  to</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4" *ngIf="Isadmin">
+                            <div class="md-form md-outline">
+                                <select class=" field-ht colorful-select" id="department_type"class="form-control"  formControlName="department_type" >
+                                    <option value="" selected="true">Select department</option>
+                                    <option *ngFor="let dept of deptdata" value={{dept.RoleId}}>
+                                        {{dept.userRole}}
+                                    </option>
+                                </select>
+                                <label class="active">Department type</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="resetSearch()" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" ><i class="fas fa-redo-alt mr-2" aria-hidden="true" ></i>Reset</button>
+                        <button type="button" (click)="fileSearch()"class="btn dusty-grass-gradient btn-sm waves-light waves-effect float-left" ><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <!--  -->
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"  class="table table-striped"  cellspacing="0" width="100%"> 
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>File name</th>
+                                    <th>Upload Date</th>
+                                    <th>Department / User Name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let file of data let i=index" >
+                                    <td>{{i+1}}</td>
+                                    <td>{{file.file_name}}</td>
+                                    <td>{{file.created_dt|date:'dd-MM-yyyy'}}</td>
+                                    <td *ngIf='Isadmin'>{{file.dept_UserName}}</td>
+                                    <td *ngIf='!Isadmin'>{{UserRole}}</td>
+                                    <td>
+                                        <a class="text-success" mdbtooltip="download" placement="top" (click)="viewAttchement(file.path,'download')"><i class="fa fa-download" aria-hidden="true"></i></a>
+                                        <a class="red-text"  mdbtooltip="Remove" placement="top" (click)="deletTask(file.fileId)"><i class="fa-times px-1 fas"></i></a>
+                                        <!-- <a class="text-success" id="" ngbTooltip="Edit Cheque" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a> -->
+                                        <!-- <a class="text-danger" style="padding-left: 10px;" id="" ngbTooltip="Delete File" placement="top" #Customerdata ><i class="fa-times px-1 fas"></i></a> -->
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="false">
+                                <tr>
+                                    <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+             <!-- Add New Cheque modal -->
+             <div class="modal fade" id="add_cheque_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md modal-notify modal-info " role="document ">
+                    <div class="modal-content ">
+                        <div class="modal-header mdb-color ">
+                            <p class="heading lead font-weight-bold" id="modaltextheader">Upload File</p>
+                            <button type="button" (click)="closeModal()" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- [formGroup]="attachments" -->
+                        
+                        <div class="form-group" [formGroup]="myForm" class="modal-body">
+                            <div  class="form-row"> 
+                                <div class="row col-md-12" *ngIf="Isadmin">
+                                        <div class="col-md-6">
+                                            Select Type to  Shown by  :
+                                        </div>
+                                        <div class="row col-md-12 m-auto">
+                                            <div class="form-check form-check-inline col-md-6">
+                                                <input type="radio" class="form-check-input" name="SelectType" id="User" value="User"
+                                                formControlName="SelectType"
+                                                (change)="SelectionToggle('User')">
+                                                <label class="form-check-label" for="User">By USER</label>
+                                            </div>
+                                            <div class="form-check form-check-inline col-md-4 ">
+                                                <input type="radio" class="form-check-input" name="SelectType" id="Role" formControlName="SelectType"
+                                                value="Role"  (change)
+                                                ="SelectionToggle('Role')">
+                                                <label class="form-check-label" for="Role">By ROLE</label>
+                                            </div>
+                                        </div>
+                                    <div class="md-form md-outline col-md-8">
+                                      
+                                        <ng-select [items]="SelectTypeList"
+                                            formControlName="selectTypeDropdown" id="selectType" 
+                                            bindLabel="userRole"
+                                            bindValue="RoleId"
+                                            placeholder="Please Select  {{SelectType}}"
+                                            multiple = "True"
+                                            [(ngModel)]="selectedTypeIds" >
+                                        </ng-select>
+                                        <label class="ml-2 active">Select {{SelectType}}</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="md-form md-outline">
+                                        <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                            <input formControlName="attach_File" name="attach_File" type="file" class="custom-file-input" multiple id="attach_File" (change)="AttachmentImage($event.target.files, $event )">
+                                            <label class="custom-file-label" #labelImport_doc id="labelImport" for="attach_File">Upload File</label>
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="modal-footer">
+                            <button type="button" #closebutton (click)="closeModal()" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button"  class="btn btn-sm btn-outline-success waves-effect" (click)="Uplodefile()">Upload</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</body>

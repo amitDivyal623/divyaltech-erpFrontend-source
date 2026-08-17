@@ -1,0 +1,495 @@
+<!-- Add New booking modal -->
+
+<!-- Content -->
+<div class="modal-content">
+    <!-- Header -->
+    <div class="modal-header mdb-color" style="height: 3rem;">
+        <p class="heading lead font-weight-bold text-white">{{bookingHeading}}</p>
+        <button type="button" class="close" data-dismiss="modal" (click)="modal.dismiss()" aria-label="Close">
+            <span aria-hidden="true" class="white-text">&times;</span>
+        </button>
+    </div>
+    <!-- Body -->
+    <form class="modal-body" autocomplete="off">
+        <div class="form-row" [formGroup]="addBookingDetail">
+            <div class="col-md-2">
+                <div class="md-form md-outline">
+                    <input type="hidden" id="regDetailID" formControlName="regDetailID">
+                    <input type="hidden" id="regPersonID" formControlName="regPersonID">
+                    <input type="hidden" id="regPlotID" formControlName="regPlotID">
+                    <input type="hidden" id="bktype" formControlName="bktype">
+                    <input type="hidden" id="bkCustId" formControlName="bkCustId">
+                    <input type="hidden" id="bkEnqId" formControlName="bkEnqId">
+
+                    <select formControlName="bktitle" id="bktitle" name="bktitle"
+                        class="form-control field-ht colorful-select"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bktitle'].errors) || (addBookingDetail.controls['bktitle'].touched && addBookingDetail.controls['bktitle'].invalid)}">
+                        <option value="" selected>Select Title *</option>
+                        <option *ngFor="let Titellist of resplookupTitel" value={{Titellist.LookupValue}}>
+                            {{Titellist.LookupValue}}</option>
+                    </select>
+                    <label class="active">Title</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bktitle'].errors)  ||(addBookingDetail.controls['bktitle'].touched && addBookingDetail.controls['bktitle'].invalid)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf=" (submitted && addBookingDetail.controls['bktitle'].errors.required) || (addBookingDetail.controls['bktitle'].touched && addBookingDetail.controls['bktitle'].invalid)">
+                            Title is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="md-form md-outline">
+
+                    <ng-autocomplete [data]="customerdataList" [searchKeyword]="keyword" (selected)='selectCust($event)'
+                        (inputChanged)='onCustomerSearch($event);' [itemTemplate]="itemTemplate" id="bkCustomerNm"
+                        name="bkCustomerNm" formControlName="bkCustomerNm"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkCustomerNm'].invalid ) || (addBookingDetail.controls['bkCustomerNm'].invalid && addBookingDetail.controls['bkCustomerNm'].touched)}">
+                    </ng-autocomplete>
+                    <ng-template #itemTemplate let-item>
+                        <a [innerHTML]="item.name + (item.phone ? ', ' + item.phone : '')" [readonly]="Access"></a>
+                    </ng-template>
+                    <ng-template #notFoundTemplate let-notFound>
+                        <div [innerHTML]="notFound" [readonly]="Access"></div>
+                    </ng-template>
+                    <label for="bkCustomerNm" class="active" style="z-index: 1000;">Customer Name</label>
+                    <div *ngIf="(submitted && addBookingDetail.controls['bkCustomerNm'].invalid ) || (addBookingDetail.controls['bkCustomerNm'].touched && addBookingDetail.controls['bkCustomerNm'].invalid)"
+                        class="invalid-feedback">Customer Name is required</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkBookingName" name="bkBookingName"
+                        formControlName="bkBookingName"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkBookingName'].invalid ) || (addBookingDetail.controls['bkBookingName'].invalid && addBookingDetail.controls['bkBookingName'].touched)}">
+                    <label for="bkBookingName" class="active">Booking Name</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkBookingName'].errors) || (addBookingDetail.controls['bkBookingName'].touched && addBookingDetail.controls['bkBookingName'].invalid)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf=" (submitted && addBookingDetail.controls['bkBookingName'].errors && addBookingDetail.controls['bkBookingName'].errors.required) || (addBookingDetail.controls['bkBookingName'].touched && addBookingDetail.controls['bkBookingName'].errors && addBookingDetail.controls['bkBookingName'].errors.required)">
+                            Booking Name is required</div>
+                    </div>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkBookingName'].errors && addBookingDetail.controls['bkBookingName'].errors.pattern && !addBookingDetail.controls['bkBookingName'].errors.required) || (addBookingDetail.controls['bkBookingName'].touched && addBookingDetail.controls['bkBookingName'].errors && addBookingDetail.controls['bkBookingName'].errors.pattern)"
+                        class="invalid-feedback">Enter Only Numeric value
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkMobileNo" name="bkMobileNo"
+                        formControlName="bkMobileNo"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkMobileNo'].invalid ) || (addBookingDetail.controls['bkMobileNo'].invalid && addBookingDetail.controls['bkMobileNo'].touched)}">
+                    <label for="bkMobileNo" class="active">Mobile Number</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkMobileNo'].errors) || (addBookingDetail.controls['bkMobileNo'].touched && addBookingDetail.controls['bkMobileNo'].invalid)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf=" (submitted && addBookingDetail.controls['bkMobileNo'].errors && addBookingDetail.controls['bkMobileNo'].errors.required) || (addBookingDetail.controls['bkMobileNo'].touched && addBookingDetail.controls['bkMobileNo'].errors && addBookingDetail.controls['bkMobileNo'].errors.required)">
+                            Mobile No. is required</div>
+                    </div>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkMobileNo'].errors && addBookingDetail.controls['bkMobileNo'].errors.pattern && !addBookingDetail.controls['bkMobileNo'].errors.required) || (addBookingDetail.controls['bkMobileNo'].touched && addBookingDetail.controls['bkMobileNo'].errors && addBookingDetail.controls['bkMobileNo'].errors.pattern)"
+                        class="invalid-feedback">Enter Only Numeric value
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <select class="form-control field-ht colorful-select" id="bkCategory" name="bkCategory"
+                        formControlName="bkCategory"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkCategory'].errors) || (addBookingDetail.controls['bkCategory'].touched && addBookingDetail.controls['bkCategory'].invalid)}">
+                        <option value="" selected>Select Category </option>
+                        <option *ngFor="let Categorylist of resplookupCategory" value={{Categorylist.LookupDataId}}>
+                            {{Categorylist.LookupValue}}
+                        </option>
+                    </select>
+                    <label class="active">Category</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkCategory'].errors)  ||(addBookingDetail.controls['bkCategory'].touched && addBookingDetail.controls['bkCategory'].invalid)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf=" (submitted && addBookingDetail.controls['bkCategory'].errors.required) || (addBookingDetail.controls['bkCategory'].touched && addBookingDetail.controls['bkCategory'].invalid)">
+                            Category is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <!-- <input type="text" class="form-control" id="bkOccupation" name="bkOccupation" formControlName="bkOccupation" [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkOccupation'].invalid ) || (addBookingDetail.controls['bkOccupation'].invalid && addBookingDetail.controls['bkOccupation'].touched)}">  -->
+                    <select class="form-control" id="bkOccupation" name="bkOccupation" formControlName="bkOccupation"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkOccupation'].invalid) || (addBookingDetail.controls['bkOccupation'].invalid && addBookingDetail.controls['bkOccupation'].touched)}">
+
+                        <option value="" selected>Select Occupation *</option>
+                        <option value="privateJob">Private Job</option>
+                        <option value="GovernmentJob">Government Job</option>
+                        <option value="Business">Business</option>
+                        <option value="retired">Retired </option>
+                        <option value="housewife">HouseWife </option>
+                    </select>
+                    <label class="active">Occupation</label>
+
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkOccupation'].invalid && addBookingDetail.controls['bkOccupation'].errors.required) || (addBookingDetail.controls['bkOccupation'].invalid && addBookingDetail.controls['bkOccupation'].touched && addBookingDetail.controls['bkOccupation'].errors.required)"
+                        class="invalid-feedback">Occupation is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <select class="form-control field-ht colorful-select" id="bkCaretaker" name="bkCaretaker"
+                        formControlName="bkCaretaker"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkCaretaker'].invalid ) || (addBookingDetail.controls['bkCaretaker'].invalid && addBookingDetail.controls['bkCaretaker'].touched)}">
+                        <option value="" disabled>Select</option>
+                        <option value="spouse">Spouse</option>
+                        <option value="guardian">Guardian</option>
+                    </select>
+                    <label class="active">Caretaker</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkCaretaker'].invalid && addBookingDetail.controls['bkCaretaker'].errors.required) || (addBookingDetail.controls['bkCaretaker'].invalid && addBookingDetail.controls['bkCaretaker'].touched && addBookingDetail.controls['bkCaretaker'].errors.required)"
+                        class="invalid-feedback">Caretaker is required.
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkSpouse" name="bkSpouse" formControlName="bkSpouse"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkSpouse'].invalid ) || (addBookingDetail.controls['bkSpouse'].invalid && addBookingDetail.controls['bkSpouse'].touched)}">
+                    <label for="bkSpouse" class="active">Spouse/Guardian Name</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkSpouse'].invalid && addBookingDetail.controls['bkSpouse'].errors.required) || (addBookingDetail.controls['bkSpouse'].invalid && addBookingDetail.controls['bkSpouse'].touched && addBookingDetail.controls['bkSpouse'].errors.required)"
+                        class="invalid-feedback">Spouse/Guardian Name is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkbkAge" name="bkbkAge" formControlName="bkbkAge">
+                    <label for="bkbkAge" class="active">Age</label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkAlternate" name="bkAlternate"
+                        formControlName="bkAlternate">
+                    <label for="bkAlternate" class="active">Alternate Mobile Number</label>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="md-form md-outline">
+                    <textarea type="text" id="bkAddress" name="bkAddress" formControlName="bkAddress"
+                        class="md-textarea form-control" rows="1"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkAddress'].invalid ) || (addBookingDetail.controls['bkAddress'].invalid && addBookingDetail.controls['bkAddress'].touched)}"></textarea>
+                    <label for="bkAddress" class="active">Address</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkAddress'].invalid && addBookingDetail.controls['bkAddress'].errors.required) || (addBookingDetail.controls['bkAddress'].invalid && addBookingDetail.controls['bkAddress'].touched && addBookingDetail.controls['bkAddress'].errors.required)"
+                        class="invalid-feedback">Address is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkPincode" name="bkPincode" formControlName="bkPincode"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkPincode'].invalid ) || (addBookingDetail.controls['bkPincode'].invalid && addBookingDetail.controls['bkPincode'].touched)}">
+                    <label for="bkPincode" class="active">Pincode</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkPincode'].invalid && addBookingDetail.controls['bkPincode'].errors.required) || (addBookingDetail.controls['bkPincode'].invalid && addBookingDetail.controls['bkPincode'].touched && addBookingDetail.controls['bkPincode'].errors.required)"
+                        class="invalid-feedback">Pincode is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkTehsil" name="bkTehsil" formControlName="bkTehsil"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkTehsil'].invalid ) || (addBookingDetail.controls['bkTehsil'].invalid && addBookingDetail.controls['bkTehsil'].touched)}">
+                    <label for="bkTehsil" class="active">Tehsil</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkTehsil'].invalid && addBookingDetail.controls['bkTehsil'].errors.required) || (addBookingDetail.controls['bkTehsil'].invalid && addBookingDetail.controls['bkTehsil'].touched && addBookingDetail.controls['bkTehsil'].errors.required)"
+                        class="invalid-feedback">Tehsil is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkDistrict" name="bkDistrict"
+                        formControlName="bkDistrict"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkDistrict'].invalid ) || (addBookingDetail.controls['bkDistrict'].invalid && addBookingDetail.controls['bkDistrict'].touched)}">
+                    <label for="bkDistrict" class="active">District</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkDistrict'].invalid && addBookingDetail.controls['bkDistrict'].errors.required) || (addBookingDetail.controls['bkDistrict'].invalid && addBookingDetail.controls['bkDistrict'].touched && addBookingDetail.controls['bkDistrict'].errors.required)"
+                        class="invalid-feedback">District is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkCity" name="bkCity" formControlName="bkCity"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkCity'].invalid ) || (addBookingDetail.controls['bkCity'].invalid && addBookingDetail.controls['bkCity'].touched)}">
+                    <label for="bkCity" class="active">City</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkCity'].invalid && addBookingDetail.controls['bkCity'].errors.required) || (addBookingDetail.controls['bkCity'].invalid && addBookingDetail.controls['bkCity'].touched && addBookingDetail.controls['bkCity'].errors.required)"
+                        class="invalid-feedback">City is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bkState" name="bkState" formControlName="bkState"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkState'].invalid ) || (addBookingDetail.controls['bkState'].invalid && addBookingDetail.controls['bkState'].touched)}">
+                    <label for="bkState" class="active">State</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkState'].invalid && addBookingDetail.controls['bkState'].errors.required) || (addBookingDetail.controls['bkState'].invalid && addBookingDetail.controls['bkState'].touched && addBookingDetail.controls['bkState'].errors.required)"
+                        class="invalid-feedback">State is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class=" md-form md-outline">
+                    <!-- <input type="text" id="form-khasra" class="form-control"  formControlName="PaymentPlan"> -->
+                    <select formControlName="bkPaymentPlan" id="bkPaymentPlan"
+                        class="form-control field-ht colorful-select" name="bkPaymentPlan"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkPaymentPlan'].invalid ) || (addBookingDetail.controls['bkPaymentPlan'].invalid && addBookingDetail.controls['bkPaymentPlan'].touched)}">
+                        <option value="" disabled> Payment Plan </option>
+                        <option *ngFor="let paymentPlanlist of respPPlan" value={{paymentPlanlist.erpPlanID}}>
+                            {{paymentPlanlist.plan_name}}</option>
+                    </select>
+                    <label for="PaymentPlan" class="active">Payment Plan</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkPaymentPlan'].invalid && addBookingDetail.controls['bkPaymentPlan'].errors.required) || (addBookingDetail.controls['bkPaymentPlan'].invalid && addBookingDetail.controls['bkPaymentPlan'].touched && addBookingDetail.controls['bkPaymentPlan'].errors.required)"
+                        class="invalid-feedback">PaymentPlan is required.
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="md-form md-outline">
+                    <input type="text" class="form-control" id="bknumber" name="bknumber" formControlName="bknumber">
+                    <label for="bknumber" class="active">Booking Number</label>
+                </div>
+            </div>
+            <div class="col-md-3" >
+                <div class="md-form md-outline">
+                    <input placeholder="Select date" [minDate]="minDate" ngbDatepicker #edate="ngbDatepicker"
+                        (click)="edate.toggle()" type="text" class="form-control datepicker" id="bkTargetDate"
+                        name="bkTargetDate" formControlName="bkTargetDate"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['bkTargetDate'].invalid ) || (addBookingDetail.controls['bkTargetDate'].invalid && addBookingDetail.controls['bkTargetDate'].touched)}"
+                        readonly>
+                    <label for="date-picker-example" class="active">Registry Target Date*</label>
+                    <div *ngIf=" (submitted && addBookingDetail.controls['bkTargetDate'].invalid) || (addBookingDetail.controls['bkTargetDate'].invalid && addBookingDetail.controls['bkTargetDate'].touched)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf=" (submitted && addBookingDetail.controls['bkTargetDate'].invalid) || (addBookingDetail.controls['bkTargetDate'].invalid && addBookingDetail.controls['bkTargetDate'].touched)">
+                            Target Date is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" >
+                <div class="md-form md-outline">
+                    <input placeholder="Select date" [minDate]="minDate" ngbDatepicker #bkdate="ngbDatepicker"
+                        (click)="bkdate.toggle()" type="text" class="form-control datepicker" id="booking_date"
+                        name="booking_date" formControlName="booking_date"
+                        [ngClass]="{ 'is-invalid': (submitted && addBookingDetail.controls['booking_date'].invalid) || (addBookingDetail.controls['booking_date'].invalid && addBookingDetail.controls['booking_date'].touched)}"
+                        readonly>
+                    <label for="booking_date" class="active">Booking Date*</label>
+                    <div *ngIf="(submitted && addBookingDetail.controls['booking_date'].invalid) || (addBookingDetail.controls['booking_date'].invalid && addBookingDetail.controls['booking_date'].touched)"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="(submitted && addBookingDetail.controls['booking_date'].invalid) || (addBookingDetail.controls['booking_date'].invalid && addBookingDetail.controls['booking_date'].touched)">
+                            Booking Date is required</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plots Section -->
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 1.5rem; padding: 1.5rem;">
+                    <h5 style="margin: 0; display: inline-block;">Plot Details</h5>
+                    <div class="card-header bg-white">
+                        <div class="form-row align-items-end">
+
+                            <!-- Total Amount -->
+                            <div class="col-md-3 px-2">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" id="totalArea" formControlName="totalArea"
+                                        readonly>
+                                    <label for="totalArea"
+                                        [class.active]="addBookingDetail.get('totalArea').value">Total Area</label>
+                                </div>
+                            </div>
+
+                            <!-- Total Plot Amount (per sqft) -->
+                            <div class="col-md-4">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" id="totalPlotAmtPerSqft"
+                                        formControlName="totalPlotAmtPerSqft" (input)="onChangeTotalPerSqft($event)"
+                                        [ngClass]="{
+                                        'is-invalid': (submitted && addBookingDetail.controls['totalPlotAmtPerSqft'].errors) 
+                                        || (addBookingDetail.controls['totalPlotAmtPerSqft'].touched && addBookingDetail.controls['totalPlotAmtPerSqft'].invalid)
+                                    }">
+                                    <label for="totalPlotAmtPerSqft" class="active">Total Plot Amt (per sqft)</label>
+
+
+                                    <div *ngIf="
+                                        (submitted && addBookingDetail.controls['totalPlotAmtPerSqft'].errors) ||
+                                        (addBookingDetail.controls['totalPlotAmtPerSqft'].touched && addBookingDetail.controls['totalPlotAmtPerSqft'].invalid)
+                                        " class="invalid-feedback">
+
+                                        <div *ngIf="addBookingDetail.controls['totalPlotAmtPerSqft'].errors?.required">
+                                            Amount is required
+                                        </div>
+
+                                        <div *ngIf="addBookingDetail.controls['totalPlotAmtPerSqft'].errors?.pattern">
+                                            Enter valid numeric value
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Amount -->
+                            <div class="col-md-3 px-2">
+                                <div class="md-form md-outline">
+                                    <input type="text" class="form-control" id="totalAmount"
+                                        formControlName="totalAmount" (input)="onChangeTotalAmount($event)">
+                                    <label for="totalAmount"
+                                        [class.active]="addBookingDetail.get('totalAmount').value">Total Amount</label>
+                                </div>
+                            </div>
+
+                            <!-- Add Plot Button -->
+                            <div class="col-md-2">
+                                <button type="button" (click)="addPlot()"
+                                    class="btn btn-sm btn-success waves-effect w-100">
+                                    <i class="fa fa-plus"></i> Plot
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div formArrayName="plots">
+                        <div *ngFor="let plot of plots.controls; let i = index" class="card"
+                            style="margin-bottom: 1.5rem; padding: 1rem; border: 1px solid #ddd; border-radius: 4px; background-color: #f9f9f9;">
+                            <div [formGroupName]="i">
+                                <div class="form-row">
+                                    <!-- Plot Name -->
+                                    <div class="col-md-3">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" id="productId_{{i}}" formControlName="productId"
+                                                name="productId">
+                                            <ng-autocomplete [data]="productdataList" id="bkPlotName_{{i}}"
+                                                formControlName="bkPlotName" [searchKeyword]="keyword"
+                                                (selected)='selectEvent($event, i)'
+                                                (inputChanged)='onChangeSearch($event)'
+                                                (inputFocused)='onFocused($event)' [itemTemplate]="itemTemplate"
+                                                [notFoundTemplate]="notFoundTemplate"
+                                                [ngClass]="{ 'is-invalid': (submitted && getPlotFormGroup(i).controls['bkPlotName'].errors ) || (getPlotFormGroup(i).controls['bkPlotName'].errors && getPlotFormGroup(i).controls['bkPlotName'].touched)}">
+                                            </ng-autocomplete>
+                                            <label for="bkPlotName_{{i}}" class="active">Plot
+                                                Name*</label>
+                                            <ng-template #itemTemplate let-item>
+                                                <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                            </ng-template>
+                                            <ng-template #notFoundTemplate let-notFound>
+                                                <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                            </ng-template>
+                                            <div *ngIf=" (submitted && getPlotFormGroup(i).controls['bkPlotName'].errors) || (getPlotFormGroup(i).controls['bkPlotName'].errors && getPlotFormGroup(i).controls['bkPlotName'].touched)"
+                                                class="invalid-feedback">
+                                                Please Enter Plot Name
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Plot Area -->
+                                    <div class="col-md-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkPlotSqft_{{i}}"
+                                                name="bkPlotSqft" formControlName="bkPlotSqft" (input)="onChangePlotArea(i)">
+                                            <label for="bkPlotSqft_{{i}}"
+                                                [class.active]="getPlotFormGroup(i).get('bkPlotSqft').value">Plot
+                                                Area</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Plot Amount per sqft -->
+                                    <div class="col-md-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkPlotAmt_{{i}}"
+                                                name="bkPlotAmt" formControlName="bkPlotAmt" readonly
+                                                [ngClass]="{ 'is-invalid': (submitted && getPlotFormGroup(i).controls['bkPlotAmt'].errors ) || (getPlotFormGroup(i).controls['bkPlotAmt'].errors && getPlotFormGroup(i).controls['bkPlotAmt'].touched)}">
+                                            <label for="bkPlotAmt_{{i}}" class="active">Plot Amount
+                                                (per sqft)</label>
+                                            <div *ngIf=" (submitted && getPlotFormGroup(i).controls['bkPlotAmt'].errors) || (getPlotFormGroup(i).controls['bkPlotAmt'].errors && getPlotFormGroup(i).controls['bkPlotAmt'].touched)"
+                                                class="invalid-feedback">
+                                                Please Enter Valid Amount
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Plot Total Amount -->
+                                    <div class="col-md-3">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkPlotTotalAmt_{{i}}"
+                                                name="bkPlotTotalAmt" formControlName="bkPlotTotalAmt" readonly>
+                                            <label for="bkPlotTotalAmt_{{i}}"
+                                                [class.active]="getPlotFormGroup(i).get('bkPlotTotalAmt').value">Plot
+                                                Total Amount</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Khasra Number -->
+                                    <div class="col-md-3" style="margin-top: 1rem;">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkKhasraNo_{{i}}" readonly
+                                                name="bkKhasraNo" formControlName="bkKhasraNo">
+                                            <label for="bkKhasraNo_{{i}}" class="active">Khasra Number</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Raw Khasra Number (Custom7) - Hidden Field -->
+                                    <input type="hidden" id="bkRawKhasraNo_{{i}}" name="bkRawKhasraNo"
+                                        formControlName="bkRawKhasraNo">
+
+                                    <!-- Front Length -->
+                                    <div class="col-md-3" style="margin-top: 1rem;" *ngIf="!getPlotFormGroup(i).get('allSides').value">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkFront_{{i}}" name="bkFront"
+                                                 formControlName="bkFront" (input)="onChangeFrontOrDepth(i)">
+                                            <label for="bkFront_{{i}}" class="active">Front Length</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Depth Length -->
+                                    <div class="col-md-3" style="margin-top: 1rem;" *ngIf="!getPlotFormGroup(i).get('allSides').value">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bkDepth_{{i}}" name="bkDepth"
+                                                 formControlName="bkDepth" (input)="onChangeFrontOrDepth(i)">
+                                            <label for="bkDepth_{{i}}" class="active">Depth Length</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- All Sides (if custom14 exists) -->
+                                    <div class="col-md-3" style="margin-top: 1rem;"
+                                        *ngIf="getPlotFormGroup(i).get('allSides').value">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control"
+                                                [value]="getPlotFormGroup(i).get('allSides').value" readonly>
+                                            <label class="active">All Sides</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Remove Button -->
+                                    <div class="col-md-3"
+                                        style="margin-top: 1rem; display: flex; align-items: flex-end;">
+                                        <button type="button" (click)="removePlot(i)"
+                                            class="btn btn-danger btn-sm d-flex align-items-center justify-content-center"
+                                            *ngIf="plots.length > 1">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+    </form>
+    <!-- Footer -->
+    <div class="modal-footer">
+        <button type="button" #closebutton (click)="modal.dismiss()" class="btn btn-sm btn-danger"
+            data-dismiss="modal">Cancel</button>
+        <button type="button" *ngIf="hideSubmitbutton" (click)="insertBookingDetail()"
+            class="btn btn-sm btn-outline-success waves-effect">Save</button>
+    </div>
+</div>
+<!-- Content -->

@@ -1,0 +1,9 @@
+.buyer-link {
+    color: #504f4f;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.buyer-link:hover {
+    color: #007bff; 
+}

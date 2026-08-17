@@ -1,0 +1,1018 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">{{landlordtitle}}</h5>
+                <div class="card-body">
+                    <div class="form-row" [formGroup]="landlordInfo">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-landlord" class="form-control" formControlName="form_landlord">
+                                <label for="form-landlord" class="active">Landlord Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-amount" class="form-control" formControlName="form_amount">
+                                <label for="form-amount" class="active">Total Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-balamt" class="form-control" formControlName="form_balamt">
+                                <label for="form-balamt" class="active">Balance Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+
+                            <div class="md-form md-outline ">
+                                <input placeholder="Select date" readonly ngbDatepicker #lpdate="ngbDatepicker" formControlName="lastPaidDate" (click)="lpdate.toggle()" type="text" class="form-control datepicker">
+                                <label for="lpdate" class="active">Last Paid date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-khasra" class="form-control" formControlName="form_khasra">
+                                <label for="form-khasra" class="active">Khasra Number</label>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-rakba" class="form-control" formControlName="form_rakba">
+                                <label for="form-rakba" class="active">Rakba</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input type="text" id="form-block" class="form-control" formControlName="form_block">
+                                <label for="form-block" class="active">Block Number</label>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="container-fluid px-3 mb-2">
+                    <!-- Main docs tabs -->
+                    <div class="main-tabs-docs">
+                        <nav class="nav nav-pills nav-justified">
+                            <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active" href="#docsTabsPersonal" data-toggle="tab" role="tab" aria-selected="false" [ngClass]="{ 'active':activeTab==='Personal'}"><i class="fa fa-user mr-2" aria-hidden="true"></i>Personal Detail</a>
+                            <!-- <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active" href="#docsTabsAddPersonal" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-users mr-2" aria-hidden="true"></i>Add More Detail</a> -->
+                            <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsAddPersonal" data-toggle="tab" role="tab" aria-selected="false"><i class="fa fa-users mr-2" aria-hidden="true"></i>More Nominee</a>
+                            <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsAttorney" data-toggle="tab" role="tab" aria-selected="false"><i class="fas fa-file-contract mr-2" aria-hidden="true"></i>Attorney Detail</a>
+                            <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsBank" data-toggle="tab" role="tab" aria-selected="false"><i class="fas fa-donate mr-2" aria-hidden="true"></i>Bank Detail</a>
+                            <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsTransaction" data-toggle="tab" role="tab" aria-selected="false"><i class="fas fa-money-bill mr-2" aria-hidden="true"></i>Transaction Detail</a>
+                            <a id="docs-tab-task" class="nav-item nav-link link-nav" href="#docsTabsAttach" data-toggle="tab" role="tab" aria-selected="false"><i class="fas fa-money-bill mr-2" aria-hidden="true"></i>Attachment</a>
+                            <a id="docs-tab-materials" class="nav-item nav-link link-nav" href="#docsTabsLand" data-toggle="tab"  role="tab" aria-selected="false"><i class="fas fa-project-diagram mr-2" aria-hidden="true"></i>Land Details</a>
+                        </nav>
+                        <div class="tab-content panel-tab pb-1">
+
+                            <!-- Personal Details Section -->
+                            <div class="tab-pane pb-0" id="docsTabsPersonal" role="tabpanel" [ngClass]="{ 'active':activeTab==='Personal'}">
+                                <div [formGroup]="newPersonalDetail" (ngSubmit)="updatelandlorddetails_fun()">
+                                    <div class="col-md-12 px-2">
+                                        <div class="row px-3">
+                                            <div class="col-lg-3 col-md-6 px-2">
+                                                <div class="md-form md-outline">
+                                                    <!-- <input type="hidden" id="parent_id" formControlName="parent_id" > -->
+                                                    <input type="hidden" id="flandlordId" formControlName="flandlordId" >
+                                                    <select id="fetchtitle" formControlName="fetchtitle" class="form-control field-ht colorful-select">
+                                                        <option value="" selected="true">Select Title</option>
+                                                        <option *ngFor="let titlelist of respcustomerTitle" value={{titlelist.LookupValue}}>
+                                                            {{titlelist.LookupValue}}
+                                                        </option>
+                                                    </select>
+                                                    <label class="active">Title</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text" formControlName="fetchlandlord_name" id="fetchlandlord_name" class="form-control " >
+                                                    <label for="fetchlandlord_name" class="active">Name</label>
+                                               </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text" formControlName="fetchreg_area"  id="fetchreg_area" class="form-control"  >
+                                                    <label for="fetchreg_area" class="active">Area/Ward</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class="md-form md-outline">
+                                                    <select formControlName="fetchreg_caste" id="fetchreg_caste" class="form-control field-ht colorful-select">
+                                                        <option value="" selected >Select Category</option>
+                                                        <option *ngFor="let Categorylist of resplookupCategory" value={{Categorylist.LookupDataId}}>
+                                                            {{Categorylist.LookupValue}}
+                                                        </option>
+                                                    </select>
+                                                    <label class="active">Caste</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchadhar_number" id="fetchadhar_number" class="form-control" >
+                                                    <label for="fetchadhar_number" class="active">Aadhar Number</label>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-3 px-2">
+                                                <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                                    <input name="fetch_adharimage" id="fetch_adharimage" type="file" formControlName="fetch_adharimage"  class="custom-file-input" multiple (change)="AdharImage($event.target.files, $event )">
+                                                    <label class="custom-file-label" #labelImport id="labelImport" for="fetch_adharimage">Upload Aadhar Photo</label>
+                                                </div>
+                                            </div> -->
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchpan_number"  id="fetchpan_number" class="form-control" >
+                                                <label for="fetchpan_number" class="active">Pan Number</label>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="col-md-3 px-2">
+                                                <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                                    <input name="fetchpancard_img" id="fetchpancard_img" type="file"   formControlName="fetchpancard_img" class="custom-file-input" multiple id="panimage" (change)="PanImage($event.target.files, $event )">
+                                                    <label class="custom-file-label" #labelImport1 for="panimage" id="labelImport1">Upload PAN Photo</label>
+                                                </div>
+                                            </div> -->
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchmobile_no" id="fetchmobile_no" class="form-control" >
+                                                    <label for="fetchmobile_no" class="active">Mobile Number</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchalt_mobile_no" id="fetchalt_mobile_no" class="form-control"  >
+                                                    <label for="fetchalt_mobile_no" class="active">Alternate Mobile Number</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_country" id="fetchreg_country" class="form-control" >
+                                                    <label for="fetchreg_country" class="active">Country</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_state" id="fetchreg_state" class="form-control" >
+                                                    <label for="fetchreg_state" class="active">State</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_city" id="fetchreg_city" class="form-control" >
+                                                    <label for="fetchreg_city" class="active">City</label>
+                                                </div>
+                                            </div>
+                                             <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_district" id="fetchreg_district" class="form-control" >
+                                                    <label for="fetchreg_district" class="active">District</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_tah" id="fetchreg_tah" class="form-control" value="">
+                                                    <label for="fetchreg_tah" class="active">Tahsil</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <input type="text"  formControlName="fetchreg_pincode" id="fetchreg_pincode" class="form-control" >
+                                                    <label for="fetchreg_pincode" class="active">Pincode</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3 px-2">
+                                                <div class=" md-form md-outline">
+                                                    <textarea type="text"  formControlName="fetchreg_address" id="fetchreg_address" class="md-textarea form-control" rows="1" required=""></textarea>
+                                                    <label for="fetchreg_address" class="active">Address</label>
+                                                </div>
+                                            </div>
+                                            <div class="float-right m-3">
+                                              <button type="button" class="float-right btn btn-lg dusty-grass-gradient waves-light waves-effect" (click)="updatelandlorddetails_fun()" isHide><i class="fas fa-save mr-2"  ></i>Submit</button>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- More Nominee Section -->
+                            <div class="tab-pane pb-0" id="docsTabsAddPersonal" role="tabpanel" >
+                                <div class="row px-2">
+                                    <div class="col-md-12">
+                                        <button type="button" #Nomineemodal (click)="openModalButton()" id="openModalButton" class="btn btn-elegant btn-sm waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_landlord_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Nominee</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive card-body">
+                                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger1" class="table table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr class="expandRow">
+                                               <th>S.No.</th>
+                                              <th>Landlord Name</th>
+                                              <th>Contact Number</th>
+                                              <th>Address</th>
+                                              <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr  *ngFor="let item of dataa;let i=index">
+                                              <td>{{i+1}}</td>
+                                              <td>{{item.landlords_name}}</td>
+                                              <td>{{item.mobile_number}}</td>
+                                              <td>{{item.address}}</td>
+                                              <td>
+                                                  <a class="black-text" (click)="viewNominee(item.id)" ><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                  <a class="teal-text" (click)="editNominee(item.id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                  <!-- <a class="red-text" (click)="remove(item.id)" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a> -->
+                                              </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody *ngIf="dataa?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Attorney Detail Section -->
+                            <div class="tab-pane pb-0" id="docsTabsAttorney" role="tabpanel">
+                                <app-power-attorney [power_id]="id"></app-power-attorney>
+                            </div>
+
+                            <!-- Bank Detail Section -->
+                            <div class="tab-pane" id="docsTabsBank" role="tabpanel" >
+                                <div class="row px-2">
+                                    <div class="col-md-12">
+                                        <button type="button" #bankmodal (click)="openBankButton()" id="openBankButton" class="btn btn-elegant btn-sm waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_bank_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Bank Detail</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive card-body">
+                                    <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>S.No.</th>
+                                                <th>Name of Bank</th>
+                                                <th>Account Holder Name</th>
+                                                <th>Account Number</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of data;let i=index">
+                                                <td></td>
+                                                <td>{{i+1}}</td>
+                                                <td>{{item.bank_name}}</td>
+                                                <td>{{item.acc_holder_name}}</td>
+                                                <td>{{item.account_number}}</td>
+                                                <td>
+                                                    <a id="{{i+1}}" class="black-text" ngbTooltip="View Customer" placement="top" (click)="viewBank(item.bank_id)"><i class="fa fa-eye " aria-hidden="true"></i></a>
+                                                    <a id="{{i+1}}" class="text-success" ngbTooltip="Edit Customer" placement="top" (click)="editBank(item.bank_id)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <a id="{{i+1}}" class="text-primary pr-1" ngbTooltip="Download File" placement="top" (click)="downloadBankDetails(item.bank_id,item.bank_name)"><i class="fas fa-file-download"></i></a>
+                                                    <a id="{{i+1}}" class="text-danger" ngbTooltip="Remove Customer" placement="top" (click)="deleteBank(item.bank_id)"><i class="fa-times px-1 fas"></i></a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <!-- <tbody *ngIf="data?.length == 0">
+                                            <tr>
+                                                <td colspan="3" class="no-data-available">No data!</td>
+                                            </tr>
+                                        </tbody> -->
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Transaction Detail Section -->
+                            <div class="tab-pane pb-0" id="docsTabsTransaction" role="tabpanel">
+                                <div class="row px-2">
+                                    <div class="col-md-12">
+                                        <button type="button" #customermodal (click)="openTransactions()" id="openModalButton" class="btn btn-elegant btn-sm waves-light waves-effect float-right my-0" ><i class="fa fa-plus" aria-hidden="true"></i>  Add New Transaction Detail</button>
+                                    </div>
+                                </div>
+                                <div class="table-responsive card-body">
+                                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions3" [dtTrigger]="dtTrigger3" class="table table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr class="expandRow">
+                                                <th>S.No.</th>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Received From</th>
+                                                <th>Account Head</th>
+                                                <th>Reason</th>
+                                                <th>Landlord/Comapny Name</th>
+                                                <th>Payment Mode</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="expandRow rowColumn">
+                                                <td>1</td>
+                                                <td>11/02/2022</td>
+                                                <td>100000</td>
+                                                <td>Customer 1</td>
+                                                <td>CompanyId</td>
+                                                <td>Advance</td>
+                                                <td>Landlord Name 1</td>
+                                                <td>Cash</td>
+                                                <td>Cleared</td>
+                                                <td>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" (click)="openaddrow()"><i class="fas fa-angle-down px-1"></i></a>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <!-- <a class="red-text" id="" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a> -->
+                                                </td>
+                                                <!-- <td class={{isButtonVisible}}>
+                                                    <div class="row mx-1">
+                                                        <div class="col-md-5">Current Status : Initial Discussions</div>
+                                                        <div class="col-md-4">Next Status : Pricing/Quote Development</div>
+                                                        <div class="col-md-3">Total Estimated Cost : 5000</div>
+                                                    </div>
+                                                </td> -->
+                                            </tr>
+                                            <tr class="expandRow rowColumn">
+                                                <td>2</td>
+                                                <td>22/02/2022</td>
+                                                <td>50000</td>
+                                                <td>Customer 2</td>
+                                                <td>LandlordId</td>
+                                                <td>Stamp</td>
+                                                <td>Landlord Name 2</td>
+                                                <td>Bank</td>
+                                                <td>Cleared</td>
+                                                <td>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" (click)="openaddrow()"><i class="fas fa-angle-down px-1"></i></a>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <!-- <a class="red-text" id="" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a> -->
+                                                </td>
+                                                <!-- <td class={{isButtonVisible}}>
+                                                    <div class="row mx-1">
+                                                        <div class="col-md-5">Current Status : Initial Discussions</div>
+                                                        <div class="col-md-4">Next Status : Pricing/Quote Development</div>
+                                                        <div class="col-md-3">Total Estimated Cost : 5000</div>
+                                                    </div>
+                                                </td> -->
+                                            </tr>
+                                            <tr class="expandRow rowColumn">
+                                                <td>3</td>
+                                                <td>15/03/2022</td>
+                                                <td>200000</td>
+                                                <td>Customer 1</td>
+                                                <td>LandlordId</td>
+                                                <td>Finance</td>
+                                                <td>Landlord Name 1</td>
+                                                <td>Bank</td>
+                                                <td>Cleared</td>
+                                                <td>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" (click)="openaddrow()"><i class="fas fa-angle-down px-1"></i></a>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <!-- <a class="red-text" id="" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a> -->
+                                                </td>
+                                                <!-- <td class={{isButtonVisible}}>
+                                                    <div class="row mx-1">
+                                                        <div class="col-md-5">Current Status : Initial Discussions</div>
+                                                        <div class="col-md-4">Next Status : Pricing/Quote Development</div>
+                                                        <div class="col-md-3">Total Estimated Cost : 5000</div>
+                                                    </div>
+                                                </td> -->
+                                            </tr>
+                                            <tr class="expandRow rowColumn">
+                                                <td>4</td>
+                                                <td>25/04/2022</td>
+                                                <td>500000</td>
+                                                <td>Customer 1</td>
+                                                <td>LandlordId</td>
+                                                <td>Finance</td>
+                                                <td>Landlord Name 1</td>
+                                                <td>Bank</td>
+                                                <td>Cleared</td>
+                                                <td>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" (click)="openaddrow()"><i class="fas fa-angle-down px-1"></i></a>
+                                                    <a class="black-text" id="" mdbtooltip="View" placement="top" data-toggle="modal" data-target="#view_ety_modal"><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                    <a class="teal-text" id="" mdbtooltip="Edit" placement="top" data-toggle="modal" data-target="#edit_ety_modal"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                    <!-- <a class="red-text" id="" mdbtooltip="Remove" placement="top"><i class="fa-times px-1 fas"></i></a> -->
+                                                </td>
+                                                <!-- <td class={{isButtonVisible}}>
+                                                    <div class="row mx-1">
+                                                        <div class="col-md-5">Current Status : Initial Discussions</div>
+                                                        <div class="col-md-4">Next Status : Pricing/Quote Development</div>
+                                                        <div class="col-md-3">Total Estimated Cost : 5000</div>
+                                                    </div>
+                                                </td> -->
+                                            </tr>
+                                        </tbody>
+                                        <!-- <tbody>
+                                            <tr>
+                                                <td colspan="6" class="no-data-available">No data!</td>
+                                            </tr>
+                                        <tbody> -->
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Attachment Secton -->
+                            <div class="tab-pane" id="docsTabsAttach" role="tabpanel">
+                                <div class="row px-2">
+                                    <div class="col-md-12">
+                                        <div class="px-2">
+                                            <button type="button" class="btn btn-elegant btn-sm  waves-light waves-effect float-right" (click)="Newattachmentadd()"><i class="fa fa-plus" aria-hidden="true"></i> Add New Attachment</button>
+                                            <button type="button" style="display: none;" #attachmentModalButton data-toggle="modal" data-target="#add_attach_modal"></button>
+                                        </div>
+                                    </div>
+                                    <!--Grid column: Content-->
+                                    <div class=" col-md-12">
+                                        <div class="card">
+                                            <div class="table-responsive card-body">
+                                                <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions2" [dtTrigger]="dtTrigger1" class="table table-striped" cellspacing="0" width="100%">
+                                                    <thead>
+                                                        <tr >
+                                                            <th></th>
+                                                            <th>S.No.
+                                                            </th>
+                                                            <th>Date & Time
+                                                            </th>
+                                                            <!-- <th>Uploader Name
+                                                            </th> -->
+                                                            <th>Filename
+                                                            </th>
+                                                            <th>Action
+                                                            </th>
+                                                            <th>status
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let item of dataattach;let i=index">
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><a class="black-text" id="" ngbTooltip="View Customer" placement="top"
+                                                                ><i class="fa fa-eye px-1" aria-hidden="true"></i></a>
+                                                                <a class="text-primary." id="" ngbTooltip="Download" placement="top" ><i class="fas fa-download px-1"></i></a>
+                                                            </td>
+                                                            <td>
+                                                                <a class="teal-text" mdbtooltip="Edit" placement="top" data-toggle="modal" ><i class="fa-pencil-alt px-1 fas"></i></a>
+                                                                <a *ngIf="!CrmUserRole" class="red-text" mdbtooltip="Remove" placement="top" ><i class="fa-times px-1 fas"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--Grid column: Content-->
+                                </div>
+                            </div>
+
+                            <!-- Land Detail Section -->
+                            <div class="tab-pane" id="docsTabsLand" role="tabpanel">
+                                <app-land-detail [Landlord_id]="id"></app-land-detail>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="add_land_modal" (click)="landmodalbtn()" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                <div class="modal-content">
+                    <div class="modal-header mdb-color ">
+                        <p class="heading lead font-weight-bold">{{PopupTitle}}</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-row px-2">
+                            <div class="row p-2" >
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="">
+                                            <option value="" selected >Select</option>
+                                            <option ></option>
+                                        </select>
+                                        <label class="active">Block Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="">
+                                            <option value="" selected >Select</option>
+                                            <option ></option>
+                                        </select>
+                                        <label class="active">Land Use</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="">
+                                            <option value="" selected >Select</option>
+                                            <option ></option>
+                                        </select>
+                                        <label class="active">Khasra Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="">
+                                            <option value="" selected >Select</option>
+                                            <option ></option>
+                                        </select>
+                                        <label class="active">Rakba</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" class="form-control" id="">
+                                        <label for="Account" class=" ">Purchased Price</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 px-2">
+                                    <div class="md-form md-outline">
+                                        <select class="form-control field-ht colorful-select" id="">
+                                            <option value="" selected >Select</option>
+                                            <option ></option>
+                                        </select>
+                                        <label class="active">Facing</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Bank Detail Modal-->
+        <div class="modal fade" id="add_bank_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                <div class="modal-content">
+                    <div class="modal-header mdb-color ">
+                        <p class="heading lead font-weight-bold">{{bankTitle}}</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div [formGroup]="landlordBank">
+                            <div class="form-row">
+                                <div class="row p-2" >
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="bankLandlordId" id="bankLandlordId">
+                                            <input type="hidden" formControlName="bank_id" id="bank_id" class="form-control" >
+                                            <select class="form-control field-ht colorful-select" id="bankName"
+                                            name="bankName" formControlName="bankName">
+                                                <option value="" selected >Select Bank</option>
+                                                <option *ngFor="let Banklist of resplookupBank" value={{Banklist.LookupDataId}}>
+                                                    {{Banklist.LookupValue}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Name of Bank</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input name="bankBranch" type="text" class="form-control" id="bankBranch" formControlName="bankBranch">
+                                            <label for="bankBranch" class="active">Bank Branch Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input name="bankHolder" type="text" class="form-control" id="bankHolder" formControlName="bankHolder">
+                                            <label for="bankHolder" class="active">Account Holder Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="accountNo" name="accountNo" formControlName="accountNo">
+                                            <label for="accountNo" class="active">Account Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="bankIfsc"  name="bankIfsc" formControlName="bankIfsc">
+                                            <label for="IFSC" class="active">IFSC Code</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-3">
+                                       <div class="md-form md-outline">
+                                            <input class="form-check-input filled-in CalendarForm" formControlName="ownedDetail_chk"  type="checkbox" name="ownedDetail" value="1" id="ownedDetail" [checked]="IsOwned" >
+                                            <label for="ownedDetail">Is Owned</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-3">
+                                        <div class="md-form md-outline">
+                                            <input class="form-check-input filled-in CalendarForm"  type="checkbox" formControlName="cardDetail_chk" name="cardDetail" value="1" id="cardDetail" (change)=showCardDetail($event) [checked]="isChecked">
+                                            <label for="cardDetail">Card Detail</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2" *ngIf="showcardNumberfield">
+                                        <div class="md-form md-outline">
+                                            <input name="cardNumber" type="text" id="cardNumber" class="form-control"
+                                            formControlName="cardNumber">
+                                            <label for="cardNumber" class="active">Card Number</label>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-md-4 px-2" >
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" id="expiryDate" name="expiryDate" formControlName="expiryDate">
+                                            <label for="expiryDate" class=" ">Expiry date</label>
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="col-md-4 px-2" >
+                                        <div class="md-form md-outline">
+                                            <select class="form-control field-ht colorful-select" id="cbankName" name="cbankName" formControlName="cbankName">
+                                                <option value="" selected >Select Card</option>
+                                                <option ></option>
+                                            </select>
+                                            <label class="active">Card type</label>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect" (click)="addBankDetails();">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Transaction Modal-->
+        <div class="modal fade" id="add_cust_modal" (click)="custmodalbackdropbtn()" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+               <form [formGroup]="Transations_form" (ngSubmit)="add_edit_transation()">
+                    <div class="modal-content">
+                        <div class="modal-header mdb-color ">
+                            <p class="heading lead font-weight-bold" id="modaltextheader">Add Transations Details</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row px-2">
+                                <div class="row px-2">
+                                    <div class="col-lg-12 col-md-9 p-2 pb-3">
+                                        <label class="pr-2 form-check-label" for="">Payment Mode : </label>
+                                        <!-- <div class="form-check form-check-inline">
+                                            <input type="radio" class="form-check-input" id="PaymentMode_1" name="PaymentMode"
+                                                (change)="changePaymentMode($event)" #onlinedetail>
+                                            <label class="form-check-label" for="PaymentMode_1">Online Payment</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" class="form-check-input" id="PaymentMode_2" name="PaymentMode" #chequeDetail>
+                                            <label class="form-check-label" for="PaymentMode_2">Cheque Payment</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" class="form-check-input" id="PaymentMode_3" name="PaymentMode"
+                                                (change)="changePaymentMode($event)" #cashDetail>
+                                            <label class="form-check-label" for="PaymentMode_3">Cash Payment</label>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <input type="hidden" id="regTransactionID" formControlName="regTransactionID" >
+                                    <input type="hidden" formControlName="Id">
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName="BankName" class="form-control field-ht colorful-select" id="form-cust_title">
+                                                <option value="" selected="true">Select Bank Name</option>
+                                                <option *ngFor="let Banklist of resplookupBank" value={{Banklist.LookupDataId}}>
+                                                    {{Banklist.LookupValue}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Bank Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" class="form-control" formControlName="ChequeNumber">
+                                            <label for="" class=" ">Cheque Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline pr-4">
+                                            <input class="form-control" formControlName="ChequeDate" placeholder="Select date" name="td" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()" readonly
+                                            style="height: 1rem !important;">
+                                            <label for="td" class="active">Cheque date</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="AmountPaid" class="form-control" >
+                                            <label for="" class=" ">Amount Paid</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="Recipient_Ac" class="form-control" >
+                                            <label for="" class=" ">Recipient Account Number</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName="EmployeeName" class="form-control field-ht colorful-select" >
+                                                <option value="" selected="true">Select Employee Name</option>
+                                                <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                    {{Employeelist.EmployeeName}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Submitted/Took By</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4  px-2">
+                                        <div class=" md-form md-outline">
+                                            <select formControlName="DepoBankName" class="form-control field-ht colorful-select" id="">
+                                                <option value="" selected="true">Select Bank Name</option>
+                                                <option *ngFor="let Banklist of resplookupBank" value={{Banklist.LookupDataId}}>
+                                                    {{Banklist.LookupValue}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Deposited To Bank</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName ='PaymentStatus' class="form-control field-ht colorful-select" id="">
+                                                <option value="" selected="true">Select Status</option>
+                                                <option *ngFor="let pStatuslist of respPStatus"  value={{pStatuslist.erpPStatusID}}>
+                                                    {{pStatuslist.status}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Payment Status</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <input formControlName="TransactionId" type="text" class="form-control">
+                                            <label for="td" class="active">Transaction Id</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName="RemarkStatus" class="form-control field-ht colorful-select" id="">
+                                                <option value="" selected="true">Select Status</option>
+                                                <option *ngFor="let Remarklist of resplookupremark" value={{Remarklist.LookupDataId}}>
+                                                    {{Remarklist.LookupValue}}
+                                                </option>
+                                            </select>
+                                            <label class="active">Remark</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Add New landlord modal -->
+        <div class="modal fade" id="add_landlord_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info " role="document ">
+                <!-- Content -->
+                <div class="modal-content ">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color ">
+                        <p class="heading lead font-weight-bold" id="modaltextheader"> {{nominee_title}} </p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <!-- Body -->
+                    <div [formGroup]="PersonalDetailsForm">
+                        <div class="col-md-12 p-2">
+                            <div class="row px-3" >
+                                <div class="col-lg-3 col-md-6 px-2">
+                                    <div class="md-form md-outline">
+                                        <!-- <input type="hidden" id="parent_id" formControlName="parent_id" > -->
+                                        <input type="hidden" id="PlandlordId" formControlName="PlandlordId">
+                                        <select id="title" formControlName="title" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['title'].invalid ) || (PersonalDetailsForm.controls['title'].invalid && PersonalDetailsForm.controls['title'].touched)}">
+                                            <option value="" selected="true">Select Title</option>
+                                            <option *ngFor="let titlelist of respcustomerTitle" value={{titlelist.LookupValue}}>
+                                                {{titlelist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="active">Title</label>
+                                        <div *ngIf="(submitted && PersonalDetailsForm.controls['title'].invalid ) || (PersonalDetailsForm.controls['title'].touched && PersonalDetailsForm.controls['title'].invalid)"class="invalid-feedback">Title is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="landlords_name" id="landlords_name" class="form-control " [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['landlords_name'].invalid ) || (PersonalDetailsForm.controls['landlords_name'].invalid && PersonalDetailsForm.controls['landlords_name'].touched)}">
+                                        <label for="" class="active">Landlord Name</label>
+                                        <div *ngIf=" (submitted && PersonalDetailsForm.controls['landlords_name'].invalid && PersonalDetailsForm.controls['landlords_name'].errors.required) || (PersonalDetailsForm.controls['landlords_name'].invalid && PersonalDetailsForm.controls['landlords_name'].touched && PersonalDetailsForm.controls['landlords_name'].errors.required)" class="invalid-feedback">Landlord Name is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-6 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="reg_area"  id="reg_area" class="form-control "  [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['reg_area'].invalid ) || (PersonalDetailsForm.controls['reg_area'].invalid && PersonalDetailsForm.controls['reg_area'].touched)}">
+                                        <label for="reg_area" class="active" >Area/Ward</label>
+                                        <div *ngIf=" (submitted && PersonalDetailsForm.controls['reg_area'].invalid && PersonalDetailsForm.controls['reg_area'].errors.required) || (PersonalDetailsForm.controls['reg_area'].invalid && PersonalDetailsForm.controls['reg_area'].touched && PersonalDetailsForm.controls['reg_area'].errors.required)" class="invalid-feedback">Area/Ward is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="reg_caste" id="reg_caste" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['reg_caste'].invalid ) || (PersonalDetailsForm.controls['reg_caste'].invalid && PersonalDetailsForm.controls['reg_caste'].touched)}">
+                                            <option value="" selected >Select Category</option>
+                                            <option *ngFor="let Categorylist of resplookupCategory" value={{Categorylist.LookupDataId}}>
+                                                {{Categorylist.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="active">Category</label>
+                                        <div *ngIf="(submitted && PersonalDetailsForm.controls['reg_caste'].invalid ) || (PersonalDetailsForm.controls['reg_caste'].touched && PersonalDetailsForm.controls['reg_caste'].invalid)"class="invalid-feedback">Category is required</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="adhar_number" id="adhar_number" class="form-control"
+                                        [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['adhar_number'].errors) || (PersonalDetailsForm.controls['adhar_number'].touched && PersonalDetailsForm.controls['adhar_number'].invalid)}">
+                                        <label for="" class="active">Aadhar Number</label>
+                                        <div *ngIf=" (submitted && PersonalDetailsForm.controls['adhar_number'].errors && PersonalDetailsForm.controls['adhar_number'].errors.required) || (PersonalDetailsForm.controls['adhar_number'].touched && PersonalDetailsForm.controls['adhar_number'].errors && PersonalDetailsForm.controls['adhar_number'].errors.required )" class="invalid-feedback">Aadhar number is required</div>
+                                        <div *ngIf=" (submitted && PersonalDetailsForm.controls['adhar_number'].errors && PersonalDetailsForm.controls['adhar_number'].errors.pattern && !PersonalDetailsForm.controls['adhar_number'].errors.required) || (PersonalDetailsForm.controls['adhar_number'].touched && PersonalDetailsForm.controls['adhar_number'].errors && PersonalDetailsForm.controls['adhar_number'].errors.pattern)" class="invalid-feedback">Enter Only Numeric value
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                        <input name="adharimage" id="adharimage" type="file" formControlName="adharimage"  class="custom-file-input" multiple id="adharimage" (change)="AdharImage($event.target.files, $event )">
+                                        <label class="custom-file-label" #labelImport id="labelImport" for="adharimage">Upload Aadhar Photo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="pan_number"  id="pan_number" class="form-control" [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['pan_number'].errors) || (PersonalDetailsForm.controls['pan_number'].touched && PersonalDetailsForm.controls['pan_number'].invalid)}">
+                                    <label for="" class="active">Pan Number</label>
+                                    <div *ngIf=" (submitted && PersonalDetailsForm.controls['pan_number'].errors && PersonalDetailsForm.controls['pan_number'].errors.required) || (PersonalDetailsForm.controls['pan_number'].touched && PersonalDetailsForm.controls['pan_number'].errors && PersonalDetailsForm.controls['pan_number'].errors.required )" class="invalid-feedback">Pan number is required</div>
+                                        <div *ngIf=" (submitted && PersonalDetailsForm.controls['pan_number'].errors && PersonalDetailsForm.controls['pan_number'].errors.pattern && !PersonalDetailsForm.controls['pan_number'].errors.required) || (PersonalDetailsForm.controls['pan_number'].touched && PersonalDetailsForm.controls['pan_number'].errors && PersonalDetailsForm.controls['pan_number'].errors.pattern)" class="invalid-feedback">Enter Correct Pan Number
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                        <input name="adharimage" id="pancard_img" type="file"   formControlName="pancard_img" class="custom-file-input" multiple id="panimage" (change)="PanImage($event.target.files, $event )">
+                                        <label class="custom-file-label" #labelImport1 for="panimage" id="labelImport1">Upload PAN Photo</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="mobile_number" id="mobile_number" name="mobile_number" class="form-control" [ngClass]="{ 'is-invalid': (submitted && PersonalDetailsForm.controls['mobile_number'].invalid ) || (PersonalDetailsForm.controls['mobile_number'].invalid && PersonalDetailsForm.controls['mobile_number'].touched)}">
+                                        <label for="" class="active">Mobile Number</label>
+                                        <div
+                                        *ngIf=" (submitted && PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].errors.required) || (PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].touched && PersonalDetailsForm.controls['mobile_number'].errors.required)"
+                                        class="invalid-feedback">Please Enter Contact Number</div>
+                                        <div
+                                        *ngIf=" (submitted && PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].errors.pattern) || (PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].touched && PersonalDetailsForm.controls['mobile_number'].errors.pattern)"
+                                        class="invalid-feedback">Please Enter Only Numeric Number. </div>
+                                        <div
+                                        *ngIf=" (submitted && PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].errors.maxlength && !PersonalDetailsForm.controls['mobile_number'].errors.pattern && !PersonalDetailsForm.controls['mobile_number'].errors.required) || (PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].touched && PersonalDetailsForm.controls['mobile_number'].errors.maxlength && !PersonalDetailsForm.controls['mobile_number'].errors.pattern)"
+                                        class="invalid-feedback">Please Enter Maximum 10 Digit Number. </div>
+                                        <div
+                                        *ngIf=" (submitted && PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].errors.minlength && !PersonalDetailsForm.controls['mobile_number'].errors.pattern && !PersonalDetailsForm.controls['mobile_number'].errors.required) || (PersonalDetailsForm.controls['mobile_number'].errors && PersonalDetailsForm.controls['mobile_number'].touched && PersonalDetailsForm.controls['mobile_number'].errors.minlength && !PersonalDetailsForm.controls['mobile_number'].errors.pattern)"
+                                        class="invalid-feedback">Please Enter Minimum 10 Digit Number</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="alt_mobile_number" id="alt_mobile_number" class="form-control"  >
+                                    <label for="" class="active">Alternate Mobile Number</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="reg_country" id="reg_country" class="form-control" >
+                                    <label for="" class="active" >Country</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="reg_state" id="reg_state" class="form-control" >
+                                        <label for="" class="active" >State</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="reg_city" id="reg_city" class="form-control" >
+                                        <label for="" class="active" >City</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                            <input type="text"  formControlName="reg_district" id="reg_district" class="form-control" >
+                                            <label for="Active" class="active" >District</label>
+                                            <div class="invalid-feedback">Please Enter District</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="reg_tah" id="reg_tah" class="form-control" value="">
+                                        <label for="" class="Active">Tahsil</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 px-2">
+                                    <div class=" md-form md-outline">
+                                        <input type="text"  formControlName="reg_pincode" id="reg_pincode" class="form-control" >
+                                        <label for="" class="active" >Pincode</label>
+                                    </div>
+                                    <div *ngIf=" (submitted && PersonalDetailsForm.controls['reg_pincode'].invalid && PersonalDetailsForm.controls['reg_pincode'].errors.pattern) || (PersonalDetailsForm.controls['reg_pincode'].invalid && PersonalDetailsForm.controls['reg_pincode'].touched && PersonalDetailsForm.controls['reg_pincode'].errors.pattern)" class="invalid-feedback" style="display: block !important;">Please Enter Only Numeric Number. </div>
+                                    <!-- <div *ngIf=" (submitted && PersonalDetailsForm.controls['reg_pincode'].invalid && PersonalDetailsForm.controls['reg_pincode'].errors.maxlength && !PersonalDetailsForm.controls['reg_pincode'].errors.pattern) || (PersonalDetailsForm.controls['reg_pincode'].invalid && PersonalDetailsForm.controls['reg_pincode'].touched && PersonalDetailsForm.controls['reg_pincode'].errors.maxlength && !PersonalDetailsForm.controls['reg_pincode'].errors.pattern)" class="invalid-feedback" style="display: block !important;">Please Enter Maximum 6 Digit Number. </div>
+                                    <div *ngIf=" (submitted && PersonalDetailsForm.controls['reg_pincode'].invalid && PersonalDetailsForm.controls['reg_pincode'].errors.minlength && !PersonalDetailsForm.controls['reg_pincode'].errors.pattern) || (PersonalDetailsForm.controls['reg_pincode'].errors && PersonalDetailsForm.controls['reg_pincode'].touched && PersonalDetailsForm.controls['reg_pincode'].errors.minlength && !PersonalDetailsForm.controls['reg_pincode'].errors.pattern)" class="invalid-feedback" style="display: block !important;">Please Enter Minimum 6 Digit Number</div> -->
+                                </div>
+                                <div class="col-md-8 px-2">
+                                    <div class=" md-form md-outline">
+                                        <textarea type="text"  formControlName="reg_address" id="reg_address" class="md-textarea form-control" rows="1" required=""></textarea>
+                                        <label for="" class="active">Address</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" (click)="addlandlorddetails_fun()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+        <!-- Add New Attach modal -->
+        <div class="modal fade" id="add_attach_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <!-- Content -->
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">{{attachmentModalHadding}}</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+                    <form [formGroup]="landAttachment" >
+                        <!-- Body -->
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="col-lg-8 col-md-8 px-2">
+                                    <div class="md-form md-outline" style="margin-top: 0rem !important;">
+                                        <input type="hidden" name="attachmeid_id" formControlName="attachmeid_id">
+                                        <input formControlName="landattachmentimg" name="landattachmentimg" type="file" class="custom-file-input" multiple id="landattachmentimg" (change)="AttachmentImage($event.target.files, $event )">
+                                        <label class="custom-file-label" #labelImport id="labelImport" for="landattachmentimg">{{uploadMode ? attachmentimageName : 'Upload File'}}</label>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-lg-4 col-md-4 px-2 py-2">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="attachmentstatus" class="form-control field-ht colorful-select">
+                                            <option value=" " selected disabled>Select Status</option>
+                                            <option value="Enable">Enable</option>
+                                            <option value="Disable">Disable</option>
+                                        </select>
+                                        <label class="active">Status</label>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                        </div>
+                        <!-- Footer -->
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm  btn-danger" #attachmentclosebutton data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect" id="attachmentsave" (click)="attachmentSubmit()">Save</button>
+                    </div>
+                </div>
+                <!-- Content -->
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+</body>

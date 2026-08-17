@@ -1,0 +1,219 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Item Group
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal" data-target="#add_master_modal"><i class="fa fa-plus" aria-hidden="true"></i> Add New Item</button>
+                </h5>
+                <div [formGroup]="searchitem" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input type="text" formControlName="itemname" id="itemname" class="form-control">
+                                <label for="itemname" class=" ">Item Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-9 px-4">
+                            <button type="button" (click)="itemSearch()" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive card-body">
+                        <table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>S.No.</th>
+                                    <th>Item Name</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tr *ngFor="let item of dataa">
+                                <td>{{item.counter}}</td>
+                                <td>{{item.GroupName}}</td>
+                                <td *ngIf="item.status == 1">Enable</td>
+                                <td *ngIf="item.status != 1">Disable</td>
+                                <td>
+                                    <a class="black-text" mdbtooltip="View" placement="top" ><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                    <a class="teal-text" id="{{i+1}}" mdbtooltip="Edit" data-toggle="modal" data-target="#edit_ety_modal" (click)="getitem(item.ItemGropuId)" placement="top" ><i class="fa-pencil-alt px-1 fas"></i></a>
+                                    <a class="red-text" id="{{i+1}}" mdbtooltip="Remove" (click)="deletemployee(item.ItemGropuId)" placement="top"><i class="fa-times px-1 fas"></i></a>
+                                </td>
+                            </tr>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                  <td colspan="3" class="no-data-available">No data!</td>
+                                </tr>
+                              <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New modal -->
+            <div class="modal fade" id="add_master_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Add New Item</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div div [formGroup]="additem" class="modal-body">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" formControlName="itemgroup" id="form-item" class="form-control " value="">
+                                            <label for="form-item" class=" ">Add New Item</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3 ">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button"  (click)="insertItem()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+            
+            <!-- Edit modal -->
+            <div class="modal fade" id="edit_ety_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">Edit Entry</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Body -->
+                        <div [formGroup]="fetchitem" class="modal-body">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="hidden" formControlName="itemgroupgid" id="itemgroupgid" class="form-control " value="">
+                                            <input type="hidden" formControlName="itemgroupcid" id="itemgroupcid" class="form-control " value="">
+                                            <input type="text" formControlName="itemgroupname" id="itemgroupname" class="form-control">
+                                            <label for="form-employee" class="Active">Item</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <select formControlName="itemgroupstatus" class="form-control field-ht colorful-select">
+                                                <option value=" " selected disabled>Select Status</option>
+                                                <option value="Enable">Enable</option>
+                                                <option value="Disable">Disable</option>
+                                            </select>
+                                            <label class="active">Status</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="modal-footer mx-3">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="updateItem()" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Main layout -->
+
+    <!-- SCRIPTS -->
+
+    <!-- JQuery -->
+    <script>
+        // SideNav Initialization
+        $(".button-collapse").sideNav();
+
+        var container = document.querySelector('.custom-scrollbar');
+        var ps = new PerfectScrollbar(container, {
+            wheelSpeed: 2,
+            wheelPropagation: true,
+            minScrollbarLength: 20
+        });
+        $(document).ready(function() {
+            $('.mdb-select').materialSelect();
+        });
+        $('.datepicker').pickadate();
+        $('#input_starttime').pickatime({
+            twelvehour: true
+        });
+        $('#input_endtime').pickatime({
+            // 12 or 24 hour
+            twelvehour: false,
+            // Light or Dark theme
+        });
+    </script>
+    <script>
+        $('#dt-material-checkbox').dataTable({
+
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            }
+        });
+
+        $('#dtMaterialDesignExample_wrapper, #dt-material-checkbox_wrapper').find('label').each(function() {
+            $(this).parent().append($(this).children());
+        });
+        $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').find(
+            'input')(function() {
+            $('input').removeClass('form-control-sm');
+        });
+        $('#dtMaterialDesignExample_wrapper .dataTables_length, #dt-material-checkbox_wrapper .dataTables_length').addClass(
+            'd-flex flex-row');
+        $('#dtMaterialDesignExample_wrapper .dataTables_filter, #dt-material-checkbox_wrapper .dataTables_filter').addClass(
+            'md-form');
+        $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').removeClass(
+            'custom-select custom-select-sm form-control form-control-sm');
+        $('#dtMaterialDesignExample_wrapper select, #dt-material-checkbox_wrapper select').addClass('mdb-select');
+        $('#dtMaterialDesignExample_wrapper .mdb-select, #dt-material-checkbox_wrapper .mdb-select').materialSelect();
+        $('#dtMaterialDesignExample_wrapper .dataTables_filte, #dt-material-checkbox_wrapper .dataTables_filterr').find(
+            'label').remove();
+    </script>
+</body>

@@ -1,0 +1,9 @@
+.no-data-available {
+	text-align: center;
+}
+.dataTables_empty {
+	display: none;
+}
+::ng-deep table.dataTable td.dataTables_empty {
+	display: none;
+}

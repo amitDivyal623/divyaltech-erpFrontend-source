@@ -1,0 +1,793 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="main-tabs-docs">
+                <nav class="nav nav-pills nav-justified" [formGroup]="PRPOformGroup">
+                    <a id="docs-tab-workdetail" class="nav-item nav-link link-nav active"
+                        [class.active]="activeTab === 'Vendor'" (click)="setActiveTab('Vendor')" href="#docsTabsVendor"
+                        data-toggle="tab" role="tab" aria-controls="docsTabsVendor"><i class="fa fa-file-alt mr-2"
+                            aria-hidden="true"></i>Purchase Request
+                        <span class="badge badge-pill badge-danger ml-2">
+                            {{ PRPOformGroup.get('PRPending').value }}
+                        </span>
+
+                    </a>
+                    <a *ngIf="!isProjectCoordinator" id="docs-tab-attach" class="nav-item nav-link link-nav"
+                        href="#docsTabsMachinery" [class.active]="activeTab === 'Machinery'"
+                        (click)="setActiveTab('Machinery')" data-toggle="tab" role="tab"
+                        aria-controls="docsTabsMachinery"><i class="fa fa-shopping-cart mr-2"
+                            aria-hidden="true"></i>Purchase Order
+                        <span class="badge badge-pill badge-danger ml-2">
+                            {{ PRPOformGroup.get('POPending').value }}
+                        </span>
+                    </a>
+                </nav>
+                <div class="tab-content panel-tab pb-1 p-1">
+                    <div class="tab-pane pb-0" [class.show]="activeTab === 'Vendor'"
+                        [class.active]="activeTab === 'Vendor'" id="docsTabsVendor" role="tabpanel">
+                        <div class="row p-2">
+                            <div class="col-lg-12 col-md-12" [formGroup]="searchPRForm">
+                                <div class="row py-2 px-2">
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="purchaseRequestList" bindLabel="purchase_request_no"
+                                                bindValue="purchase_request_no" formControlName="prNumber"
+                                                placeholder="Select PR" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100">
+                                            </ng-select>
+                                            <label class="active">PR No.</label>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <label for="requestedDate" class="active">Requested Date</label>
+                                            <input id="requestedDate" type="date" formControlName="requestedDate"
+                                                class="form-control w-100" />
+                                        </div>
+                                    </div>
+                                    <!-- Requested By -->
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="allEmployeesList" bindLabel="employeename"
+                                                bindValue="employeeid" formControlName="requestedBy"
+                                                placeholder="Select Person" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100">
+                                            </ng-select>
+                                            <label class="active">Requested By</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submitted By -->
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="allEmployeesList" bindLabel="employeename"
+                                                bindValue="employeeid" formControlName="submittedBy"
+                                                placeholder="Select Person" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100">
+                                            </ng-select>
+                                            <label class="active">Submitted By</label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Project Name -->
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="projectsList" bindLabel="project_name"
+                                                bindValue="project_id" formControlName="projectName"
+                                                placeholder="Select Project" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100">
+                                            </ng-select>
+                                            <label class="active">Project Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="categorySearchLists" bindLabel="group_name"
+                                                bindValue="group_id" formControlName="itemCategory"
+                                                placeholder="Select Category" [searchable]="true" [clearable]="true"
+                                                class="d-block w-100" (change)="onSearchCategoryChange($event)">
+                                            </ng-select>
+                                            <label class="active ml-0">Category</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+
+                                            <ng-select [items]="filteredSearchSubcategoryLists"
+                                                bindLabel="sub_group_name" bindValue="sub_group_id"
+                                                formControlName="itemSubCategory" placeholder="Select Sub Category"
+                                                [searchable]="true" [clearable]="true" class="d-block w-100"
+                                                (change)="onSearchSubCategoryChange($event)">
+                                            </ng-select>
+                                            <label class="active ml-0">Sub Category</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <ng-select [items]="filteredSearchMaterialsList" bindLabel="itemname"
+                                                bindValue="itemname" placeholder="Select Item"
+                                                notFoundText="No items found" formControlName="itemName"
+                                                [searchable]="true" [clearable]="true"
+                                                (change)="onSearchItemChange($event)">
+                                            </ng-select>
+                                            <label class="active ml-0">Item</label>
+                                        </div>
+                                    </div>
+
+                                    <div class=" col-md-6 px-2">
+                                        <button type="button"
+                                            class="btn dusty-grass-gradient btn-sm  waves-light waves-effect col-lg-2 col-md-6 px-2"
+                                            (click)="searchPR()"><i class="fa fa-search mr-2"
+                                                aria-hidden="true"></i>Search</button>
+                                        <button type="button" (click)="resetPR()"
+                                            class="btn warm-flame-gradient btn-sm waves-light waves-effect col-lg-2 col-md-6 px-2"><i
+                                                class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                                        <button type="button" style="display: none;"></button>
+                                        <button type="button" data-toggle="modal" data-target="#add_vendor_modal"
+                                            (click)="openModal()"
+                                            class="btn blue-gradient btn-sm  waves-light waves-effect col-md-4"><i
+                                                class="fa fa-plus " aria-hidden="true"></i> &nbsp; Purchase
+                                            Request</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 mb-2">
+                                <section>
+                                    <div class="card px-2 my-2">
+                                        <div class="table-responsive">
+                                            <table id="vendor" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                                                class="table table-striped" cellspacing="0" width="100%">
+                                                <thead class="winter-neva-gradient">
+                                                    <tr>
+                                                        <th width="5%">S.No.</th>
+                                                        <th width="10%">Project</th>
+                                                        <th width="10%">PR No.</th>
+                                                        <th width="10%">Request Date</th>
+                                                        <th width="10%">Requested By</th>
+                                                        <th width="10%"> Submitted By</th>
+                                                        <th width="5%">Priority</th>
+                                                        <!-- <th width="5%">Status</th> -->
+                                                        <th width="15%"> Items </th>
+                                                        <th width="15%"> Description </th>
+                                                        <th width="5%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tr *ngFor="let pr of prDetailsData;let i=index">
+                                                    <td width="5%">{{i+1}}</td>
+                                                    <td width="10%">{{pr.project_name}}</td>
+                                                    <td width="10%">{{pr.purchase_request_no}}</td>
+                                                    <td width="10%">{{pr.request_date | date:'dd-MM-yyyy'}}</td>
+                                                    <td width="10%">{{pr.requested_by}}</td>
+                                                    <td width="10%">{{pr.submitted_by}}</td>
+                                                    <td width="5%">{{pr.priority}}</td>
+                                                    <!-- <td width="5%">{{pr.status}}</td> -->
+                                                    <td width="15%">
+                                                        <span [ngbTooltip]="pr.item" tooltipClass="wide-tooltip"
+                                                            placement="top" container="body" triggers="hover">
+                                                            {{ pr.item?.length > 30 ? (pr.item | slice:0:30) + '...' :
+                                                            pr.item }}
+                                                        </span>
+                                                    </td>
+                                                    <td width="15%">
+                                                        <span [ngbTooltip]="pr.description" tooltipClass="wide-tooltip"
+                                                            placement="top" container="body" triggers="hover">
+                                                            {{ pr.description?.length > 30 ? (pr.description |
+                                                            slice:0:30) + '...' :
+                                                            pr.description }}
+                                                        </span>
+                                                    </td>
+                                                    <td width="6%">
+                                                        <!-- <a class="teal-text" style="display: none;" #EditViewPopup id=""
+                                                            ngbTooltip="Edit" placement="top" data-toggle="modal"
+                                                            data-target="#edit_vendor_modal"></a> -->
+                                                        <a class="black-text" mdbtooltip="View" placement="top"
+                                                            ngbTooltip="View PR" data-toggle="modal"
+                                                            data-target="#add_vendor_modal"
+                                                            (click)="editPR('viewPR',pr.request_id)"><i
+                                                                class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <a *ngIf="!pr.hasPO" class="teal-text" id="" mdbtooltip="Edit"
+                                                            ngbTooltip="Edit PR" placement="top" data-toggle="modal"
+                                                            data-target="#add_vendor_modal"
+                                                            (click)="editPR('editPR',pr.request_id)"><i
+                                                                class="fa-pencil-alt px-1 fas"></i></a>
+                                                        <a class="red-text" id="" mdbtooltip="Remove" placement="top"
+                                                            ngbTooltip="Delete PR" (click)="deletePR(pr.request_id)"><i
+                                                                class="fa-times px-1 fas"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tbody *ngIf="prDetailsData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="7" class="no-data-available">No data!</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <!-- <div class="col-md-12">
+                                <button type="button"
+                                    class="float-right btn blue-gradient btn-sm waves-light waves-effect"
+                                    (click)="result('Machinery')"><i class="fas fa-forward mr-2"
+                                        aria-hidden="true"></i>Next</button>
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="tab-pane" [class.show]="activeTab === 'Machinery'"
+                        [class.active]="activeTab === 'Machinery'" id="docsTabsMachinery" role="tabpanel">
+                        <div class="row p-2">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="row py-2 px-2">
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="companyName" name="companyName"
+                                                class="form-control field-ht colorful-select" required="">
+                                            <label for="companyName" class="active">PO Name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 px-2">
+                                        <div class="md-form md-outline">
+                                            <input type="text" id="vendorname" name="vendorname"
+                                                class="form-control field-ht colorful-select" required="">
+                                            <label for="vendorname" class="active">Vendor</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8 px-2">
+                                        <button type="button"
+                                            class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"><i
+                                                class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                                        <button type="button"
+                                            class="btn warm-flame-gradient btn-sm waves-light waves-effect"><i
+                                                class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                                        <button type="button"
+                                            class="btn dusty-grass-gradient btn-sm  waves-light waves-effect"
+                                            (click)="route('add-purchase-order')"><i class="fa fa-plus "
+                                                aria-hidden="true"></i> &nbsp; Create Purchase Order</button>
+                                        <button type="button" #VendorPopup data-toggle="modal"
+                                            data-target="#add_vendor_modal" style="display: none;"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Table-->
+                            <div class="col-lg-12 col-md-12 mb-2">
+                                <section>
+                                    <div class="card px-2 my-2">
+                                        <div class="" [formGroup]="poForm">
+                                            <table id="vendor" datatable [dtOptions]="dtOptions1"
+                                                [dtTrigger]="dtTrigger1" class="table " cellspacing="0" width="100%">
+                                                <thead class="">
+                                                    <tr>
+                                                        <th width="5%">S.No.</th>
+                                                        <th width="5%">Po No</th>
+                                                        <th width="5%">Pr No</th>
+                                                        <th width="20%"> Items </th>
+                                                        <th width="5%">Order Date</th>
+                                                        <!-- <th>Ordered By</th> -->
+                                                        <th width="5%">To Warehouse</th>
+                                                        <th width="5%">Vendor Name</th>
+                                                        <th width="5%">Company Name</th>
+                                                        <th width="5%">Grand Total</th>
+                                                        <th width="5%">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody formArrayName="purchaseOrders">
+
+                                                    <tr *ngFor="let vendors of poDetailsData;let i=index">
+                                                        <td>{{i+1}}</td>
+                                                        <td>{{vendors.purchase_order_number}}</td>
+                                                        <td>{{vendors.purchase_number}}</td>
+                                                        <td width="20%">
+                                                            <span [ngbTooltip]="vendors.item_name"
+                                                                tooltipClass="wide-tooltip" placement="top"
+                                                                container="body" triggers="hover">
+                                                                {{ vendors.item_name?.length > 40 ? (vendors.item_name |
+                                                                slice:0:40) + '...' :
+                                                                vendors.item_name }}
+                                                            </span>
+                                                        </td>
+                                                        <td>{{vendors.order_date | date:'dd-MM-yyyy'}}</td>
+                                                        <!-- <td>{{vendors.ordered_by}}</td> -->
+                                                        <td>{{vendors.to_warehouse}}</td>
+                                                        <td>{{vendors.vendor_name}}</td>
+                                                        <td>{{vendors.company_name}}</td>
+                                                        <td>{{vendors.grand_total}}</td>
+                                                        <td style="width: 8%;">
+                                                            <a class="black-text" mdbtooltip="View" placement="top"
+                                                                ngbTooltip="View PO"
+                                                                (click)="ViewPurchaseOrder('view', vendors.purchase_order_id)">
+                                                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                                            </a>
+
+
+                                                            <a *ngIf="!poForm.get('purchaseOrders').value[i].dispatched"
+                                                                ngbTooltip="Edit PO" class="teal-text" id=""
+                                                                mdbtooltip="Edit" placement="top"
+                                                                (click)="ViewPurchaseOrder('edit', vendors.purchase_order_id)">
+                                                                <i class="fa-pencil-alt px-1 fas"></i>
+                                                            </a>
+
+
+                                                            <a class="blue-text" mdbtooltip="Download" placement="top"
+                                                                ngbTooltip="Download PO"
+                                                                (click)="downloadPurchaseOrder(vendors.purchase_order_id)">
+                                                                <i class="fa fa-download px-1" aria-hidden="true"></i>
+                                                            </a>
+
+                                                            <a class="mx-2"
+                                                                [ngClass]="poForm.get('purchaseOrders').value[i].dispatched ? 'text-muted' : 'text-success'"
+                                                                [ngbTooltip]="poForm.get('purchaseOrders').value[i].dispatched ? 'Dispatched' : 'Not Dispatched'"
+                                                                placement="top" (click)="onDispatchClick(i, $event)"
+                                                                style="cursor: pointer;">
+
+                                                                <i class="fas fa-check-square" aria-hidden="true"></i>
+
+                                                            </a>
+
+
+
+
+                                                            <a class="red-text" id="" mdbtooltip="Remove"
+                                                                placement="top" ngbTooltip="Delete PO"
+                                                                (click)="deletePurchaseOrder(vendors.purchase_order_id)">
+                                                                <i class="fa-times px-1 fas"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody *ngIf="poDetailsData?.length == 0">
+                                                    <tr>
+                                                        <td colspan="7" class="no-data-available">No data!</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="button"
+                                    class="float-right btn blue-gradient btn-sm waves-light waves-effect"
+                                    (click)="result('Machinery')"><i class="fas fa-forward mr-2"
+                                        aria-hidden="true"></i>Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Add New Purchase Request Modal -->
+        <div class="modal fade" id="add_vendor_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                <div class="modal-content">
+
+                    <!-- Header -->
+                    <div class="modal-header mdb-color">
+                        <p class="heading lead font-weight-bold">Add New Purchase Request</p>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            (click)="cancelPR()">
+                            <span aria-hidden="true" class="white-text">&times;</span>
+                        </button>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <div class="col-lg-12 col-md-12" [formGroup]="purchaseRequestForm">
+                            <div class="row">
+                                <input type="hidden" formControlName="request_id">
+
+                                <!-- Project Name -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="purchase_request_no"
+                                            formControlName="purchase_request_no" name="purchase_request_no"
+                                            class="form-control field-ht colorful-select" readonly>
+                                        <label for="purchase_request_no" class="active">Purchase Request No.</label>
+                                    </div>
+                                </div>
+                                <!-- Project Name -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <label for="projectName" class="active">Project Name</label>
+                                        <select id="project" formControlName="projectName" class="form-control">
+                                            <option [ngValue]="''">Select Project</option>
+                                            <option *ngFor="let p of projectsList" [ngValue]="p.project_id">
+                                                {{ p.project_name }}
+                                            </option>
+                                        </select>
+                                        <div class="text-danger"
+                                            *ngIf="purchaseRequestForm.get('projectName')?.invalid && purchaseRequestForm.get('projectName')?.touched">
+                                            Project Name is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Requested By -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <label for="requested_by" class="ml-1 active">Requested By</label>
+                                        <select id="requested_by" formControlName="requested_by" class="form-control"
+                                            (change)="onEmployeeSelect($event)">
+                                            <option value="">Select Person</option>
+                                            <option *ngFor="let p of employee" [value]="p.employeeid">{{p.employeename}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Request Date -->
+                                <div class="col-lg-4 col-md-10 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="date" id="request_date" formControlName="request_date"
+                                            name="request_date" class="form-control">
+                                        <div class="text-danger"
+                                            *ngIf="purchaseRequestForm.get('request_date')?.invalid && purchaseRequestForm.get('request_date')?.touched">
+                                            Request Date is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contact No -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <input type="text" id="contact_no" formControlName="contact_no"
+                                            name="contact_no" class="form-control field-ht colorful-select" required>
+                                        <label for="contact_no" class="active">Contact No.</label>
+                                    </div>
+                                </div>
+
+                                <!-- Submitted By -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <label for="submitted_by" class="ml-1 active">Submitted By</label>
+                                        <select id="submitted_by" formControlName="submitted_by" class="form-control">
+                                            <option value="">Select Person</option>
+                                            <option *ngFor="let p of employee" [value]="p.employeeid">{{p.employeename}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Priority -->
+                                <div class="col-lg-3 col-md-10 px-2">
+                                    <div class="md-form md-outline">
+                                        <label for="priority" class="ml-0 active">Priority</label>
+                                        <select id="priority" formControlName="priority" name="priority"
+                                            class="form-control">
+                                            <option value="">Select Priority</option>
+                                            <option value="High">High</option>
+                                            <option value="Medium">Medium</option>
+                                            <option value="Low">Low</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!-- Status -->
+                                <div class="col-lg-4 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <label for="status" class="ml-2 active">Status</label>
+                                        <select id="status" formControlName="status" class="form-control">
+                                            <option value="">Select Status</option>
+                                            <option value="active">Active</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="on_hold">On-Hold</option>
+                                            <option value="completed">Completed</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <!-- Description -->
+                                <div class="col-lg-12 col-md-12 px-2">
+                                    <div class="md-form md-outline">
+                                        <textarea id="description" formControlName="description" name="description"
+                                            class="md-textarea form-control" rows="2"></textarea>
+                                        <label for="description" class="active">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Add Material Button -->
+                            <div class="row my-3">
+                                <div class="col-lg-12">
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="addMaterial()">
+                                        + Add Material
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Material Boxes -->
+                            <div formArrayName="materials">
+                                <div *ngFor="let material of materials.controls; let i = index" [formGroupName]="i"
+                                    class="card p-3 mb-3">
+
+                                    <!-- Card Header with Remove Button -->
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                    </div>
+
+                                    <!-- Material Fields -->
+                                    <div class="row">
+
+
+                                        <!-- Category -->
+                                        <div class="col-lg-4 col-md-6 md-form md-outline">
+                                            <label class="active ml-3">Category</label>
+                                            <select formControlName="itemCategory" class="form-control"
+                                                (change)="onCategoryChange($event, i)">
+                                                <option value="">Select category</option>
+                                                <option *ngFor="let m of categoryLists" [value]="m.group_id">
+                                                    {{m.group_name}}</option>
+                                            </select>
+                                            <div class="text-danger mt-1"
+                                                *ngIf="material.get('itemCategory')?.invalid && material.get('itemCategory')?.touched">
+                                                Category is required.
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Item Subcategory -->
+                                        <div class="col-lg-4 col-md-6 md-form md-outline">
+                                            <label class="active ml-3">Sub Category</label>
+                                            <select formControlName="itemSubCategory" class="form-control"
+                                                (change)="onSubCategoryChange($event,i)">
+                                                <option value="">Select Sub Category</option>
+                                                <option *ngFor="let m of filteredSubcategoryListsByIndex[i]"
+                                                    [value]="m.sub_group_id">{{m.sub_group_name}}</option>
+                                            </select>
+                                            <div class="text-danger mt-1"
+                                                *ngIf="material.get('itemSubCategory')?.invalid && material.get('itemSubCategory')?.touched">
+                                                Sub Category is required.
+                                            </div>
+                                        </div>
+
+                                        <!-- Item Name -->
+                                        <div class="col-lg-4 col-md-6 md-form md-outline">
+                                            <input type="hidden" formControlName="master_item_id">
+                                            <label class="form-label" for=""
+                                                style="position: absolute;top: -30px;left: 10px;">
+                                                Item name
+                                            </label>
+                                            <ng-select [items]="filteredMaterialsListByIndex[i] || materialsList"
+                                                bindLabel="itemname" bindValue="itemname" placeholder="Select Item"
+                                                notFoundText="No items found" formControlName="itemName"
+                                                [searchable]="true" [clearable]="true"
+                                                (change)="onMaterialChange($event,i)">
+                                            </ng-select>
+                                            <div class="text-danger mt-1"
+                                                *ngIf="material.get('itemName')?.invalid && material.get('itemName')?.touched">
+                                                Item Name is required.
+                                            </div>
+                                        </div>
+
+
+                                        <!-- Current Balance -->
+                                        <div class="col-lg-2 col-md-4">
+                                            <div class="md-form md-outline">
+                                                <input type="number" formControlName="currentBalance"
+                                                    class="form-control">
+                                                <label class="active">Current Bal.</label>
+                                                <div class="text-danger mt-1"
+                                                    *ngIf="material.get('currentBalance')?.invalid && material.get('currentBalance')?.touched">
+                                                    Current Balance is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Quantity -->
+                                        <div class="col-lg-2 col-md-4">
+                                            <div class="md-form md-outline">
+                                                <input type="number" formControlName="quantity" class="form-control">
+                                                <label class="active">Quantity</label>
+                                                <div class="text-danger mt-1"
+                                                    *ngIf="material.get('quantity')?.invalid && material.get('quantity')?.touched">
+                                                    Required
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Unit -->
+                                        <div class="col-lg-3 col-md-4">
+                                            <div class="md-form md-outline">
+                                                <select formControlName="unit" class="form-control">
+                                                    <!-- <option value="">Select Unit</option> -->
+                                                    <option *ngFor="let u of unitListByIndex[i]" [value]="u.unit_name">
+                                                        {{ u.unit_name }}
+                                                    </option>
+                                                </select>
+                                                <label class="active">Unit</label>
+                                                <div class="text-danger mt-1"
+                                                    *ngIf="material.get('unit')?.invalid && material.get('unit')?.touched">
+                                                    Unit is required.
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <!-- HSN Code -->
+                                        <div class="col-lg-3 col-md-4">
+                                            <div class="md-form md-outline">
+                                                <input type="text" formControlName="hsnCode" class="form-control">
+                                                <label class="active">HSN Code</label>
+                                            </div>
+                                        </div>
+                                        <button *ngIf="hidePRSaveButton" type="button" class="btn btn-sm btn-danger"
+                                            (click)="removeMaterial(i)" style="height: 2rem;">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button #closePRModal type="button" class="btn btn-sm btn-danger" data-dismiss="modal"
+                            (click)="cancelPR()">Cancel</button>
+                        <button type="button" class="btn btn-sm btn-outline-success waves-effect"
+                            *ngIf="hidePRSaveButton" (click)="SubmitPR()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Preview PDF Modal -->
+        <div class="modal fade" [class.show]="showModal" [ngStyle]="{'display': showModal ? 'block' : 'none'}"
+            tabindex="-1" role="dialog" aria-labelledby="purchaseOrderLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+                <div class="modal-content p-3" id="poPreviewArea">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Purchase Order Preview</h5>
+                        <button type="button" class="close" (click)="closePdfModal()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body" *ngIf="previewData">
+                        <div id="poContent" class="container">
+
+                            <h4 class="text-center font-weight-bold mb-4">PURCHASE ORDER</h4>
+                            <div class="po-details-box mb-3 row">
+
+                                <div class="col-md-6 left-box">
+                                    <h6 class="font-weight-bold">Supplier Details</h6>
+                                    <p><b>Name:</b> {{previewData.supplier_name}}</p>
+                                    <p><b>Branch:</b> {{previewData.vendor_branch_address}}</p>
+                                    <p><b>Contact No:</b> {{previewData.vendor_contact_no}}</p>
+                                    <p><b>Contact Person:</b> {{previewData.vendor_contact_person}}</p>
+                                    <p><b>Email:</b> {{previewData.vendor_email}}</p>
+                                    <p><b>GST No:</b> {{previewData.vendor_gst_no}}</p>
+                                    <p><b>PAN No:</b> {{previewData.vendor_pan_no}}</p>
+                                </div>
+
+                                <div class="col-md-6 right-box ">
+                                    <h6 class="font-weight-bold">Company Details</h6>
+                                    <p><b>PO No:</b> {{previewData.purchase_order_number}}</p>
+                                    <p><b>Order Date:</b> {{previewData.order_date | date:'dd/MM/yyyy'}}</p>
+                                    <p><b>Expiry Date:</b> {{previewData.expiry_date |date:'dd/MM/yyyy'}}</p>
+                                    <p><b>Company Name:</b> {{previewData.company_name}}</p>
+                                    <p><b>Address:</b> {{previewData.company_address}}</p>
+                                    <p><b>GST No:</b> {{previewData.company_gst_no}}</p>
+                                    <p><b>PAN No:</b> {{previewData.company_pan_no}}</p>
+                                </div>
+                            </div>
+
+                            <!-- Greeting Line -->
+                            <p class="mt-3">
+                                Dear Sir,<br>
+                                Please supply the following material strictly confirming to the description mentioned
+                                below with the following Terms & Condition.
+                            </p>
+
+
+                            <h6 class="font-weight-bold mt-3">Item Details</h6>
+                            <table class="table table-bordered">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Item Name</th>
+                                        <th>HSN Code</th>
+                                        <th>GST%</th>
+                                        <th>Qty</th>
+                                        <th>Rate</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of previewData.items; let i = index">
+                                        <td>{{i + 1}}</td>
+                                        <td>{{item.item_name}}</td>
+                                        <td>{{item.hsncode}}</td>
+                                        <td>{{item.gst}} %</td>
+                                        <td>{{item.quantity}}</td>
+                                        <td>{{item.rate | indianCurrency}}</td>
+                                        <td>{{item.amount | indianCurrency}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="text-right">
+                                <p>Net Value:{{previewData.total_amount | indianCurrency}}</p>
+                                <p>CGST: {{previewData.grand_cgst | indianCurrency}}</p>
+                                <p>SGST: {{previewData.grand_sgst | indianCurrency}}</p>
+                                <p>IGST: {{previewData.grand_igst | indianCurrency}}</p>
+                                <p>Gross Total: {{previewData.grand_total | indianCurrency}}</p>
+                            </div>
+
+                            <!-- Terms & Conditions -->
+                            <h6 class="font-weight-bold mt-4">Terms & Conditions</h6>
+                            <div class="pl-3 small">
+                                <p>01) Delivery : {{previewData.delivery_term || 'null'}}</p>
+                                <p>02) Payment Term : {{previewData.payment_term || 'CREDIT'}}</p>
+                                <p>03) Transportation : {{previewData.transportation || 'NO'}}</p>
+                                <p>04) Taxes : {{previewData.taxes || 'null'}}</p>
+                                <p>05) Quality Analysis : {{previewData.quality_analysis || 'null'}}</p>
+                                <p>06) Penalty : {{previewData.penalty || 'null'}}</p>
+                                <p>07) Validity : {{previewData.validity || 'null'}}</p>
+                                <p>08) Remarks : {{previewData.remarks || 'null'}}</p>
+
+                                <p>9) The Price mentioned in the Purchase Order shall remain firm till the execution of
+                                    the contract, unless amended by any agreement in written under signature of both the
+                                    parties.</p>
+                                <p>10) All Challans with Supplies should bear our P.O. No., Full Description of
+                                    materials, Brand Name & relevant details.</p>
+                                <p>11) The Supplier is expected to scrutinize the Purchase Order immediately on receipt
+                                    thereof. Objection regarding errors & commission, if any, shall not be entertained
+                                    after expiry of 10 days from the date of dispatch of the Purchase Order.</p>
+                                <p>12) Place of Supply and our state code should be mentioned in your bill as per GST
+                                    rules.</p>
+                                <p>13) Final inspection will be done at our site and that will be final & binding.</p>
+                                <p>14) In case the material is rejected then the TO & FRO charges will be to supplier
+                                    account.</p>
+                                <p>15) All disputes are subject to Durg Jurisdiction.</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-success btn-sm" (click)="downloadPDF()">Download as PDF</button>
+                        <button class="btn btn-secondary btn-sm" (click)="closePdfModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal-backdrop fade" [class.show]="showModal" *ngIf="showModal"></div>
+
+
+
+    </main>
+</body>

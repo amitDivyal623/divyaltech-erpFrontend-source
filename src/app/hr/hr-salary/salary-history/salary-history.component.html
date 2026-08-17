@@ -1,0 +1,158 @@
+<div class="row p-2">
+    <div class="col-lg-12 col-md-12" [formGroup]="searchsalaryHistory">
+        <div class="row py-2 px-2">
+            <div class="col-md-2 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" id="salary-month" formControlName="month" class="form-control" />
+                    <label for="salary-month" class="active">Month</label>
+                </div>
+            </div>
+            <div class="col-md-2 px-2">
+                <div class="md-form md-outline">
+                    <input type="text" id="salary-year" formControlName="year" class="form-control">
+                    <label for="salary-year" class="active">Enter Year</label>
+                </div>
+            </div>
+            <div class="col-md-3 md-form md-outline px-4">
+                <select class="form-control field-ht colorful-select" formControlName="employee" id="form-customername">
+                    <option value="" selected="true">Select Employee Name</option>
+                    <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                        {{Employeelist.EmployeeName}}
+                    </option>
+                </select>
+                <label class="top-lb active">Employee</label>
+            </div>
+            <div class="col-5 px-2">
+                <button type="button" class="float-right btn dusty-grass-gradient btn-sm  waves-light waves-effect" (click)="historySreach()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 mb-2">
+        <section>
+            <a class="black-text" mdbtooltip="View" style="display: none;" #viewbutton placement="top" data-toggle="modal" data-target="#salary_overview_modal"></a>
+            <div class="card px-2 my-2">
+                <div class="table-responsive">
+                    <table id="salary_historytable" datatable [dtOptions]="dtOptions1" [dtTrigger]="dtTrigger"  class="table table-striped" cellspacing="0" width="100%">
+                            <thead class="winter-neva-gradient">
+                                <tr>
+                                    <th></th>
+                                    <th>S.No.
+                                    </th>
+                                    <th>Emp Id
+                                    </th>
+                                    <th>Employee Name
+                                    </th>
+                                    <th>Month/Year
+                                    </th>
+                                    <th>Total Payable
+                                    </th>
+                                    <th>Total Deduction
+                                    </th>
+                                    <th>Net Salary
+                                    </th>
+                                    <th>Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of herstoryRes;let i=index">
+                                    <td></td>
+                                    <td>{{item.counter}}</td>
+                                    <td>{{item.EmployeeCode}}</td>
+                                    <td>{{item.EmployeeName}}</td>
+                                    <td>{{item.monthyear}}</td>
+                                    <td>{{item.totalamountPay}}</td>
+                                    <td>{{item.DeductionAmount}}</td>
+                                    <td>{{item.NetPay}}</td>
+                                    <td><a class="black-text" mdbtooltip="View" placement="top" (click)="viewsealrhistory(item.EmployeeId)"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- Salary process modal -->
+<div class="modal fade" id="salary_overview_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog cascading-modal modal-notify modal-info" role="document">
+        <!-- Content -->
+        <div class="modal-content">
+            <!-- Header -->
+            <div class="modal-header mdb-color">
+                <p class="heading lead font-weight-bold">Salary Overview</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="white-text">&times;</span>
+                </button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body">
+                <div class="col-lg-12 col-md-12">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table id="dt-material-checkbox" class="table table-striped" cellspacing="0" width="100%">
+                                <tr>
+                                    <th class="head-width">Employee Name</th>
+                                    <td class="col-fontwt">{{employeename}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Basic Salary</th>
+                                    <td class="col-fontwt">Rs {{basicSalary}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">House Rent Allowance(HRA)
+                                    </th>
+                                    <td class="col-fontwt">Rs {{HRA}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Dearness Allowance(DA)
+                                    </th>
+                                    <td class="col-fontwt">Rs {{DA}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Conveyance Allowance(CA)
+                                    </th>
+                                    <td class="col-fontwt">Rs {{CA}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Gross Salary
+                                    </th>
+                                    <td class="col-fontwt">Rs {{Grosspay}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Bonus
+                                    </th>
+                                    <td class="col-fontwt">Rs {{Bonus}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">PF Deduction
+                                    </th>
+                                    <td class="col-fontwt">Rs {{PFDeduction}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">ESIC Deduction
+                                    </th>
+                                    <td class="col-fontwt">Rs {{ESIDeduction}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Net Salary
+                                    </th>
+                                    <td class="col-fontwt">Rs {{NetSalary}}</td>
+                                </tr>
+                                <tr>
+                                    <th class="head-width">Total CTC
+                                    </th>
+                                    <td class="col-fontwt">Rs {{TotalCTC}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content -->
+    </div>
+</div>
+<!-- Salary process modal -->

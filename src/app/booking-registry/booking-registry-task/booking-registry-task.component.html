@@ -1,0 +1,329 @@
+<body class="fixed-sn white-skin">
+
+    <!-- Main Navigation -->
+    <header>
+
+        <!-- Sidebar navigation -->
+        <app-header></app-header>
+
+        <!-- Navbar -->
+        <app-navbar></app-navbar>
+
+        <!-- /.Navbar -->
+
+    </header>
+    <!-- Main Navigation -->
+
+    <!-- Main layout -->
+    <main>
+        <div class="container-fluid px-4 mb-2">
+            <div class="card">
+                <h5 class="card-header info-tab white-text pl-4 py-2" style="font-weight: 500;">Task List
+                    <button type="button" class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" (click)="openmodal()" ><i class="fa fa-plus" aria-hidden="true"></i> Add New Task</button>
+                    <button type="button" style="display: none;" #taskaddModel data-toggle="modal" data-target="#add_task_modal"></button>
+                    <!-- <button type="button" style="display: none;" #taskEditModel data-toggle="modal" data-target="#editTask"></button> -->
+                </h5>
+                <div [formGroup]="searchTask" class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 px-4">
+                            <div class=" md-form md-outline">
+                                <input formControlName="regbook_user_task" type="text" id="regbook_user_task" class="form-control">
+                                <label for="regbook_user_task" class="">Customer name*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 px-4">
+                            <div class="md-form md-outline">
+                                <input formControlName="regbook_task_date" placeholder="Select date" [minDate]="minDate" [maxDate]="maxDate" readonly ngbDatepicker #date="ngbDatepicker" (click)="date.toggle()" type="text" id="date-picker-example" class="form-control datepicker">
+                                <label for="date-picker-example" class="ml-1 active">Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 md-form md-outline px-4">
+                            <ng-select formControlName="regbook_task_status" [items]="categories" bindLabel="name" placeholder="Select status" appendTo="body" [multiple]="true" [(ngModel)]="selected" >
+                            </ng-select>
+                            <label class="top-lb active">Status</label>
+                        </div>
+                        <div class="col-md-3 px-4">
+                          <div class="md-form md-outline input-group margin-mdform">
+                            <input type="hidden" formControlName="regbook_Tasktagid" value="{{CustTagID}}">
+                            <ng-select formControlName="filtertasktag" [items]="custtags" bindLabel="name" placeholder="Select Tags" appendTo="body" [multiple]="true" [(ngModel)]="select"  (change)="SelectedTagsValue($event)">
+                            </ng-select>
+                            <label class="top-lb active">Tags</label>
+                          </div>
+                        </div>
+
+                    </div>
+                    <div class="form-row float-right mr-3">
+                        <button type="button" (click)="taskSearchReset()" class="btn warm-flame-gradient btn-sm waves-light waves-effect float-right" ><i class="fas fa-redo-alt mr-2" aria-hidden="true"></i>Reset</button>
+                        <button type="button" (click)="taskSearch()" class="btn dusty-grass-gradient btn-sm  waves-light waves-effect" ><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid px-4 my-4">
+            <section>
+                <div class="card">
+                    <div class="table-responsive">
+                        <table id="bookregTaskTable" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th width="5%">S.No.</th>
+                                    <th width="20%">Task Title</th>
+                                    <th width="40%">Customer Name</th>
+                                    <!-- <th width="40%">TaskDescription</th> -->
+                                    <th width="15%">Task Date</th>
+                                    <th width="10%">Status</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dataa;let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{item.taskTitle}}</td>
+                                    <td>{{item.customerName}}</td>
+                                    <!-- <td class="overFlowData">{{item.taskDescription}}</td> -->
+                                    <td>{{item.taskDt}}</td>
+                                    <td>{{item.LookupValue}}</td>
+                                    <td>
+                                        <a class="black-text" mdbtooltip="View" placement="top" (click)="ViewTask(item.taskId)"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                        <a class="teal-text" mdbtooltip="Edit" placement="top" (click)="editTaskdesp(item.taskId)"><i class="fa-pencil-alt px-1 fas"></i></a>
+                                        <a *ngIf="!CrmUserRole && !CRMAdmin" class="red-text"  mdbtooltip="Remove" placement="top" (click)="deletTask(item.taskId)"><i class="fa-times px-1 fas"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody *ngIf="dataa?.length == 0">
+                                <tr>
+                                  <td colspan="6" class="no-data-available">No data available in table</td>
+                                </tr>
+                            <tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <!-- Add New task modal -->
+            <div class="modal fade" id="add_task_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+                    <!-- Content -->
+                    <div class="modal-content">
+                        <!-- Header -->
+                        <div class="modal-header mdb-color">
+                            <p class="heading lead font-weight-bold">{{taskHeading}}</p>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true" class="white-text">&times;</span>
+                            </button>
+                        </div>
+                        <!-- Body -->
+                        <div [formGroup]="addTaskbookreg" class="modal-body">
+                            <input type="hidden" id="task_id" name="task_id" formControlName="task_id">
+                            <input type="hidden" id="CustomerId" name="CustomerId" formControlName="customer_id">
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <ng-autocomplete  [data]="customerdataList" formControlName="visitor_name" [searchKeyword]="keyword" (selected)='selectCust($event)' (inputChanged)='onCustomerSearch($event);onCustomerId();'  [itemTemplate]="itemTemplate" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['visitor_name'].invalid ) || (addTaskbookreg.controls['visitor_name'].invalid && addTaskbookreg.controls['visitor_name'].touched)}">
+                                        </ng-autocomplete>
+                                        <ng-template #itemTemplate let-item>
+                                          <a [innerHTML]="item.name" [readonly]="Access"></a>
+                                        </ng-template>
+                                        <ng-template #notFoundTemplate let-notFound>
+                                          <div [innerHTML]="notFound" [readonly]="Access"></div>
+                                        </ng-template>
+                                        <label for="visitor_name" class="active">Customer Name</label>
+                                        <div
+                                          *ngIf="(submitted && addTaskbookreg.controls['visitor_name'].invalid ) || (addTaskbookreg.controls['visitor_name'].touched && addTaskbookreg.controls['visitor_name'].invalid)"
+                                          class="invalid-feedback">Customer Name is required</div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class=" md-form md-outline">
+                                        <input formControlName="rb_task_title" name="rb_task_title" type="text" id="rb_task_title" class="form-control" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_task_title'].invalid ) || (addTaskbookreg.controls['rb_task_title'].invalid && addTaskbookreg.controls['rb_task_title'].touched)}">
+                                        <label for="rb_task_title" class="{{activeTaskField}}">Task Title*</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_title'].invalid) || (addTaskbookreg.controls['rb_task_title'].invalid && addTaskbookreg.controls['rb_task_title'].touched)" class="invalid-feedback">
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_title'].invalid) || (addTaskbookreg.controls['rb_task_title'].invalid && addTaskbookreg.controls['rb_task_title'].touched)">Title is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="rb_task_description" class="md-textarea form-control" rows="3" required="" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_task_description'].invalid ) || (addTaskbookreg.controls['rb_task_description'].invalid && addTaskbookreg.controls['rb_task_description'].touched)}"></textarea>
+                                        <label for="form10" class="{{activeTaskField}}">Task Description*</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_description'].invalid) || (addTaskbookreg.controls['rb_task_description'].invalid && addTaskbookreg.controls['rb_task_description'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_description'].invalid) || (addTaskbookreg.controls['rb_task_description'].invalid && addTaskbookreg.controls['rb_task_description'].touched)">Description is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-4">
+                                    <div class=" md-form md-outline">
+                                        <input type="text" formControlName="rb_date" id="form-date" [minDate]="minDate" [maxDate]="maxDate" placeholder="Select Date" class="form-control" ngbDatepicker #sdate="ngbDatepicker" value="dd-MM-yyyy" (click)="sdate.toggle()"
+                                        [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_date'].invalid ) || (addTaskbookreg.controls['rb_date'].invalid && addTaskbookreg.controls['rb_date'].touched)}" readonly>
+                                        <label for="form-rb_date" class="active ml-2">Date*</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_date'].invalid) || (addTaskbookreg.controls['rb_date'].invalid && addTaskbookreg.controls['rb_date'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_date'].invalid) || (addTaskbookreg.controls['rb_date'].invalid && addTaskbookreg.controls['rb_date'].touched)">Date is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="rb_status" class="form-control field-ht colorful-select" (change)="filterChanged($event.target.value)" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_status'].invalid ) || (addTaskbookreg.controls['rb_status'].invalid && addTaskbookreg.controls['rb_status'].touched)}">
+                                            <option value="" selected="true" disabled="disabled">Select Status*</option>
+                                            <option *ngFor="let Status of respStatus" value={{Status.LookupDataId}}>
+                                                {{Status.LookupValue}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Status</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_status'].invalid) || (addTaskbookreg.controls['rb_status'].invalid && addTaskbookreg.controls['rb_status'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_status'].invalid) || (addTaskbookreg.controls['rb_status'].invalid && addTaskbookreg.controls['rb_status'].touched)">Status is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="rb_assignee" id="form-namecustomer" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_assignee'].invalid ) || (addTaskbookreg.controls['rb_assignee'].invalid && addTaskbookreg.controls['rb_assignee'].touched)}">
+                                            <option value="" selected="true">Select Assignee*</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Assignee</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_assignee'].invalid) || (addTaskbookreg.controls['rb_assignee'].invalid && addTaskbookreg.controls['rb_assignee'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_assignee'].invalid) || (addTaskbookreg.controls['rb_assignee'].invalid && addTaskbookreg.controls['rb_assignee'].touched)">Assignee is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <select formControlName="rb_reporter" id="form-nameuser" class="form-control field-ht colorful-select" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_reporter'].invalid ) || (addTaskbookreg.controls['rb_reporter'].invalid && addTaskbookreg.controls['rb_reporter'].touched)}">
+                                            <option value="" selected="true">Select Reporter*</option>
+                                            <option *ngFor="let Employeelist of employee" value={{Employeelist.EmployeeId}}>
+                                                {{Employeelist.EmployeeName}}
+                                            </option>
+                                        </select>
+                                        <label class="ml-2 active">Reporter</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_reporter'].invalid) || (addTaskbookreg.controls['rb_reporter'].invalid && addTaskbookreg.controls['rb_reporter'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_reporter'].invalid) || (addTaskbookreg.controls['rb_reporter'].invalid && addTaskbookreg.controls['rb_reporter'].touched)">Reporter is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                      <select formControlName="rb_taskAction" class="form-control field-ht colorful-select" (change)='onOptionsSelected($event)' [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_taskAction'].invalid ) || (addTaskbookreg.controls['rb_taskAction'].invalid && addTaskbookreg.controls['rb_taskAction'].touched)}">
+                                          <option value="" selected="true" disabled="disabled">Select Task Action*</option>
+                                          <option *ngFor="let Status of rb_taskAction" value={{Status.LookupDataId}}>
+                                              {{Status.LookupValue}}
+                                          </option>
+                                      </select>
+                                      <label class="ml-2 active">Task Action</label>
+                                      <div *ngIf=" (submitted && addTaskbookreg.controls['rb_taskAction'].invalid) || (addTaskbookreg.controls['rb_taskAction'].invalid && addTaskbookreg.controls['rb_taskAction'].touched)" class="invalid-feedback">
+                                          <div *ngIf=" (submitted && addTaskbookreg.controls['rb_taskAction'].invalid) || (addTaskbookreg.controls['rb_taskAction'].invalid && addTaskbookreg.controls['rb_taskAction'].touched)">Task Action is required</div>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                      <select formControlName="rb_Tasktype" class="form-control field-ht colorful-select" (change)='onOptionsSelected($event)' [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_Tasktype'].invalid ) || (addTaskbookreg.controls['rb_Tasktype'].invalid && addTaskbookreg.controls['rb_Tasktype'].touched)}">
+                                          <option value="" selected="true" disabled="disabled">Select Task Action*</option>
+                                          <option *ngFor="let Status of rb_Tasktype" value={{Status.LookupDataId}}>
+                                              {{Status.LookupValue}}
+                                          </option>
+                                      </select>
+                                      <label class="ml-2 active">Task Type</label>
+                                      <div *ngIf=" (submitted && addTaskbookreg.controls['rb_Tasktype'].invalid) || (addTaskbookreg.controls['rb_Tasktype'].invalid && addTaskbookreg.controls['rb_Tasktype'].touched)" class="invalid-feedback">
+                                          <div *ngIf=" (submitted && addTaskbookreg.controls['rb_Tasktype'].invalid) || (addTaskbookreg.controls['rb_Tasktype'].invalid && addTaskbookreg.controls['rb_Tasktype'].touched)">Task Action is required</div>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                      <select formControlName="rb_taskResult" class="form-control field-ht colorful-select"  (change)='onTaskresultSelected($event)' [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_taskResult'].invalid ) || (addTaskbookreg.controls['rb_taskResult'].invalid && addTaskbookreg.controls['rb_taskResult'].touched)}">
+                                        <option value="">Select</option>
+                                        <option *ngFor="let actionResult of respresStatus" value="{{actionResult.result_id}}" [selected]="">{{actionResult.result_value}}</option>
+
+                                      </select>
+                                      <label class="ml-2 active">Task Result</label>
+                                      <div *ngIf=" (submitted && addTaskbookreg.controls['rb_taskResult'].invalid) || (addTaskbookreg.controls['rb_taskResult'].invalid && addTaskbookreg.controls['taskAction'].touched)" class="invalid-feedback">
+                                          <div *ngIf=" (submitted && addTaskbookreg.controls['rb_taskResult'].invalid) || (addTaskbookreg.controls['rb_taskResult'].invalid && addTaskbookreg.controls['rb_taskResult'].touched)">Task Result is required</div>
+                                      </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline ">
+                                      <input type="hidden" #tag_id formControlName="tag_id" value="{{CustTagID}}">
+                                      <ng-select formControlName="rb_task_tags" [items]="custtags" bindLabel="name" placeholder="Select Tags" appendTo="body" [multiple]="true" [(ngModel)]="taskselected"  (change)="SelectedTagsValue($event)">
+                                      </ng-select>
+                                      <label class="top-lb active">Tags</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="rb_task_response" class="md-textarea form-control" rows="3" [ngClass]="{ 'is-invalid': (submitted && addTaskbookreg.controls['rb_task_response'].invalid ) || (addTaskbookreg.controls['rb_task_response'].invalid && addTaskbookreg.controls['rb_task_response'].touched)}" ></textarea>
+                                        <label for="form10" class="active">Task Action Response</label>
+                                        <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_response'].invalid) || (addTaskbookreg.controls['rb_task_response'].invalid && addTaskbookreg.controls['rb_task_response'].touched)" class="invalid-feedback">
+                                            <div *ngIf=" (submitted && addTaskbookreg.controls['rb_task_response'].invalid) || (addTaskbookreg.controls['rb_task_response'].invalid && addTaskbookreg.controls['rb_task_response'].touched)">Task Action Response is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="md-form md-outline">
+                                        <textarea type="text" id="form10" formControlName="rb_task_completion" class="md-textarea form-control" rows="3"  ></textarea>
+                                        <label for="form10" class="{{activeTaskField}}">Task Followup*</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="followupadd">
+                                <div class="col-lg-12">
+                                    <div class="md-form md-outline">
+                                        <input class="form-check-input filled-in CalendarForm"  type="checkbox" name="nextFollowCRM" value="1" id="nextFollowCRM" (change)=showFollowup($event)>
+                                        <label for="nextFollowCRM">Next Follow Up</label>
+                                    </div>
+                                </div>
+                                <div class="form-row" [formGroup]="nextFollowup" *ngIf="additionalFollow">
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                        <input type="text" formControlName="followup_date" id="followup_date" [minDate]="minDate"
+                                        [maxDate]="maxDate" placeholder="Select date" class="form-control" ngbDatepicker #atd="ngbDatepicker" value="" (click)="atd.toggle()" [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_date'].invalid) || (nextFollowup.controls['followup_date'].invalid && nextFollowup.controls['followup_date'].touched)}">
+                                        <label for="followup_date" class="active">Date</label>
+                                        <div *ngIf="(submitted && nextFollowup.controls['followup_date'].invalid ) || (nextFollowup.controls['followup_date'].touched && nextFollowup.controls['followup_date'].invalid)" class="invalid-feedback">Date is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-12 px-2">
+                                        <div class="md-form md-outline">
+                                        <input type="time" placeholder="Select Time" formControlName="followup_Time" id="followup_Time" class="form-control datepicker CalendarForm" [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].invalid && nextFollowup.controls['followup_Time'].touched)}">
+                                        <label for="followup_Time" class="active">Time</label>
+                                        <div
+                                            *ngIf="(submitted && nextFollowup.controls['followup_Time'].invalid ) || (nextFollowup.controls['followup_Time'].touched && nextFollowup.controls['followup_Time'].invalid)"
+                                            class="invalid-feedback">Time is required</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 px-2">
+                                        <div class=" md-form md-outline">
+                                        <textarea type="text" formControlName="followup_notes" class="md-textarea form-control" rows="2" [readonly]="Access"
+                                        [ngClass]="{ 'is-invalid': (submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].invalid && nextFollowup.controls['followup_notes'].touched)}">
+                                        </textarea>
+                                        <label class="active" for="form10">Description*</label>
+                                        <div
+                                            *ngIf="(submitted && nextFollowup.controls['followup_notes'].invalid ) || (nextFollowup.controls['followup_notes'].touched && nextFollowup.controls['followup_notes'].invalid)"
+                                            class="invalid-feedback">Description is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="modal-footer">
+                            <button type="button" #closebutton class="btn btn-sm btn-danger" data-dismiss="modal">Cancel</button>
+                            <button type="button" (click)="insertTask()" [disabled]="isButtonDisabled" class="btn btn-sm btn-outline-success waves-effect">Save</button>
+                        </div>
+                    </div>
+                    <!-- Content -->
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+    <!-- Main layout -->
+
+</body>

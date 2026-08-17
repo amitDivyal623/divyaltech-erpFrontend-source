@@ -1,0 +1,165 @@
+<div class="row">
+	<div class="col-lg-12 col-md-12">
+		<div class="row py-2 px-2" [formGroup]="searchuomForm">
+			<div class="col-md-3 px-2">
+				<div class=" md-form md-outline">
+					<input type="text" id="uomName" class="form-control" formControlName="searchUOM">
+					<label for="uomName" class="">UOM Name</label>
+				</div>
+			</div>
+			<div class="col-md-3 px-2">
+				<div class=" md-form md-outline">
+					<input type="text" id="uomcode" class="form-control" formControlName="searchUOMCode">
+					<label for="uomcode" class="">UOM Code</label>
+				</div>
+			</div>
+			<div class="col-md-2 px-2">
+				<button class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0"
+					(click)="searchUOM()"><i class="fa fa-search mr-2" aria-hidden="true"></i>Search</button>
+			</div>
+			<div class="col-md-3 px-2">
+				<button type="button" (click)="addPopup()"
+					class="btn btn-white heavy-rain-gradient btn-sm  waves-light waves-effect float-right my-0" data-toggle="modal"
+					data-target="#add_unit_measure"><i class="fa fa-plus" aria-hidden="true"></i> Add New Unit of Measure</button>
+			</div>
+		</div>
+		
+		<button type="button" style="display: none;" #modalbutton data-toggle="modal" data-target="#add_unit_measure"></button>
+	</div>
+	<div class="col-lg-12 col-md-12 px-0">
+		<div class="container-fluid my-3">
+			<section>
+				<div class="card">
+					<div class="table-responsive card-body p-0">
+						<table id="dt-material-checkbox" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table table-striped" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>S.No.
+									</th>
+									<th>UOM Name
+									</th>
+									<th>UOM Code
+									</th>
+									<th>BaseUOM
+									</th>
+									<th>Parent UOM
+									</th>
+									<th>Parent Relation
+									</th>
+									<th>Action
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let item of data;let i=index">
+									<td></td>
+									<td>{{i+1}}</td>
+									<td>{{item.uom_name}}</td>
+									<td>{{item.uom_code}}</td>
+									<td>{{item.base_uom}}</td>
+									<td>{{item.parentuom}}</td>
+									<td>{{item.parentRelation}}</td>
+									<td>
+										<a class="black-text" mdbtooltip="View" (click)="viewPopup(item.MeasureId)" placement="top"><i class="fa fa-eye" aria-hidden="true"></i></a>
+										<a class="teal-text" mdbtooltip="Edit" (click)="editPopup(item.MeasureId)" placement="top"><i class="fa-pencil-alt px-1 fas"></i></a>
+										<a *ngIf="!CrmUserRole && !CRMAdmin"  class="red-text" mdbtooltip="Remove" (click)="deleteUnitMeasure(item.MeasureId)" placement="top"><i class="fa-times px-1 fas"></i></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</section>
+			<!-- Add New property sale modal -->
+			<div class="modal fade" id="add_unit_measure" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+				aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-notify modal-info" role="document">
+					<!-- Content -->
+					<div class="modal-content">
+						<!-- Header -->
+						<div class="modal-header mdb-color">
+							<p class="heading lead font-weight-bold" id="heading">Add New Unit of Measure</p>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true" class="white-text">&times;</span>
+							</button>
+						</div>
+						<!-- Body -->
+						<div class="modal-body">
+							<form [formGroup]="unitMeasure">
+								<div class="form-row">
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="hidden" id="measureID" class="form-control" formControlName="measureID" name="measureID">
+											<input type="text" id="prod_id" class="form-control" formControlName="prod_id" name="prod_id" [ngClass]="{ 'is-invalid': (submitted && unitMeasure.controls['prod_id'].invalid ) || (unitMeasure.controls['prod_id'].invalid && unitMeasure.controls['prod_id'].touched)}">
+											<label for="prod_id" class="{{activefiled}}">Id</label>
+											<div *ngIf=" (submitted && unitMeasure.controls['prod_id'].invalid) || (unitMeasure.controls['prod_id'].invalid && unitMeasure.controls['prod_id'].touched)" class="invalid-feedback">Please Enter Id</div>
+
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="prod-name" class="form-control" formControlName="uomName" name="uomName" [ngClass]="{ 'is-invalid': (submitted && unitMeasure.controls['uomName'].invalid ) || (unitMeasure.controls['uomName'].invalid && unitMeasure.controls['uomName'].touched)}">
+											<label for="prod-name" class="{{activefiled}}">UOM Name </label>
+											<div *ngIf=" (submitted && unitMeasure.controls['uomName'].invalid) || (unitMeasure.controls['uomName'].invalid && unitMeasure.controls['uomName'].touched)" class="invalid-feedback">Please Enter UOM Name</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="pshort-name" class="form-control" formControlName="uomCode" name="uomCode" [ngClass]="{ 'is-invalid': (submitted && unitMeasure.controls['uomCode'].invalid ) || (unitMeasure.controls['uomCode'].invalid && unitMeasure.controls['uomCode'].touched)}">
+											<label for="pshort-name" class="{{activefiled}}">UOM Code</label>
+											<div *ngIf=" (submitted && unitMeasure.controls['uomCode'].invalid) || (unitMeasure.controls['uomCode'].invalid && unitMeasure.controls['uomCode'].touched)" class="invalid-feedback">Please Enter UOM Code</div>
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class="md-form md-outline">
+											<input type="text" id="prod-desp" class="form-control" formControlName="baseUom" name="baseUom" >
+											<label for="prod-desp" class="{{activefiled}}">Base UOM</label>
+											<!-- <div *ngIf=" (submitted && unitMeasure.controls['baseUom'].invalid) || (unitMeasure.controls['baseUom'].invalid && unitMeasure.controls['baseUom'].touched)" class="invalid-feedback">Please Enter Base UOM</div> -->
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="location" class="form-control" formControlName="ParentUom" name="ParentUom">
+											<label for="location" class="{{activefiled}}"> Parent UOM </label>
+											<!-- <div *ngIf=" (submitted && unitMeasure.controls['ParentUom'].invalid) || (unitMeasure.controls['ParentUom'].invalid && unitMeasure.controls['ParentUom'].touched)"
+												class="invalid-feedback">Please Enter Parent UOM</div> -->
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="location" class="form-control" formControlName="baseRelation" name="baseRelation" >
+											<label for="location" class="{{activefiled}}"> Base Relation </label>
+											<!-- <div *ngIf=" (submitted && unitMeasure.controls['baseRelation'].invalid) || (unitMeasure.controls['baseRelation'].invalid && unitMeasure.controls['baseRelation'].touched)" class="invalid-feedback">Please Enter Base Relation</div> -->
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input type="text" id="location" class="form-control" formControlName="ParentRelation" name="ParentRelation">
+											<label for="location" class="{{activefiled}}"> Parent Relation </label>
+											<!-- <div *ngIf=" (submitted && unitMeasure.controls['ParentRelation'].invalid) || (unitMeasure.controls['ParentRelation'].invalid && unitMeasure.controls['ParentRelation'].touched)" class="invalid-feedback">Please Enter Parent Relation</div> -->
+										</div>
+									</div>
+									<div class="col-lg-6 col-md-12 px-2">
+										<div class=" md-form md-outline">
+											<input class="form-check-input filled-in" type="checkbox" value="" id="txtstatus" formControlName="txtstatus" name="txtstatus">
+											<label class="form-check-label" for="txtstatus">Enabled?</label>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- Footer -->
+						<div class="modal-footer mx-3">
+							<a type="button" class="btn btn-sm btn-danger" #closebutton data-dismiss="modal">Cancel</a>
+							<span *ngIf="save_btn">
+								<a *ngIf="UOMViewTAb" type="button"  class="btn btn-sm btn-outline-success waves-effect" (click)="SaveUnitMeasure()">Save</a>
+							</span>
+						</div>
+					</div>
+					<!-- Content -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
