@@ -54,10 +54,13 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
+          set -x
+          echo "DEBUG: SSH_HOST length=${#SSH_HOST} SSH_USER length=${#SSH_USER} SSH_PRIVATE_KEY length=${#SSH_PRIVATE_KEY}"
           mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>&1 || echo "ssh-keyscan exit code: $?"
 
           if [ "${{ github.ref_name }}" = "prod" ]; then
             TARGET=/var/www/html/erp.divyaltech.com
@@ -66,6 +69,7 @@ jobs:
           fi
 
           rsync -avz --delete \
+            -e "ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no" \
             dist/my-app/ "$SSH_USER@$SSH_HOST:$TARGET/"
 
           echo "Deployed to $TARGET"
