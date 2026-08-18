@@ -1,8 +1,12 @@
 name: Deploy Frontend
 
+# DISABLED 2026-08-18: pipeline verified working end-to-end (see test-and-cleanup commits),
+# but deploys are going back to manual drag-drop for now. Uncomment to re-enable auto-deploy.
+# on:
+#   push:
+#     branches: [dev, prod]
 on:
-  push:
-    branches: [dev, prod]
+  workflow_dispatch: {}
 
 jobs:
   build-and-deploy:
