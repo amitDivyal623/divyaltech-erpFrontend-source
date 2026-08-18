@@ -1,4 +1,5 @@
 
+// CI/CD pipeline live test marker 2026-08-18 - safe to remove
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserModule } from '@angular/platform-browser';
 import { APP_BOOTSTRAP_LISTENER, NgModule,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
